@@ -1,0 +1,11 @@
+canvas{
+    position: absolute;
+    background: transparent;
+    top: 100px;
+    left: auto;
+    display: block;
+}
+
+#game{
+    margin: auto;
+}
