@@ -6,6 +6,15 @@ canvas{
     display: block;
 }
 
+
+
 #game{
-    margin: auto 0;
+    margin: 100px auto 0;
+    width: 800px;
+    height: 500px;
+    display: block;
+}
+
+body{
+    background-color: #303030;
 }
