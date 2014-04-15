@@ -2,10 +2,10 @@ canvas{
     position: absolute;
     background: transparent;
     top: 100px;
-    left: auto;
+    left: auto ;
     display: block;
 }
 
 #game{
-    margin: auto;
+    margin: auto 0;
 }
