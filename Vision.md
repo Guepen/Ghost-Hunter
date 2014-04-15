@@ -36,11 +36,13 @@ Spelet skall finnas tillgängligt för alla som har en dator med en webbläsare 
 #### Positiva funktioner
 
 Erbjuder femtio olika banor.
+
 Grafiskt tilltalande.
 
 #### Negativa funktioner
 
 Är ett flashspel vilket gör att det inte är lättillgängligt för användare.
+
 Är lätt att fuska på spelet.
 
 ## Baskrav
