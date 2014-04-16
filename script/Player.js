@@ -30,12 +30,17 @@ Player.prototype.render = function(){
 
 Player.prototype.checkDirection = function(){
     //console.log("hej");
+    //console.log(Game.player.x);
     if(this.moveLeft){
-        this.x -= this.speed;
+        if (!Game.player.x <= 0) {
+            this.x -= this.speed;
+        }
     }
 
     if(this.moveRight){
-        this.x += this.speed;
+        if (Game.player.x < Game.width - this.width) {
+            this.x += this.speed;
+        }
     }
 };
 
@@ -71,8 +76,10 @@ Player.prototype.ifShooting = function(){
 function keyDown(e){
     var keyId = e.keyCode || e.which;
     if(keyId === 37 || keyId === 65){ //flyttar spelaren åt vänster
-        e.preventDefault();
-        Game.player.moveLeft = true;
+        if(!Game.player.x <= 0){
+            e.preventDefault();
+            Game.player.moveLeft = true;
+        }
     }
 
     if(keyId === 39 || keyId === 68){ //flyttar spelaren åt höger
@@ -101,30 +108,3 @@ function keyUp(e){
         Game.player.isSpacebar = false; //spelaren skjuter inte
     }
 }
-
-function Bullet(){
-    this.width = 8;
-    this.height = 10;
-    this.speed = 3;
-    this.srcX = 710;
-    this.srcY = 520;
-    this.drawY = 510;
-    this.drawX = 400;
-}
-
-Bullet.prototype.render = function(){
-    //console.log(Game.gameSprite);
-    //alert("bullet");
-    Game.bulletCanvas.drawImage(Game.gameSprite, this.srcX, this.srcY, this.width,
-                                this.height, this.drawX, this.drawY -= this.speed, this.width, this.height);
-
-        //console.log(this.drawX, this.drawY, this.width, this.height);
-        //Game.bulletCanvas.fillRect(this.drawX, this.drawY, this.width, this.height);
-
-
-};
-
-Bullet.prototype.fire = function(x, y){
-    this.drawX = x + Game.player.width / 2 - (this.width / 2);
-    this.drawY = y;
-};

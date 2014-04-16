@@ -67,7 +67,6 @@ var animFrame = window.requestAnimationFrame ||
 function loop(){
     if(Game.rendering){
         Game.player.render();
-
         animFrame(loop);
     }
 }
