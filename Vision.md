@@ -6,7 +6,8 @@ Jag har länge funderat på att utvveckla ett spel men brist på erfarenheter oc
 
 ## Problembeskrivning
 
-Spelet Ghost Hunter går ut på att en eller två spelare skall skjuta ner spöken som faller ner från slumpmässiga ställen. Det gäller att skjuta ner spökena innan de nuddar marken. Om användaren har skjutit ner ett spöke ska det explodera och ett ljud skall spelas upp.
+Spelet Ghost Hunter går ut på att en eller två spelare skall skjuta ner spöken som faller ner från slumpmässiga ställen. Det gäller att skjuta ner spökena innan de nuddar marken. Om användaren har skjutit ner ett spöke ska det explodera och ett ljud skall spelas upp och
+eventuellt skall en powerup ges till spelaren.
 Spökena skall falla fortare och fortare ju mer eftersom och det skall även falla fler och fler spöken.
 
 Spelet är slut när ett spöke nuddar marken eller om ett spöke kolliderar med en spelare, om det inte finns några spöken kvar att skjuta ner så har spelaren vunnit.
@@ -55,6 +56,7 @@ Grafiskt tilltalande.
       3.2 Erbjuda användaren flera sätt att styra spelet.
       4. Användarens poäng skall kunna sparas.
       5. Två spelare skall kunna spela spelet från samma dator.
+      6. Spelaren eller spelarna skall kunna få powerups.
 
 
                                                                            Tobias Holst WP13

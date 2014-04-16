@@ -1,19 +1,24 @@
 "use strict";
 
 function Player(){
-    this.x = 400;
-    this.height = 50;
-    this.y = 450;
-    this.width = 50;
+    this.drawX = 400;
+    this.height = 117;
+    this.drawY = 383;
+    this.srcX = 25;
+    this.srcY =0;
+    this.width = 100;
     this.speed = 5;
     this.shoot = false;
     this.currentBullet = 0;
     this.bullets = [];
+    this.interval = null;
 
+    //lägger till 50 skott tillhörande spelarinstansen.
+    //skotten återanvänds sedan istället för att skapa en
+    //ny instans av Bullet-objektet varje gång spelaren skjuter
     for(var i = 0; i < 50; i++){
         this.bullets[this.bullets.length] = new Bullet();
     }
-
 }
 
 Player.prototype.render = function(){
@@ -21,44 +26,40 @@ Player.prototype.render = function(){
     this.checkDirection();
     this.ifShooting();
     this.renderBullets();
-    Game.playerCanvas.fillRect(this.x, this.y, this.width, this.height);
+    Game.playerCanvas.drawImage(Game.initPics[1],this.srcX, this.srcY, this.width, this.height,
+                                this.drawX, this.drawY, this.width, this.height);
 };
 
 Player.prototype.checkDirection = function(){
-    if(Game.pressedKeys[37] || Game.pressedKeys[65]){
-        if(!Game.player.x <= 0){
-            Game.player.x -= this.speed;
-        }
-    }
 
-    if(Game.pressedKeys[39] || Game.pressedKeys[68]){
-        if(Game.player.x <= Game.width - Game.player.width){
-            Game.player.x += this.speed;
+        if (Game.pressedKeys[37] || Game.pressedKeys[65]) {
+            if (!Game.player.drawX <= 0) {
+                Game.player.drawX -= this.speed;
+            }
         }
-    }
 
-    if(Game.pressedKeys[32]){
-        Game.player.isSpacebar = true;
-    }
+        if (Game.pressedKeys[39] || Game.pressedKeys[68]) {
+            if (Game.player.drawX <= Game.width - Game.player.width) {
+                Game.player.drawX += this.speed;
+            }
+        }
 };
 
-Player.prototype.renderBullets = function(){
+Player.prototype.renderBullets = function() {
 
     Game.bulletCanvas.clearRect(0, 0, 800, 500);
-    for(var i = 0; i < this.bullets.length; i++){
+    for (var i = 0; i < this.bullets.length; i++) {
         if (this.bullets[i].drawY <= 500) {
             this.bullets[i].render();
         }
-
-
     }
 };
 
 Player.prototype.ifShooting = function(){
-    console.log(Game.pressedKeys);
+
     if(Game.pressedKeys[32] && !this.shoot){
         this.shoot = true;
-        this.bullets[this.currentBullet].fire(this.x, this.y);
+        this.bullets[this.currentBullet].fire(this.drawX, this.drawY);
         this.currentBullet++;
 
         if(this.currentBullet >= this.bullets.length){
@@ -73,11 +74,32 @@ Player.prototype.ifShooting = function(){
 };
 
 function keyDown(e){
-    Game.pressedKeys[e.keyCode] = true;
+    e.preventDefault();
+    //alert(e.keyCode);
+    if (e.keyCode === 37 || e.keyCode === 39)  {
+        if (!Game.pressedKeys[e.keyCode]) {
+            Game.player.interval = setInterval(function () {
+                Game.player.srcX += 150;
+                if (Game.player.srcX >= 1050) {
+                    Game.player.srcX = 150;
+                }
+            }, 100);
+        }
+    }
 
+    if(e.keyCode === 80){
+        stopStart();
+    }
+    //console.log('down');
+    Game.pressedKeys[e.keyCode] = true;
 }
 
 function keyUp(e){
+    e.preventDefault();
+    if (e.keyCode === 37 || e.keyCode === 39) {
+        clearInterval(Game.player.interval);
+    }
     Game.pressedKeys[e.keyCode] = false;
+    Game.player.srcX = 0;
 
 }

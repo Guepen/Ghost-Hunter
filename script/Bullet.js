@@ -11,11 +11,11 @@ function Bullet(){
 }
 
 Bullet.prototype.render = function(){
-    Game.bulletCanvas.drawImage(Game.gameSprite, this.srcX, this.srcY, this.width,
+    Game.bulletCanvas.drawImage(Game.initPics[0], this.srcX, this.srcY, this.width,
        this.height, this.drawX, this.drawY -= this.speed, this.width, this.height);
 };
 
-Bullet.prototype.fire = function(x, y){
-    this.drawX = x + Game.player.width / 2 - (this.width / 2);
-    this.drawY = y;
+Bullet.prototype.fire = function(playerX, playerY){
+    this.drawX = playerX + Game.player.width / 2 - (this.width / 2);
+    this.drawY = playerY;
 };
