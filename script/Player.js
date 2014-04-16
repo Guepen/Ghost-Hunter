@@ -6,10 +6,7 @@ function Player(){
     this.y = 450;
     this.width = 50;
     this.speed = 5;
-    this.moveLeft = false;
-    this.moveRight = false;
     this.shoot = false;
-    this.isSpacebar = false;
     this.currentBullet = 0;
     this.bullets = [];
 
@@ -20,7 +17,6 @@ function Player(){
 }
 
 Player.prototype.render = function(){
-    //console.log("loop");
     Game.playerCanvas.clearRect(0, 0, 800, 500);
     this.checkDirection();
     this.ifShooting();
@@ -29,18 +25,20 @@ Player.prototype.render = function(){
 };
 
 Player.prototype.checkDirection = function(){
-    //console.log("hej");
-    //console.log(Game.player.x);
-    if(this.moveLeft){
-        if (!Game.player.x <= 0) {
-            this.x -= this.speed;
+    if(Game.pressedKeys[37] || Game.pressedKeys[65]){
+        if(!Game.player.x <= 0){
+            Game.player.x -= this.speed;
         }
     }
 
-    if(this.moveRight){
-        if (Game.player.x < Game.width - this.width) {
-            this.x += this.speed;
+    if(Game.pressedKeys[39] || Game.pressedKeys[68]){
+        if(Game.player.x <= Game.width - Game.player.width){
+            Game.player.x += this.speed;
         }
+    }
+
+    if(Game.pressedKeys[32]){
+        Game.player.isSpacebar = true;
     }
 };
 
@@ -57,7 +55,8 @@ Player.prototype.renderBullets = function(){
 };
 
 Player.prototype.ifShooting = function(){
-    if(this.isSpacebar && !this.shoot){
+    console.log(Game.pressedKeys);
+    if(Game.pressedKeys[32] && !this.shoot){
         this.shoot = true;
         this.bullets[this.currentBullet].fire(this.x, this.y);
         this.currentBullet++;
@@ -67,44 +66,18 @@ Player.prototype.ifShooting = function(){
         }
     }
 
-    else if(!this.isSpacebar){
+    else if(!Game.pressedKeys[32]){
         this.shoot = false;
     }
 
 };
 
 function keyDown(e){
-    var keyId = e.keyCode || e.which;
-    if(keyId === 37 || keyId === 65){ //flyttar spelaren åt vänster
-        if(!Game.player.x <= 0){
-            e.preventDefault();
-            Game.player.moveLeft = true;
-        }
-    }
+    Game.pressedKeys[e.keyCode] = true;
 
-    if(keyId === 39 || keyId === 68){ //flyttar spelaren åt höger
-        e.preventDefault();
-        Game.player.moveRight = true;
-    }
-
-    if(keyId === 32){
-        Game.player.isSpacebar = true; // spelaren skjuter
-    }
 }
 
 function keyUp(e){
-    var keyId = e.keyCode || e.which;
-    if(keyId === 37 || 65){ //om spelaren inte flyttas till vänster
-        e.preventDefault();
-        Game.player.moveLeft = false;
-    }
+    Game.pressedKeys[e.keyCode] = false;
 
-    if(keyId === 39 || 68){ //om spelaren inte flyttas till höger
-        e.preventDefault();
-        Game.player.moveRight = false;
-    }
-
-    if(keyId === 32){
-        Game.player.isSpacebar = false; //spelaren skjuter inte
-    }
 }

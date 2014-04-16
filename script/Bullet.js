@@ -11,15 +11,8 @@ function Bullet(){
 }
 
 Bullet.prototype.render = function(){
-    //console.log(Game.gameSprite);
-    //alert("bullet");
     Game.bulletCanvas.drawImage(Game.gameSprite, this.srcX, this.srcY, this.width,
-        this.height, this.drawX, this.drawY -= this.speed, this.width, this.height);
-
-    //console.log(this.drawX, this.drawY, this.width, this.height);
-    //Game.bulletCanvas.fillRect(this.drawX, this.drawY, this.width, this.height);
-
-
+       this.height, this.drawX, this.drawY -= this.speed, this.width, this.height);
 };
 
 Bullet.prototype.fire = function(x, y){

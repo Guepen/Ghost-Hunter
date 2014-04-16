@@ -4,7 +4,7 @@
 var Game = {
     player: null,
     bullet: null,
-    bullets: [],
+    pressedKeys: [],
     backgroundCanvas: "",
     playerCanvas: "",
     bulletCanvas: "",
@@ -43,11 +43,8 @@ var Game = {
         Game.playerCanvas = document.getElementById("playerCanvas").getContext("2d");
         Game.playerCanvas.fillStyle = "blue";
         Game.bulletCanvas = document.getElementById("bulletCanvas").getContext("2d");
-        Game.bulletCanvas.fillStyle = "red";
 
         Game.player = new Player();
-        //console.log(Game.player);
-        //alert("Hello world");
         document.addEventListener('keydown', keyDown, false);
         document.addEventListener("keyup", keyUp, false);
 
