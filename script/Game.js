@@ -42,6 +42,8 @@ var Game = {
     init: function () {
         Game.playerCanvas = document.getElementById("playerCanvas").getContext("2d");
         Game.playerCanvas.fillStyle = "blue";
+        Game.bulletCanvas = document.getElementById("bulletCanvas").getContext("2d");
+        Game.bulletCanvas.fillStyle = "red";
 
         Game.player = new Player();
         //console.log(Game.player);
@@ -65,6 +67,7 @@ var animFrame = window.requestAnimationFrame ||
 function loop(){
     if(Game.rendering){
         Game.player.render();
+
         animFrame(loop);
     }
 }
