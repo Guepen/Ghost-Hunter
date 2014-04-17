@@ -2,16 +2,16 @@
 
 function Player(){
     this.drawX = 400;
-    this.height = 117;
-    this.drawY = 383;
-    this.srcX = 25;
-    this.srcY =0;
-    this.width = 100;
+    this.height = 100;
+    this.drawY = 420;
+    this.srcX = 63;
+    this.srcY =500;
+    this.width = 80;
     this.speed = 5;
     this.shoot = false;
     this.currentBullet = 0;
     this.bullets = [];
-    this.interval = null;
+    //this.interval = null;
 
     //lägger till 50 skott tillhörande spelarinstansen.
     //skotten återanvänds sedan istället för att skapa en
@@ -26,7 +26,7 @@ Player.prototype.render = function(){
     this.checkDirection();
     this.ifShooting();
     this.renderBullets();
-    Game.playerCanvas.drawImage(Game.initPics[1],this.srcX, this.srcY, this.width, this.height,
+    Game.playerCanvas.drawImage(Game.gameSprite,this.srcX, this.srcY, this.width, this.height,
                                 this.drawX, this.drawY, this.width, this.height);
 };
 
@@ -76,16 +76,16 @@ Player.prototype.ifShooting = function(){
 function keyDown(e){
     e.preventDefault();
     //alert(e.keyCode);
-    if (e.keyCode === 37 || e.keyCode === 39)  {
-        if (!Game.pressedKeys[e.keyCode]) {
-            Game.player.interval = setInterval(function () {
+    /*if (e.keyCode === 37 || e.keyCode === 39)  {
+       // if (!Game.pressedKeys[e.keyCode]) {
+            //Game.player.interval = setInterval(function () {
                 Game.player.srcX += 150;
-                if (Game.player.srcX >= 1050) {
+                //if (Game.player.srcX >= 1050) {
                     Game.player.srcX = 150;
                 }
-            }, 100);
+           // }, 100);
         }
-    }
+    }*/
 
     if(e.keyCode === 80){
         stopStart();
@@ -96,10 +96,10 @@ function keyDown(e){
 
 function keyUp(e){
     e.preventDefault();
-    if (e.keyCode === 37 || e.keyCode === 39) {
+   /* if (e.keyCode === 37 || e.keyCode === 39) {
         clearInterval(Game.player.interval);
-    }
+    }*/
     Game.pressedKeys[e.keyCode] = false;
-    Game.player.srcX = 0;
+    //Game.player.srcX = 0;
 
 }

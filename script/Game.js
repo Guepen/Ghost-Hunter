@@ -6,8 +6,6 @@ var Game = {
     bullet: null,
     pauseButton: "",
     pressedKeys: [],
-    initPics: [],
-    initPicsSrc: [],
     backgroundCanvas: "",
     playerCanvas: "",
     bulletCanvas: "",
@@ -18,24 +16,15 @@ var Game = {
     height: 500,
     rendering: false,
     paused: true,
-    requierdPictures: 2,
-    loadedPicuters: 0,
+
 
     //låter bilderna laddas innan spelet startar så de inte saknas när de skall användas
-    pictureLoader: function (pics) {
-        for(var i = 0; i < pics.length ; i++){
-            var pic = new Image();
-            pic.src = pics[i];
-            this.initPics.push(pic);
+    pictureLoader: function () {
+            Game.gameSprite = new Image();
+            Game.gameSprite.src = "pictures/Spriten.png";
 
-            var that = this;
-            Game.initPics[i].onload = function(){
-                that.loadedPicuters++;
-
-                if(that.loadedPicuters === that.requierdPictures){
-                    that.renderBackground();
-                }
-            }
+            Game.gameSprite.onload = function(){
+                Game.renderBackground();
 
         }
     },
@@ -48,7 +37,7 @@ var Game = {
         var drawX = 0; //x-pixeln där bakgrunden börjar ritas ut
         var drawY = 0; //y-pixeln där bakgrunden börjar ritas ut
 
-        Game.backgroundCanvas.drawImage(Game.initPics[0], srcX, srcY, Game.width, Game.height, drawX, drawY, Game.width, Game.height);
+        Game.backgroundCanvas.drawImage(Game.gameSprite, srcX, srcY, Game.width, Game.height, drawX, drawY, Game.width, Game.height);
 
         //när bakgrunden är utritad anropas init
         Game.init();
@@ -129,7 +118,5 @@ function startLoop(){
 function stopLoop(){
     Game.rendering = false;
 }
-
-Game.initPicsSrc = ["pictures/gameSprite.png", "pictures/playerSprite.png"];
 //anropar funktionen pictureLoader när sidan är färdigladdad
 window.onload = Game.pictureLoader(Game.initPicsSrc);
