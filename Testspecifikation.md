@@ -77,7 +77,7 @@ Javascript skall vara aktiverat.
 
 
 
-## Testfall 3 FPS
+## Testfall 4 FPS
 
 ### Förkrav
 Javascript skall vara aktiverat.
