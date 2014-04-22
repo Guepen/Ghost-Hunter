@@ -1,23 +1,25 @@
 "use strict";
 
 function Player(){
-    this.drawX = 400;
-    this.height = 100;
-    this.drawY = 420;
-    this.srcX = 63;
+    this.drawX = Game.width / 2;
+    this.drawHeight = 80;
+    this.drawY = Game.height - this.drawHeight;
+    this.srcX = 70;
     this.srcY =500;
-    this.width = 80;
+    this.drawWidth = 50;
+    this.srcWidth = 60;
+    this.srcHeight = 80;
     this.speed = 5;
     this.shoot = false;
     this.currentBullet = 0;
-    this.bullets = [];
+    //Game.bullets = [];
     //this.interval = null;
 
     //lägger till 50 skott tillhörande spelarinstansen.
     //skotten återanvänds sedan istället för att skapa en
     //ny instans av Bullet-objektet varje gång spelaren skjuter
     for(var i = 0; i < 50; i++){
-        this.bullets[this.bullets.length] = new Bullet();
+        Game.bullets[Game.bullets.length] = new Bullet();
     }
 }
 
@@ -26,8 +28,8 @@ Player.prototype.render = function(){
     this.checkDirection();
     this.ifShooting();
     this.renderBullets();
-    Game.playerCanvas.drawImage(Game.gameSprite,this.srcX, this.srcY, this.width, this.height,
-                                this.drawX, this.drawY, this.width, this.height);
+    Game.playerCanvas.drawImage(Game.gameSprite,this.srcX, this.srcY, this.srcWidth, this.srcHeight,
+                                this.drawX, this.drawY, this.drawWidth, this.drawHeight);
 };
 
 Player.prototype.checkDirection = function(){
@@ -39,7 +41,7 @@ Player.prototype.checkDirection = function(){
         }
 
         if (Game.pressedKeys[39] || Game.pressedKeys[68]) {
-            if (Game.player.drawX <= Game.width - Game.player.width) {
+            if (Game.player.drawX <= Game.width - Game.player.drawWidth) {
                 Game.player.drawX += this.speed;
             }
         }
@@ -48,9 +50,9 @@ Player.prototype.checkDirection = function(){
 Player.prototype.renderBullets = function() {
 
     Game.bulletCanvas.clearRect(0, 0, 800, 500);
-    for (var i = 0; i < this.bullets.length; i++) {
-        if (this.bullets[i].drawY <= 500) {
-            this.bullets[i].render();
+    for (var i = 0; i < Game.bullets.length; i++) {
+        if (Game.bullets[i].drawY <= 500) {
+            Game.bullets[i].render();
         }
     }
 };
@@ -59,10 +61,10 @@ Player.prototype.ifShooting = function(){
 
     if(Game.pressedKeys[32] && !this.shoot){
         this.shoot = true;
-        this.bullets[this.currentBullet].fire(this.drawX, this.drawY);
+        Game.bullets[this.currentBullet].fire(this.drawX, this.drawY);
         this.currentBullet++;
 
-        if(this.currentBullet >= this.bullets.length){
+        if(this.currentBullet >= Game.bullets.length){
             this.currentBullet = 0;
         }
     }

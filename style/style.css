@@ -7,19 +7,30 @@ canvas{
 }
 
 #FPS{
-    margin-left: 580px;
+    margin-left: 28%;
+    margin-top: -50px;
     color: white;
     font-style: italic;
     font-size: 20px;
 }
 
 #pauseButton{
-    width: 70px;
     height: 20px;
-    margin-left: 30%;
-    margin-top: -600px;
-    position: fixed;
+    margin: 17px 0 0 25px;
+}
 
+#topGame{
+    width: 800px;
+    height: 40px;
+    margin-left:26%;
+    margin-top: -20px;
+    display: inline-flex;
+
+
+}
+
+label, h1{
+    color: white;
 }
 
 #game{
@@ -34,5 +45,5 @@ body{
 }
 
 h1{
-    margin-left: 850px;
+    margin-left: 40%;
 }
