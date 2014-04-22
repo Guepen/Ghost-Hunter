@@ -4,15 +4,19 @@
 var Game = {
     player: null,
     bullet: null,
+    obstacle: null,
+    obstacle2: null,
     pauseButton: null,
     pressedKeys: [],
     ghosts: [],
     bullets: [],
+    obstacles: [],
     backgroundCanvas: null,
     playerCanvas: null,
     bulletCanvas: null,
     ghostCanvas: null,
     obstacleCanvas: null,
+    healthCanvas: null,
     gameSprite: null,
     playerSprite: null,
     width: 800,
@@ -56,15 +60,19 @@ var Game = {
         Game.bulletCanvas = document.getElementById("bulletCanvas").getContext("2d");
         Game.ghostCanvas = document.getElementById("ghostCanvas").getContext("2d");
         Game.obstacleCanvas = document.getElementById("obstacleCanvas").getContext("2d");
+        Game.healthCanvas = document.getElementById("healthCanvas").getContext("2d");
         Game.pauseButton = document.getElementById("pauseButton");
         Game.htmlScore = document.getElementById("score");
         Game.player = new Player();
+        Game.obstacle = new Obstacle();
+        Game.obstacle2 = new  Obstacle();
         document.addEventListener('keydown', keyDown, false);
         document.addEventListener("keyup", keyUp, false);
         Game.pauseButton.addEventListener("click", stopStart, false);
 
         //initGhosts(Game.spawnAmount);
         //spawnGhosts(Game.spawnAmount);
+        //Game.obstacle.render();
         startLoop();
     }
 };
@@ -86,10 +94,13 @@ function stopStart(){
 
 function checkObjectPositions(){
     //alert("checking");
-    for(var g = 0; g < Game.ghosts.length; g++){
-        for(var b = 0; b < Game.bullets.length; b++){
+    for(var b = 0; b < Game.bullets.length; b++) {
+        if(checkCollision(Game.bullets[b], Game.obstacle)){
+            Game.bullets[b].drawY = 520;
+        }
+        for (var g = 0; g < Game.ghosts.length; g++) {
             //console.log(g);
-            if(checkCollision(Game.bullets[b], Game.ghosts[g])){
+            if (checkCollision(Game.bullets[b], Game.ghosts[g])) {
                 Game.score++;
                 Game.htmlScore.innerHTML = Game.score;
                 Game.ghosts.splice(g, 1);
@@ -98,15 +109,34 @@ function checkObjectPositions(){
         }
     }
 }
+
+function bulletHitObstacle(){
+    //console.log(Game.obstacle);
+    for(var i = 0; i < Game.bullets.length; i++){
+        var bullet = Game.bullets[i];
+        if(bullet.drawX + bullet.drawWidth >= Game.obstacle.drawX &&
+            bullet.drawX  + bullet.drawWidth <= Game.obstacle.drawX + Game.obstacle.drawWidth + 10 &&
+            bullet.drawY <= Game.obstacle.drawY){
+            Game.bullets[i].drawY = 520;
+        }
+
+        if(bullet.drawX + bullet.drawWidth >= Game.obstacle2.drawX &&
+            bullet.drawX  + bullet.drawWidth <= Game.obstacle2.drawX + Game.obstacle2.drawWidth + 10 &&
+            bullet.drawY <= Game.obstacle2.drawY){
+            Game.bullets[i].drawY = 520;
+        }
+    }
+}
                         //bullet     //ghost
 function checkCollision(firstObject, secondObject){
+    //console.log(firstObject);
     //console.log(firstObject);
     if (firstObject == undefined || secondObject == undefined) {
         return false;
     }
 
-    if(firstObject.drawX +15 >= secondObject.drawX &&
-        firstObject.drawX + firstObject.drawWidth <= secondObject.drawX + secondObject.drawWidth +20){
+    if(firstObject.drawX + firstObject.drawWidth >= secondObject.drawX &&
+        firstObject.drawX + firstObject.drawWidth <= secondObject.drawX + secondObject.drawWidth + 15){
         return(firstObject.drawY <= secondObject.drawY &&
             firstObject.drawY - firstObject.drawHeight >= secondObject.drawY - secondObject.drawHeight)
     }
@@ -146,9 +176,10 @@ var animFrame = window.requestAnimationFrame ||
 //funktonen loop kallar på sig själv med hjälp av aninframe
 function loop(){
     if(Game.rendering){
+        Game.player.render();
         fps.f.innerHTML = fps.getFps();
         checkObjectPositions();
-        Game.player.render();
+        bulletHitObstacle();
         renderGhosts();
         animFrame(loop);
     }
@@ -157,6 +188,7 @@ function loop(){
 // startar spel-loopen när bilderna har laddats in eller om spelet har varit pausat
 function startLoop(){
     Game.rendering = true;
+    Game.player.renderHealth();
     loop();
     startSpawn();
 }

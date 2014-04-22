@@ -10,6 +10,7 @@ function Player(){
     this.srcWidth = 60;
     this.srcHeight = 80;
     this.speed = 5;
+    this.health = 3;
     this.shoot = false;
     this.currentBullet = 0;
     //Game.bullets = [];
@@ -24,12 +25,34 @@ function Player(){
 }
 
 Player.prototype.render = function(){
-    Game.playerCanvas.clearRect(0, 0, 800, 500);
-    this.checkDirection();
-    this.ifShooting();
-    this.renderBullets();
-    Game.playerCanvas.drawImage(Game.gameSprite,this.srcX, this.srcY, this.srcWidth, this.srcHeight,
-                                this.drawX, this.drawY, this.drawWidth, this.drawHeight);
+    if(this.health <= 0){
+        Game.rendering = false;
+        Game.bulletCanvas.clearRect(0, 0, Game.width, Game.height);
+        Game.ghostCanvas.clearRect(0, 0, Game.width, Game.height);
+        Game.backgroundCanvas.fillStyle = "blue";
+        Game.backgroundCanvas.font = "bold 25px Arial";
+        Game.backgroundCanvas.fillText("Game Over", Game.width/2, 70);
+        stopLoop();
+    }
+    else {
+        Game.playerCanvas.clearRect(0, 0, 800, 500);
+        this.checkDirection();
+        this.ifShooting();
+        this.renderBullets();
+        Game.playerCanvas.drawImage(Game.gameSprite, this.srcX, this.srcY, this.srcWidth, this.srcHeight,
+            this.drawX, this.drawY, this.drawWidth, this.drawHeight);
+    }
+};
+
+Player.prototype.renderHealth = function(){
+    console.log(this.health);
+    var nextX = -18;
+    Game.healthCanvas.clearRect(0, 0, Game.width, Game.height);
+    for(var i = 0; i < this.health; i++){
+        Game.healthCanvas.drawImage(Game.gameSprite,195, 500, 25, 23,
+            nextX += 28, 470, 25, 25)
+    }
+
 };
 
 Player.prototype.checkDirection = function(){
