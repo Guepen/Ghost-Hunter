@@ -64,8 +64,12 @@ var Game = {
         Game.pauseButton = document.getElementById("pauseButton");
         Game.htmlScore = document.getElementById("score");
         Game.player = new Player();
-        Game.obstacle = new Obstacle();
-        Game.obstacle2 = new  Obstacle();
+
+        for(var i = 0; i < 2; i++){
+            Game.obstacles[i] = new Obstacle();
+        }
+        //Game.obstacle = new Obstacle();
+        //Game.obstacle2 = new  Obstacle();
         document.addEventListener('keydown', keyDown, false);
         document.addEventListener("keyup", keyUp, false);
         Game.pauseButton.addEventListener("click", stopStart, false);
@@ -94,76 +98,80 @@ function stopStart(){
 
 function checkObstacles() {
     for(var i = 0; i < Game.ghosts.length; i++) {
-        var ghost = Game.ghosts[i];
-        if (Game.obstacle.drawX + Game.obstacle.drawWidth <= Game.obstacle2.drawX &&
-            Game.obstacle.drawX + Game.obstacle.drawWidth >= Game.obstacle2.drawX + Game.obstacle2.drawWidth) {
-            Game.obstacle.drawX--;
-            Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
-            Game.obstacle.render();
-            Game.obstacle2.render();
+        for(var o = 0; o < Game.obstacles.length; o++) {
 
-        }
-
-        if (Game.obstacle.drawY <= 100) {
-            Game.obstacle.drawY++;
-            Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
-            Game.obstacle.render();
-        }
-
-        if (Game.score >= 8 && Game.score < 18) {
-            ghost.speed = 0.7;
-            Game.spawnAmount = 3;
-            if (Game.obstacle2.drawY <= 115) {
+            var ghost = Game.ghosts[i];
+            /*if (Game.obstacles[o].drawX + Game.obstacle.drawWidth <= Game.obstacle2.drawX &&
+                Game.obstacle.drawX + Game.obstacle.drawWidth >= Game.obstacle2.drawX + Game.obstacle2.drawWidth) {
+                Game.obstacle.drawX--;
                 Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
-                Game.obstacle2.drawY++;
-                Game.obstacle2.render();
-                Game.obstacle.render();
-            }
-        }
-
-        else if (Game.score >= 18 && Game.score < 28) {
-            ghost.speed = 0.8;
-            Game.spawnAmount = 4;
-            Game.spawnRate = 2500;
-        }
-
-        else if (Game.score >= 28 && Game.score < 40) {
-            ghost.speed = 1;
-            Game.spawnAmount = 5;
-            Game.spawnRate = 1800;
-            if (Game.obstacle.drawY <= 175) {
-                Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
-                Game.obstacle.drawY++;
                 Game.obstacle.render();
                 Game.obstacle2.render();
-            }
-        }
 
-        else if (Game.score >= 40) {
-            ghost.speed = 1;
-            Game.spawnAmount = 6;
-            Game.spawnRate = 1200;
-            if (Game.obstacle2.drawY <= 255) {
-                Game.obstacle2.drawY++;
+            }*/
+
+            if (Game.obstacles[0].drawY <= 100) {
+                Game.obstacles[0].drawY++;
                 Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
-                Game.obstacle2.render();
-                Game.obstacle.render();
+                Game.obstacles[0].render();
             }
 
-            else if(Game.score <= 80){
-                ghost.speed = 1.1;
-                Game.spawnAmount = 8;
-                Game.spawnRate = 1000;
-                if(Game.obstacle2.drawY <= 280){
+            if (Game.score >= 8 && Game.score < 18) {
+                ghost.speed = 0.7;
+                Game.spawnAmount = 3;
+                if (Game.obstacles[1].drawY <= 115) {
                     Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
-                    Game.obstacle2.drawY++;
-                    Game.obstacle.render();
-                    Game.obstacle2.render();
+                    Game.obstacles[1].drawY++;
+                    Game.obstacles[1].render();
+                    Game.obstacles[0].render();
                 }
             }
-        }
-    }
 
+            else if (Game.score >= 18 && Game.score < 28) {
+                ghost.speed = 0.8;
+                Game.spawnAmount = 4;
+                Game.spawnRate = 2500;
+            }
+
+            else if (Game.score >= 28 && Game.score < 40) {
+                ghost.speed = 1;
+                Game.spawnAmount = 5;
+                Game.spawnRate = 1800;
+                if (Game.obstacles[0].drawY <= 175) {
+                    Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
+                    Game.obstacles[0].drawY++;
+                    Game.obstacles[0].render();
+                    Game.obstacles[1].render();
+                }
+            }
+
+            else if (Game.score >= 40 && Game.score < 80) {
+                ghost.speed = 1;
+                Game.spawnAmount = 6;
+                Game.spawnRate = 1200;
+                if (Game.obstacles[1].drawY <= 255) {
+                    Game.obstacles[1].drawY++;
+                    Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
+                    Game.obstacles[1].render();
+                    Game.obstacles[0].render();
+                }
+            }
+
+                else if (Game.score >= 80) {
+                    ghost.speed = 1.1;
+                    Game.spawnAmount = 7;
+                    Game.spawnRate = 1000;
+                    if (Game.obstacles[1].drawY <= 280) {
+                        Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
+                        Game.obstacles[1].drawY++;
+                        Game.obstacles[0].render();
+                        Game.obstacles[1].render();
+                    }
+                }
+
+                //else if(Game.score)
+            }
+        }
 }
 
 function checkObjectPositions(){
@@ -187,17 +195,20 @@ function checkObjectPositions(){
 function bulletHitObstacle(){
     //console.log(Game.obstacle);
     for(var i = 0; i < Game.bullets.length; i++){
-        var bullet = Game.bullets[i];
-        if(bullet.drawX + bullet.drawWidth >= Game.obstacle.drawX &&
-            bullet.drawX  + bullet.drawWidth <= Game.obstacle.drawX + Game.obstacle.drawWidth + 10 &&
-            bullet.drawY <= Game.obstacle.drawY){
-            Game.bullets[i].drawY = 520;
-        }
+        for(var x = 0; x < Game.obstacles.length; x++) {
+            var bullet = Game.bullets[i];
+            var obstacle = Game.obstacles[x];
+            if (bullet.drawX + bullet.drawWidth >= obstacle.drawX &&
+                bullet.drawX + bullet.drawWidth <= obstacle.drawX + obstacle.drawWidth + 10 &&
+                bullet.drawY <= obstacle.drawY) {
+                Game.bullets[i].drawY = 520;
+            }
 
-        if(bullet.drawX + bullet.drawWidth >= Game.obstacle2.drawX &&
-            bullet.drawX  + bullet.drawWidth <= Game.obstacle2.drawX + Game.obstacle2.drawWidth + 10 &&
-            bullet.drawY <= Game.obstacle2.drawY){
-            Game.bullets[i].drawY = 520;
+            /*if (bullet.drawX + bullet.drawWidth >= Game.obstacle2.drawX &&
+                bullet.drawX + bullet.drawWidth <= Game.obstacle2.drawX + Game.obstacle2.drawWidth + 10 &&
+                bullet.drawY <= Game.obstacle2.drawY) {
+                Game.bullets[i].drawY = 520;
+            }*/
         }
     }
 }

@@ -24,7 +24,7 @@ function renderGhosts(){
     for(var i = 0; i < Game.ghosts.length; i++){
         var ghost = Game.ghosts[i];
 
-        if(ghost.drawX <= 2){
+        if(ghost.drawX <= 5){
             ghost.drawX += 0.5;
         }
 
@@ -33,24 +33,22 @@ function renderGhosts(){
         }
         //console.log(ghost);
         if(ghost.drawY >= Game.height){
-           //console.log("removing");
             Game.player.health--;
             Game.player.renderHealth();
-           Game.ghosts.splice(i, 1);
+            Game.ghosts.splice(i, 1);
         }
-        else{
-            //console.log(ghost.movement);
-            if (ghost.movement > 0) {
-                ghost.drawX += ghost.speed / 2;
-                ghost.movement -= ghost.speed / 2;
-            } else {
-                ghost.drawX -= ghost.speed / 2;
+        if (ghost.movement > 0) {
+            ghost.drawX += ghost.speed;
+            ghost.movement -= ghost.speed;
+            }
+
+        else {
+                ghost.drawX -= ghost.speed;
                 ghost.movement += ghost.speed / 2;
             }
 
             ghost.render();
         }
-    }
 }
 
 function spawnGhosts(amount){
