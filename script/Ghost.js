@@ -10,7 +10,7 @@ function Ghost(){
     this.drawWidth = 30;
     this.drawHeight = 50;
     this.speed = 0.5;
-    this.movement = Math.random() * Game.width * 0.2 - Game.width * 0.1;
+    this.movement = Math.floor(Math.random() * Game.width * 0.2 - Game.width * 0.1);
 }
 
 Ghost.prototype.render = function(){
@@ -28,7 +28,7 @@ function renderGhosts(){
             ghost.drawX += 0.5;
         }
 
-        if(ghost.drawX >= 488){
+        if(ghost.drawX + ghost.drawWidth >= 795){
             ghost.drawX -= 0.5;
         }
         //console.log(ghost);
@@ -37,15 +37,22 @@ function renderGhosts(){
             Game.player.renderHealth();
             Game.ghosts.splice(i, 1);
         }
-        if (ghost.movement > 0) {
-            ghost.drawX += ghost.speed;
-            ghost.movement -= ghost.speed;
-            }
+        if(ghost.movement === 0){
+            ghost.movement = Math.floor(Math.random() * Game.width * 0.2 - Game.width * 0.1);
+        }
+        if (!ghost.drawX <= 5 || ghost.drawX + ghost.drawWidth >= 795 ) {
+            if (ghost.movement > 0) {
+                //console.log("larger");
+                ghost.drawX += ghost.speed / 2;
+                ghost.movement -= ghost.speed / 2;
+                }
 
-        else {
-                ghost.drawX -= ghost.speed;
-                ghost.movement += ghost.speed / 2;
-            }
+            else if (ghost.movement < 0) {
+                //console.log("smaller");
+                    ghost.drawX -= ghost.speed / 2;
+                    ghost.movement += ghost.speed / 2;
+                }
+        }
 
             ghost.render();
         }
@@ -54,8 +61,6 @@ function renderGhosts(){
 function spawnGhosts(amount){
     for(var i = 0; i < amount; i++){
         Game.ghosts[Game.ghosts.length] = new Ghost();
-
-        //console.log(Game.ghosts);
     }
 }
 
