@@ -11,6 +11,7 @@ function Ghost(){
     this.drawHeight = 50;
     this.speed = 0.5;
     this.movement = Math.floor(Math.random() * Game.width * 0.2 - Game.width * 0.1);
+    this.type = "ghost";
 }
 
 Ghost.prototype.render = function(){

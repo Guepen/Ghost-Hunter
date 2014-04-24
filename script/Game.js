@@ -11,6 +11,7 @@ var Game = {
     ghosts: [],
     bullets: [],
     obstacles: [],
+    powerUps: [],
     backgroundCanvas: null,
     playerCanvas: null,
     bulletCanvas: null,
@@ -68,6 +69,32 @@ var Game = {
         for(var i = 0; i < 2; i++){
             Game.obstacles[i] = new Obstacle();
         }
+
+        Game.powerUps.push({
+            drawX: 900,
+            drawY: -10,
+            srcY: 500,
+            srcX: 250,
+            srcWidth: 26,
+            srcHeight: 27,
+            drawWidth: 26,
+            drawHeight: 27,
+            type: "speed"
+
+        });
+
+        Game.powerUps.push({
+            drawX: 900,
+            drawY: -10,
+            srcY: 500,
+            srcX: 219,
+            srcWidth: 26,
+            srcHeight: 27,
+            drawWidth: 26,
+            drawHeight: 27,
+            type: "heart"
+
+        });
         //Game.obstacle = new Obstacle();
         //Game.obstacle2 = new  Obstacle();
         document.addEventListener('keydown', keyDown, false);
@@ -77,20 +104,20 @@ var Game = {
         //initGhosts(Game.spawnAmount);
         //spawnGhosts(Game.spawnAmount);
         //Game.obstacle.render();
-        startLoop();
+        stopStart();
     }
 };
 
 function stopStart(){
     if(Game.paused){
-        Game.paused = false;
         stopLoop();
+        Game.paused = false;
         Game.pauseButton.innerHTML = "Play";
     }
 
     else if(!Game.paused){
-        Game.paused = true;
         startLoop();
+        Game.paused = true;
         Game.pauseButton.innerHTML = "Pause";
     }
 
@@ -174,56 +201,45 @@ function checkObstacles() {
         }
 }
 
-function checkObjectPositions(){
+function checkObjectPositions() {
     //alert("checking");
-    for(var b = 0; b < Game.bullets.length; b++) {
-        if(checkCollision(Game.bullets[b], Game.obstacle)){
+    for (var b = 0; b < Game.bullets.length; b++) {
+        for (var o = 0; o < Game.obstacles.length; o++) {
+         if (checkCollision(Game.bullets[b], Game.obstacles[o])) {
+             alert("hit obstacle!");
             Game.bullets[b].drawY = 520;
+            }
         }
         for (var g = 0; g < Game.ghosts.length; g++) {
             //console.log(g);
             if (checkCollision(Game.bullets[b], Game.ghosts[g])) {
+                //var powerUp = Game.powerUps[0];
                 Game.score++;
                 Game.htmlScore.innerHTML = Game.score;
                 Game.ghosts.splice(g, 1);
                 Game.bullets[b].drawY = 520;
+                //powerUp = new PowerUp(powerUp.srcX, powerUp.srcY, powerUp.srcWidth, powerUp.srcHeight,
+                //powerUp.drawX, powerUp.drawY, powerUp.drawWidth, powerUp.drawHeight);
+                //powerUp.render();
             }
         }
     }
 }
+                        //bullet     //ghost or obstacle
+function checkCollision(bullet, secondObject){
 
-function bulletHitObstacle(){
-    //console.log(Game.obstacle);
-    for(var i = 0; i < Game.bullets.length; i++){
-        for(var x = 0; x < Game.obstacles.length; x++) {
-            var bullet = Game.bullets[i];
-            var obstacle = Game.obstacles[x];
-            if (bullet.drawX + bullet.drawWidth >= obstacle.drawX &&
-                bullet.drawX + bullet.drawWidth <= obstacle.drawX + obstacle.drawWidth + 10 &&
-                bullet.drawY <= obstacle.drawY) {
-                Game.bullets[i].drawY = 520;
-            }
-
-            /*if (bullet.drawX + bullet.drawWidth >= Game.obstacle2.drawX &&
-                bullet.drawX + bullet.drawWidth <= Game.obstacle2.drawX + Game.obstacle2.drawWidth + 10 &&
-                bullet.drawY <= Game.obstacle2.drawY) {
-                Game.bullets[i].drawY = 520;
-            }*/
-        }
-    }
-}
-                        //bullet     //ghost
-function checkCollision(firstObject, secondObject){
-    //console.log(firstObject);
-    //console.log(firstObject);
-    if (firstObject == undefined || secondObject == undefined) {
+    if (bullet == undefined || secondObject == undefined) {
         return false;
     }
 
-    if(firstObject.drawX + firstObject.drawWidth >= secondObject.drawX &&
-        firstObject.drawX + firstObject.drawWidth <= secondObject.drawX + secondObject.drawWidth + 15){
-        return(firstObject.drawY <= secondObject.drawY &&
-            firstObject.drawY - firstObject.drawHeight >= secondObject.drawY - secondObject.drawHeight)
+    if(bullet.drawX + bullet.drawWidth >= secondObject.drawX &&
+        bullet.drawX + bullet.drawWidth <= secondObject.drawX + secondObject.drawWidth + 15){
+        if (secondObject.type === "ghost") {
+            return(bullet.drawY <= secondObject.drawY &&
+            bullet.drawY - bullet.drawHeight >= secondObject.drawY - secondObject.drawHeight);
+        } else {
+            return (bullet.drawY <= secondObject.drawY);
+        }
     }
 
     return false;
@@ -264,7 +280,6 @@ function loop(){
         Game.player.render();
         fps.f.innerHTML = fps.getFps();
         checkObjectPositions();
-        bulletHitObstacle();
         checkObstacles();
         renderGhosts();
         animFrame(loop);

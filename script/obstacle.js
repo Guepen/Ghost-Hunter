@@ -7,6 +7,7 @@ function Obstacle(){
     this.srcHeight = 20;
     this.drawWidth = 70;
     this.drawHeight = 20;
+    this.type = "obstacle";
 }
 
 Obstacle.prototype.render = function() {
