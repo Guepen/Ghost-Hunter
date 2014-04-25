@@ -1,0 +1,35 @@
+canvas{
+    position:absolute;
+    background:transparent;
+    top:100;
+    left:auto;
+}
+
+#game{
+    margin:auto 0;
+}
+#backgroundCanvas{
+    background:url("../pictures/canvasBg.png");
+    display:block;
+}
+#Score{
+    font-style:italic;
+    color:white;
+    font-weight:bold;
+    font-size:14px;
+
+}
+#playerCanvas,#ghostCanvas, #bulletCanvas {
+    display:block;
+}
+
+body{
+    background:#303030;
+}
+
+#game{
+    width:800px;
+    height:600px;
+    display:block;
+    Margin:100px auto 0;
+}
