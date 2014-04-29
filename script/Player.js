@@ -4,11 +4,11 @@ function Player(){
     this.drawX = Game.width / 2;
     this.drawHeight = 80;
     this.drawY = Game.height - this.drawHeight;
-    this.srcX = 70;
-    this.srcY =500;
+    this.srcX = 0;
+    this.srcY = 1117;
     this.drawWidth = 50;
-    this.srcWidth = 60;
-    this.srcHeight = 80;
+    this.srcWidth = 54;
+    this.srcHeight = 83;
     this.speed = 5;
     this.health = 3;
     this.shoot = false;
@@ -49,8 +49,8 @@ Player.prototype.renderHealth = function(){
     var nextX = -18;
     Game.healthCanvas.clearRect(0, 0, Game.width, Game.height);
     for(var i = 0; i < this.health; i++){
-        Game.healthCanvas.drawImage(Game.gameSprite,195, 500, 25, 23,
-            nextX += 28, 470, 25, 25)
+        Game.healthCanvas.drawImage(Game.gameSprite, 0, 1076, 27, 23,
+            nextX += 28, 470, 27, 23)
     }
 
 };
@@ -58,7 +58,10 @@ Player.prototype.renderHealth = function(){
 Player.prototype.checkDirection = function(){
 
         if (Game.pressedKeys[37] || Game.pressedKeys[65]) {
-            if (!Game.player.drawX <= 0) {
+            if (Game.player.drawX <= 0) {
+                Game.player.drawX = 0;
+            }
+            else {
                 Game.player.drawX -= this.speed;
             }
         }
@@ -71,11 +74,14 @@ Player.prototype.checkDirection = function(){
 };
 
 Player.prototype.renderBullets = function() {
-
     Game.bulletCanvas.clearRect(0, 0, 800, 500);
     for (var i = 0; i < Game.bullets.length; i++) {
-        if (Game.bullets[i].drawY <= 500) {
+        if (Game.bullets[i].drawY <= 500 && Game.bullets[i].drawY >= 0) {
             Game.bullets[i].render();
+        }
+
+        else if (Game.bullets[i].drawY <= 0) {
+            Game.bullets[i].resetBullet(Game.bullets[i]);
         }
     }
 };
@@ -127,4 +133,8 @@ function keyUp(e){
     Game.pressedKeys[e.keyCode] = false;
     //Game.player.srcX = 0;
 
+}
+
+function startGame() {
+    Game.renderBackground();
 }

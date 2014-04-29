@@ -1,15 +1,16 @@
 "use strict";
 
 function Ghost(){
-    this.drawX = Math.random() * Game.width;
+    this.drawX = Math.random() * (Game.width - 20);
     this.drawY = -10;
-    this.srcY = 500;
+    this.srcY = 1000;
     this.srcX = 0;
-    this.srcWidth = 50;
-    this.srcHeight = 100;
+    this.srcWidth = 48;
+    this.srcHeight = 75;
     this.drawWidth = 30;
-    this.drawHeight = 50;
+    this.drawHeight = 45;
     this.speed = 0.5;
+    this.xSpeed = 1;
     this.movement = Math.floor(Math.random() * Game.width * 0.2 - Game.width * 0.1);
     this.type = "ghost";
 }
@@ -38,40 +39,40 @@ function renderGhosts(){
             Game.player.renderHealth();
             Game.ghosts.splice(i, 1);
         }
-        if(ghost.movement === 0){
-            ghost.movement = Math.floor(Math.random() * Game.width * 0.2 - Game.width * 0.1);
-        }
+
         if (!ghost.drawX <= 5 || ghost.drawX + ghost.drawWidth >= 795 ) {
+            //console.log("moving");
+            if (ghost.movement === 0) {
+                ghost.movement = Math.floor(Math.random() * Game.width * 0.2 - Game.width * 0.1);
+            }
+
             if (ghost.movement > 0) {
                 //console.log("larger");
-                ghost.drawX += ghost.speed / 2;
-                ghost.movement -= ghost.speed / 2;
+                ghost.drawX += ghost.xSpeed / 2;
+                ghost.movement -= ghost.xSpeed;
                 }
 
             else if (ghost.movement < 0) {
                 //console.log("smaller");
-                    ghost.drawX -= ghost.speed / 2;
-                    ghost.movement += ghost.speed / 2;
+                ghost.drawX -= ghost.xSpeed / 2;
+                ghost.movement += ghost.xSpeed;
                 }
         }
 
             ghost.render();
         }
 }
-
 function spawnGhosts(amount){
     for(var i = 0; i < amount; i++){
         Game.ghosts[Game.ghosts.length] = new Ghost();
     }
 }
-
 function startSpawn(){
     Game.spawnInterval = setInterval(function(){
         spawnGhosts(Game.spawnAmount);
 
     }, Game.spawnRate);
 }
-
 function stopSpawn(){
     clearInterval(Game.spawnInterval);
 }
