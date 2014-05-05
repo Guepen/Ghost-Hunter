@@ -4,6 +4,8 @@
 var Game = {
     player: null,
     pauseButton: null,
+    onePlayerButton: null,
+    twoPlayerButton: null,
     gameDiv: null,
     clearPowerUp: null,
     pressedKeys: [],
@@ -45,11 +47,15 @@ var Game = {
     },
 
     renderStartScreen: function () {
+        Game.onePlayerButton = document.getElementById("onePlayer");
+        Game.twoPlayerButton = document.getElementById("twoPlayers");
         this.backgroundCanvas = document.getElementById("backgroundCanvas").getContext("2d");
         var srcX = 0; //x-pixeln i spriten som bakgrunden börjar på
         var srcY = 500; //y-pixeln i spriten som bakgrunden börjar på
         var drawX = 0; //x-pixeln där bakgrunden börjar ritas ut
         var drawY = 0; //y-pixeln där bakgrunden börjar ritas ut
+
+
         this.backgroundCanvas.drawImage(Game.gameSprite, srcX, srcY, Game.width, Game.height, drawX, drawY, Game.width, Game.height);
 
         //Startskärmen visas, init körs och efter det är allt i spelet förberett
@@ -80,7 +86,7 @@ var Game = {
         Game.pauseButton = document.getElementById("pauseButton");
         Game.gameDiv = document.getElementById("game");
         Game.htmlScore = document.getElementById("score");
-        Game.player = new Player();
+        //Game.player = new Player();
 
         for(var i = 0; i < 2; i++){
             Game.obstacles[i] = new Obstacle();
@@ -88,15 +94,22 @@ var Game = {
 
         document.addEventListener('keydown', keyDown, false);
         document.addEventListener("keyup", keyUp, false);
-        Game.gameDiv.addEventListener("click", startGame, false);
+        Game.onePlayerButton.addEventListener("click", onePlayer, false);
+        Game.twoPlayerButton.addEventListener("click", twoPlayers, false);
         Game.pauseButton.addEventListener("click", stopStart, false);
     }
 };
+
+function onePlayer() {
+    Game.player = new Player();
+    Game.renderBackground();
+}
 
 //används för att pausa/starta spelet
 function stopStart(){
     if(Game.paused){
         stopLoop();
+        //stopSpawn();
         Game.paused = false;
         Game.pauseButton.innerHTML = "Play";
     }
@@ -173,22 +186,33 @@ function moveObstacles() {
             }
 
             else if (Game.score >= 80) {
+
                 ghost.speed = 1.1;
                 Game.spawnAmount = 7;
                 Game.spawnRate = 1000;
-                if (Game.obstacles[0].drawX >= 0 && Game.obstacles[0].drawX + Game.obstacles[0].drawWidth <= Game.width - 20) {
-                    Game.obstacles[0].drawX++;
+
+                /*if (Game.obstacles[0].drawX + Game.obstacles[0].drawWidth <= Game.width - 10) {
+                 Game.obstacles[0].drawX++;
+                 }*/
+
+                Game.obstacles[0].drawX += 0.2;
+
+                if (Game.obstacles[0].drawX >= Game.width) {
+                    Game.obstacles[0].drawX = -70;
                 }
-                if (Game.obstacles[0].drawX <= Game.width) {
-                    Game.obstacles[0].drawX--;
-                }
+                /* if (Game.obstacles[0].drawX <= Game.width) {
+                 Game.obstacles[0].drawX--;
+                 }*/
+
 
                 if (Game.obstacles[1].drawY <= 280) {
                     Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
                     Game.obstacles[1].drawY++;
-                    Game.obstacles[0].render();
-                    Game.obstacles[1].render();
+
                 }
+                Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
+                Game.obstacles[0].render();
+                Game.obstacles[1].render();
             }
         }
     }
@@ -236,6 +260,9 @@ function checkObjectPositions() {
                 // Game.powerUps.splice(p, 1);
                 Game.player.speed = 8;
 
+                // tar bort time- så att tiden ställs om när spelaren får en likadan power-up
+                clearTimeout(Game.clearPowerUp);
+
                 //efter 15 sekunder återställs spelarens hastighet
                 Game.clearPowerUp = setTimeout(function () {
                     Game.player.speed = 5;
@@ -257,6 +284,13 @@ function checkObjectPositions() {
     }
 }
 
+/**
+ *Kollar om två objekt kolliderar
+ *
+ * @param {object} firstObject
+ * @param {object} secondObject
+ * @returns {boolean} true om två objekt kolliderar, annars false
+ */
 function checkCollision(firstObject, secondObject) {
     //för säkerhets skull kollar jag om något av objekten är unndef
     //isåfall returneras false. Detta för att undvika att spelet kraschar
@@ -270,7 +304,6 @@ function checkCollision(firstObject, secondObject) {
         firstObject.drawY + firstObject.drawHeight / 2 <= secondObject.drawY + secondObject.drawHeight &&
         firstObject.drawY + firstObject.drawHeight >= secondObject.drawY) {
 
-        //om det är en kollision returneras true
         return true;
     }
 
@@ -305,7 +338,7 @@ var animFrame = window.requestAnimationFrame ||
     window.msRequestAnimationFrame ||
     null;
 
-//funktonen loop kallar på sig själv med hjälp av aninframe
+//funktonen loop kallar på sig själv med hjälp av animframe
 function loop(){
     if(Game.rendering){
         Game.player.render();

@@ -21,58 +21,83 @@ Ghost.prototype.render = function(){
 
  };
 
+/**
+ * Användnigsområden
+ * gör så spökena rör sig
+ * tar bort ett från arrayen spöke om det är under marken
+ * anropar render som ritar ut spökena
+ */
 function renderGhosts(){
+
     Game.ghostCanvas.clearRect(0, 0, Game.width, Game.height);
     for(var i = 0; i < Game.ghosts.length; i++){
+
+        //förkortning
         var ghost = Game.ghosts[i];
 
+        //om spöket är nära vänstra kanten flyttas det till höger
         if(ghost.drawX <= 5){
             ghost.drawX += 0.5;
         }
 
+        //om spöket är nära högra kanten flyttas det till vänster
         if(ghost.drawX + ghost.drawWidth >= 795){
             ghost.drawX -= 0.5;
         }
-        //console.log(ghost);
+
+        //om spöket är under marken
         if(ghost.drawY >= Game.height){
             Game.player.health--;
             Game.player.renderHealth();
             Game.ghosts.splice(i, 1);
         }
 
+        //Huvudfunktionalitet för att röra på spöken
         if (!ghost.drawX <= 5 || ghost.drawX + ghost.drawWidth >= 795 ) {
-            //console.log("moving");
+
+            //om spökets "rörelsetal" är noll slumpas ett nytt tal
             if (ghost.movement === 0) {
                 ghost.movement = Math.floor(Math.random() * Game.width * 0.2 - Game.width * 0.1);
             }
 
+            //om spökets rörelsetal är större än noll
             if (ghost.movement > 0) {
-                //console.log("larger");
-                ghost.drawX += ghost.xSpeed / 2;
-                ghost.movement -= ghost.xSpeed;
+                ghost.drawX += ghost.xSpeed / 2; //spöket går åt höger
+                ghost.movement -= ghost.xSpeed; // rörelsetalet minskas och blir tillslut noll
                 }
 
+            //om spökets rörelsetal är mindre än noll
             else if (ghost.movement < 0) {
-                //console.log("smaller");
-                ghost.drawX -= ghost.xSpeed / 2;
-                ghost.movement += ghost.xSpeed;
+                ghost.drawX -= ghost.xSpeed / 2; //spöket går åt vänster
+                ghost.movement += ghost.xSpeed; //rörelsetalet ökar och blir tillslut noll
                 }
         }
-
+        //ritar ut spöket
             ghost.render();
         }
 }
+/**
+ * Skapar nya spöken
+ * @param {number} amount antal spöken som skall skapas
+ */
 function spawnGhosts(amount){
     for(var i = 0; i < amount; i++){
         Game.ghosts[Game.ghosts.length] = new Ghost();
     }
 }
+/**
+ * Anropar funktionen spawnGhosts med ett tidsintervall
+ * Skickar med hur många spöken som skall skapas
+ */
 function startSpawn(){
+
     Game.spawnInterval = setInterval(function(){
         spawnGhosts(Game.spawnAmount);
 
     }, Game.spawnRate);
 }
+
+//tar bort intervallet för att skapa nya spöken
 function stopSpawn(){
     clearInterval(Game.spawnInterval);
 }

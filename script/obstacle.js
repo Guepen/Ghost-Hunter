@@ -1,3 +1,7 @@
+/**
+ * Skapar en instans av Obstacle
+ * @constructor
+ */
 function Obstacle(){
     this.drawX = Math.random() * (Game.width - 75);
     this.drawY = -30;

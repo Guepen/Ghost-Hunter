@@ -18,6 +18,12 @@ PowerUp.prototype.render = function () {
 
 };
 
+/**
+ * Funktion som slumpar om en power-up ska ges när ett spöke skjutits ner
+ *
+ * @param {number} drawX Det skjutna spökets x-kordinat
+ * @param {number} drawY Det skjutna spökets y-kordinat
+ */
 function newPowerUp(drawX, drawY) {
     var randomPowerUp = Math.floor(Math.random() * 25);
     var powerUp;
@@ -55,12 +61,17 @@ function newPowerUp(drawX, drawY) {
 
 }
 
+/**
+ * funktion som renderar ut power-ups
+ */
 function renderPowerUps() {
+
     if (Game.powerUps.length === 0) {
         Game.renderPowerUp = false;
     }
-    console.log("render powerup");
+
     for (var i = 0; i < Game.powerUps.length; i++) {
+        //om power-upen inte är på marken
         if (Game.powerUps[i].drawY + Game.powerUps[i].drawHeight <= Game.height) {
             Game.powerUpCanvas.clearRect(Game.powerUps[i].drawX - 2, Game.powerUps[i].drawY - 2,
                     Game.powerUps[i].drawWidth + 4, Game.powerUps[i].drawHeight + 4);

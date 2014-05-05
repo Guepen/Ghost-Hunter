@@ -1,35 +1,45 @@
-canvas{
-    position:absolute;
-    background:transparent;
-    top:100;
-    left:auto;
+canvas {
+    position: absolute;
+    background: transparent;
+    top: 100px;
+    left: auto;
+    z-index: 1;
+    display: block;
 }
 
-#game{
-    margin:auto 0;
-}
-#backgroundCanvas{
-    background:url("../pictures/canvasBg.png");
-    display:block;
-}
-#Score{
-    font-style:italic;
-    color:white;
-    font-weight:bold;
-    font-size:14px;
-
-}
-#playerCanvas,#ghostCanvas, #bulletCanvas {
-    display:block;
+#game {
+    margin: auto 0;
 }
 
-body{
-    background:#303030;
+#backgroundCanvas {
+    display: block;
 }
 
-#game{
-    width:800px;
-    height:600px;
-    display:block;
-    Margin:100px auto 0;
+#Score {
+    font-style: italic;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+
+}
+
+#playerCanvas, #ghostCanvas, #bulletCanvas {
+    display: block;
+}
+
+body {
+    background: #303030;
+}
+
+#menu {
+    z-index: 2;
+    color: red;
+    margin: 100px auto 0;
+}
+
+#game {
+    width: 800px;
+    height: 600px;
+    display: block;
+    Margin: 100px auto 0;
 }

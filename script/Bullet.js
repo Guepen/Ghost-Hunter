@@ -1,5 +1,10 @@
 "use strict";
 
+/**
+ * Skapar en instans av Bullet
+ * @constructor
+ * @this {Bullet}
+ */
 function Bullet(){
     this.drawWidth = 8;
     this.drawHeight = 12;
@@ -22,7 +27,7 @@ Bullet.prototype.fire = function(playerX, playerY){
     this.drawY = playerY;
 };
 
-Bullet.prototype.resetBullet = function (bullet) {
-    bullet.drawX = -25;
-    bullet.drawY = 510;
+Bullet.prototype.resetBullet = function () {
+    this.drawX = -25;
+    this.drawY = 510;
 };
