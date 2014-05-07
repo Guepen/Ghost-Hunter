@@ -3,12 +3,16 @@
 // objektet Game kapslar in kod som behöver köras innan spelet kan starta
 var Game = {
     player: null,
+    player2: null,
+    playerX: 200,
+    player2X: 600,
     pauseButton: null,
     onePlayerButton: null,
     twoPlayerButton: null,
     gameDiv: null,
     clearPowerUp: null,
     pressedKeys: [],
+    players: [],
     ghosts: [],
     bullets: [],
     obstacles: [],
@@ -23,8 +27,6 @@ var Game = {
     gameSprite: null,
     width: 800,
     height: 500,
-    mouseX: 0,
-    mouseY: 0,
     rendering: false,
     renderPowerUp: false,
     paused: true,
@@ -101,7 +103,13 @@ var Game = {
 };
 
 function onePlayer() {
-    Game.player = new Player();
+    Game.players[Game.players.length] = new Player(Game.width / 2);
+    Game.renderBackground();
+}
+
+function twoPlayers() {
+    Game.players[Game.players.length] = new Player(Game.playerX);
+    Game.players[Game.players.length] = new Player(Game.player2X);
     Game.renderBackground();
 }
 
@@ -224,62 +232,64 @@ function checkObjectPositions() {
     //alert("checking");
 
     //loopar först igenom kulorna och hindrena för att kolla om de kolliderar
-    for (var b = 0; b < Game.bullets.length; b++) {
-        for (var o = 0; o < Game.obstacles.length; o++) {
+    for (var p = 0; p < Game.players.length; p++) {
+        for (var b = 0; b < Game.players[p].bullets.length; b++) {
+            for (var o = 0; o < Game.obstacles.length; o++) {
 
-            //om de kolliderar "resetas" kulans position och är sen redo att återanvändas
-            if (checkCollision(Game.bullets[b], Game.obstacles[o])) {
-                Game.bullets[b].resetBullet(Game.bullets[b]);
-            }
-        }
-        //loopar igenom kulorna och spökena
-        for (var g = 0; g < Game.ghosts.length; g++) {
-            var ghost = Game.ghosts[g]; // tilldelar variabeln ghost nuvarande spökobjekt
-            // i arrayen så det blir mindre kod att skriva
-
-            //om de kolliderar "resetas" kulans position och är sen redo att återanvändas, spöket tas bort
-            // poängen ökar och ett anrop till funktionen newPowerUp görs för att slumpa om en powerUp ska ges
-            if (checkCollision(Game.bullets[b], ghost)) {
-                Game.score++;
-                Game.htmlScore.innerHTML = Game.score;
-                Game.ghosts.splice(g, 1);
-                Game.bullets[b].resetBullet(Game.bullets[b]);
-                newPowerUp(ghost.drawX, ghost.drawY); // skickar med spökets x och y som blir powerupens startposition
-            }
-        }
-    }
-    //loopar igenom power-upsen
-    for (var p = 0; p < Game.powerUps.length; p++) {
-        if (checkCollision(Game.powerUps[p], Game.player)) {
-            //rensar canvasen om spelaren har tagit powerupen
-            Game.powerUpCanvas.clearRect(Game.powerUps[p].drawX, Game.powerUps[p].drawY,
-                Game.powerUps[p].drawWidth, Game.powerUps[p].drawHeight);
-
-
-            if (Game.powerUps[p].type === "speed") {
-                // Game.powerUps.splice(p, 1);
-                Game.player.speed = 8;
-
-                // tar bort time- så att tiden ställs om när spelaren får en likadan power-up
-                clearTimeout(Game.clearPowerUp);
-
-                //efter 15 sekunder återställs spelarens hastighet
-                Game.clearPowerUp = setTimeout(function () {
-                    Game.player.speed = 5;
-                }, 15000);
-
-            }
-
-            else if (Game.powerUps[p].type === "health") {
-                //Game.powerUps.splice(p, 1);
-                //Liv ges bara om spelaren har tappat något liv
-                if (Game.player.health < 3) {
-                    Game.player.health += 1;
-                    Game.player.renderHealth();
+                //om de kolliderar "resetas" kulans position och är sen redo att återanvändas
+                if (checkCollision(Game.players[p].bullets[b], Game.obstacles[o])) {
+                    Game.players[p].bullets[b].resetBullet(Game.players[p].bullets[b]);
                 }
             }
-            //tar bort power-upen från arrayen om spelaren har tagit den
-            Game.powerUps.splice(p, 1);
+            //loopar igenom kulorna och spökena
+            for (var g = 0; g < Game.ghosts.length; g++) {
+                var ghost = Game.ghosts[g]; // tilldelar variabeln ghost nuvarande spökobjekt
+                // i arrayen så det blir mindre kod att skriva
+
+                //om de kolliderar "resetas" kulans position och är sen redo att återanvändas, spöket tas bort
+                // poängen ökar och ett anrop till funktionen newPowerUp görs för att slumpa om en powerUp ska ges
+                if (checkCollision(Game.players[p].bullets[b], ghost)) {
+                    Game.score++;
+                    Game.htmlScore.innerHTML = Game.score;
+                    Game.ghosts.splice(g, 1);
+                    Game.players[p].bullets[b].resetBullet(Game.players[p].bullets[b]);
+                    newPowerUp(ghost.drawX, ghost.drawY); // skickar med spökets x och y som blir powerupens startposition
+                }
+            }
+        }
+        //loopar igenom power-upsen
+        for (var pu = 0; pu < Game.powerUps.length; pu++) {
+            if (checkCollision(Game.powerUps[pu], Game.players[p])) {
+                //rensar canvasen om spelaren har tagit powerupen
+                Game.powerUpCanvas.clearRect(Game.powerUps[p].drawX, Game.powerUps[p].drawY,
+                    Game.powerUps[pu].drawWidth, Game.powerUps[p].drawHeight);
+
+
+                if (Game.powerUps[pu].type === "speed") {
+                    // Game.powerUps.splice(p, 1);
+                    Game.players[p].speed = 8;
+
+                    // tar bort time- så att tiden ställs om när spelaren får en likadan power-up
+                    clearTimeout(Game.clearPowerUp);
+
+                    //efter 15 sekunder återställs spelarens hastighet
+                    Game.clearPowerUp = setTimeout(function () {
+                        Game.players[p].speed = 5;
+                    }, 15000);
+
+                }
+
+                else if (Game.powerUps[pu].type === "health") {
+                    //Game.powerUps.splice(p, 1);
+                    //Liv ges bara om spelaren har tappat något liv
+                    if (Game.players[0].health < 3) {
+                        Game.players[0].health += 1;
+                        Game.players[0].renderHealth();
+                    }
+                }
+                //tar bort power-upen från arrayen om spelaren har tagit den
+                Game.powerUps.splice(p, 1);
+            }
         }
     }
 }
@@ -341,7 +351,13 @@ var animFrame = window.requestAnimationFrame ||
 //funktonen loop kallar på sig själv med hjälp av animframe
 function loop(){
     if(Game.rendering){
-        Game.player.render();
+        Game.playerCanvas.clearRect(0, 0, 800, 500);
+        for (var i = 0; i < Game.players.length; i++) {
+            Game.players[i].checkDirection();
+            Game.players[i].ifShooting();
+            Game.players[i].checkBullets();
+            Game.players[i].render();
+        }
         fps.f.innerHTML = fps.getFps();
         checkObjectPositions();
         moveObstacles();
@@ -358,7 +374,7 @@ function loop(){
 // startar spel-loopen när användaren trycker på play och bakgrunden har renderats ut
 function startLoop(){
     Game.rendering = true;
-    Game.player.renderHealth();
+    Game.players[0].renderHealth();
     loop();
     startSpawn();
 }

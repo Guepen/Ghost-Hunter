@@ -23,7 +23,7 @@ Bullet.prototype.render = function(){
 };
 
 Bullet.prototype.fire = function(playerX, playerY){
-    this.drawX = playerX + Game.player.drawWidth / 2 - (this.drawWidth / 2);
+    this.drawX = playerX + Game.players[0].drawWidth / 2 - (this.drawWidth / 2);
     this.drawY = playerY;
 };
 

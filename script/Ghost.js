@@ -47,8 +47,8 @@ function renderGhosts(){
 
         //om spöket är under marken
         if(ghost.drawY >= Game.height){
-            Game.player.health--;
-            Game.player.renderHealth();
+            Game.players[0].health--;
+            Game.players[0].renderHealth();
             Game.ghosts.splice(i, 1);
         }
 
