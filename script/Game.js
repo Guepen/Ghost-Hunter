@@ -10,6 +10,7 @@ var Game = {
     onePlayerButton: null,
     twoPlayerButton: null,
     gameDiv: null,
+    menuDiv: null,
     clearPowerUp: null,
     pressedKeys: [],
     players: [],
@@ -65,6 +66,7 @@ var Game = {
     },
 
     renderBackground: function () {
+        Game.menuDiv.parentNode.removeChild(Game.menuDiv);
         var srcX = 0; //x-pixeln i spriten som bakgrunden börjar på
         var srcY = 0; //y-pixeln i spriten som bakgrunden börjar på
         var drawX = 0; //x-pixeln där bakgrunden börjar ritas ut
@@ -87,6 +89,7 @@ var Game = {
         Game.powerUpCanvas = document.getElementById("powerUpCanvas").getContext("2d");
         Game.pauseButton = document.getElementById("pauseButton");
         Game.gameDiv = document.getElementById("game");
+        Game.menuDiv = document.getElementById("menu");
         Game.htmlScore = document.getElementById("score");
         //Game.player = new Player();
 
@@ -261,8 +264,8 @@ function checkObjectPositions() {
         for (var pu = 0; pu < Game.powerUps.length; pu++) {
             if (checkCollision(Game.powerUps[pu], Game.players[p])) {
                 //rensar canvasen om spelaren har tagit powerupen
-                Game.powerUpCanvas.clearRect(Game.powerUps[p].drawX, Game.powerUps[p].drawY,
-                    Game.powerUps[pu].drawWidth, Game.powerUps[p].drawHeight);
+                Game.powerUpCanvas.clearRect(Game.powerUps[pu].drawX, Game.powerUps[pu].drawY,
+                    Game.powerUps[pu].drawWidth, Game.powerUps[pu].drawHeight);
 
 
                 if (Game.powerUps[pu].type === "speed") {
@@ -273,9 +276,13 @@ function checkObjectPositions() {
                     clearTimeout(Game.clearPowerUp);
 
                     //efter 15 sekunder återställs spelarens hastighet
-                    Game.clearPowerUp = setTimeout(function () {
-                        Game.players[p].speed = 5;
-                    }, 15000);
+                    Game.clearPowerUp = setTimeout((function (p) {
+                        return (function () {
+                            console.log(Game.players);
+                            Game.players[p].speed = 5;
+                            console.log(Game.players);
+                        });
+                    })(p), 3000);
 
                 }
 
@@ -288,7 +295,7 @@ function checkObjectPositions() {
                     }
                 }
                 //tar bort power-upen från arrayen om spelaren har tagit den
-                Game.powerUps.splice(p, 1);
+                Game.powerUps.splice(pu, 1);
             }
         }
     }
@@ -352,11 +359,12 @@ var animFrame = window.requestAnimationFrame ||
 function loop(){
     if(Game.rendering){
         Game.playerCanvas.clearRect(0, 0, 800, 500);
+        Game.players[0].checkDirection();
+        Game.players[0].checkBullets();
+        Game.players[0].ifShooting();
         for (var i = 0; i < Game.players.length; i++) {
-            Game.players[i].checkDirection();
-            Game.players[i].ifShooting();
-            Game.players[i].checkBullets();
             Game.players[i].render();
+
         }
         fps.f.innerHTML = fps.getFps();
         checkObjectPositions();

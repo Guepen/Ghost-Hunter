@@ -4,6 +4,7 @@ canvas{
     top: 100px;
     left: auto ;
     display: block;
+    z-index: 1;
 }
 
 #FPS{
@@ -27,6 +28,31 @@ canvas{
     display: inline-flex;
 
 
+}
+
+#menu {
+    position: absolute;
+    left: 45%;
+    top: 200px;
+
+    color: yellow;
+    z-index: 999;
+}
+
+#menu a {
+    display: block;
+    text-decoration: none;
+    margin-top: 20px;
+    padding: 10px 20px 10px 10px;
+    /*background-color: orange;*/
+    background: linear-gradient(to bottom, yellow 0%, orange 100%);
+    color: black;
+    font-size: 1.5em;
+}
+
+#menu a:hover {
+    color: black;
+    background: linear-gradient(to bottom, orange 0%, yellow 100%);
 }
 
 label, h1{

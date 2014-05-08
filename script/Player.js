@@ -6,13 +6,13 @@
  */
 function Player(drawX) {
     this.drawX = drawX;
-    this.drawHeight = 80;
+    this.drawHeight = 90;
     this.drawY = Game.height - this.drawHeight;
     this.srcX = 0;
-    this.srcY = 1117;
+    this.srcY = 1099;
     this.drawWidth = 50;
     this.srcWidth = 54;
-    this.srcHeight = 83;
+    this.srcHeight = 98;
     this.speed = 5;
     this.health = 3;
     this.shoot = false;
@@ -70,17 +70,16 @@ Player.prototype.checkDirection = function(){
             }
             else {
             //console.log("player move left");
-            Game.players[0].drawX -= this.speed;
+            Game.players[0].drawX -= Game.players[0].speed;
             }
         }
-
     if (Game.pressedKeys[65]) {
         if (Game.players[1].drawX <= 0) {
             Game.players[1].drawX = 0;
         }
         else {
             //console.log("player move left");
-            Game.players[1].drawX -= this.speed;
+            Game.players[1].drawX -= Game.players[1].speed;
         }
     }
     //om användaren trycker på höger pil-tangetn eller d-tangenten
@@ -118,17 +117,6 @@ Player.prototype.checkBullets = function () {
             }
         }
     }
-
-    /* for (var i = 0; i < Game.player2.bullets.length; i++) {
-     //om kulan finns på spelytan renderas den ut
-     if (Game.player2.bullets[i].drawY <= 500 && Game.player2.bullets[i].drawY >= 0) {
-     Game.player2.bullets[i].render();
-     }
-        //om kulan är över spelytan anropas funktionen resetBullet
-     else if (Game.player2.bullets[i].drawY <= 0) {
-     Game.player2.bullets[i].resetBullet(Game.player2.bullets[i]);
-     }
-     }*/
 };
 
 /**
