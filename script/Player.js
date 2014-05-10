@@ -6,19 +6,21 @@
  */
 function Player(drawX) {
     this.drawX = drawX;
-    this.drawHeight = 90;
+    this.drawHeight = 100;
     this.drawY = Game.height - this.drawHeight;
-    this.srcX = 0;
-    this.srcY = 1099;
-    this.drawWidth = 50;
-    this.srcWidth = 54;
-    this.srcHeight = 98;
+    this.srcX = 743;
+    this.srcY = 1000;
+    this.drawWidth = 60;
+    this.srcWidth = 60;
+    this.srcHeight = 89;
     this.speed = 5;
     this.health = 3;
     this.shoot = false;
     this.shoot2 = false;
     this.currentBullet = 0;
     this.currentBullet2 = 0;
+    this.interval = 0;
+    this.interval2 = 0;
     this.bullets = [];
 
     //lägger till 50 skott tillhörande spelarinstansen.
@@ -165,18 +167,31 @@ Player.prototype.ifShooting = function(){
 function keyDown(e){
 
     //förhindrar normalt beteende
-    e.preventDefault();
+    //e.preventDefault();
     // alert(e.keyCode);
-    /*if (e.keyCode === 37 || e.keyCode === 39)  {
-       // if (!Game.pressedKeys[e.keyCode]) {
-            //Game.player.interval = setInterval(function () {
-                Game.player.srcX += 150;
-                //if (Game.player.srcX >= 1050) {
-                    Game.player.srcX = 150;
+    if (e.keyCode === 39) {
+        if (!Game.pressedKeys[e.keyCode]) {
+            Game.players[0].interval = setInterval(function () {
+                Game.players[0].srcX -= 60;
+                if (Game.players[0].srcX <= 560) {
+                    Game.players[0].srcX = 743;
                 }
-           // }, 100);
+            }, 100);
         }
-    }*/
+    }
+
+    if (e.keyCode === 37) {
+        if (!Game.pressedKeys[e.keyCode]) {
+            Game.players[0].srcX = 198;
+            Game.players[0].interval2 = setInterval(function () {
+                Game.players[0].srcX += 48
+                if (Game.players[0].srcX >= 390) {
+                    Game.players[0].srcX = 198;
+                }
+            }, 100);
+        }
+    }
+
     // om användaren trycker på p-tangenten anropas stopStart som pausar/fortsätter spelet
     if(e.keyCode === 80){
         stopStart();
@@ -186,17 +201,24 @@ function keyDown(e){
     Game.pressedKeys[e.keyCode] = true;
 }
 
+
 /**
  * Event för keyup
  * @param e event
  */
 function keyUp(e){
-   /* if (e.keyCode === 37 || e.keyCode === 39) {
-        clearInterval(Game.player.interval);
-    }*/
+    if (e.keyCode === 39) {
+        clearInterval(Game.players[0].interval);
+        Game.players[0].srcX = 743;
+    }
+
+    /*if (e.keyCode === 37) {
+     clearInterval(Game.players[0].interval2);
+     Game.players[0].srcX = 198;
+     }*/
     //sätter tangentens kod till false
     Game.pressedKeys[e.keyCode] = false;
-    //Game.player.srcX = 0;
+
 
 }
 

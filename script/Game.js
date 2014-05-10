@@ -282,7 +282,7 @@ function checkObjectPositions() {
                             Game.players[p].speed = 5;
                             console.log(Game.players);
                         });
-                    })(p), 3000);
+                    })(p), 15000);
 
                 }
 

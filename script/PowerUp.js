@@ -21,17 +21,17 @@ PowerUp.prototype.render = function () {
 /**
  * Funktion som slumpar om en power-up ska ges när ett spöke skjutits ner
  *
- * @param {number} drawX Det skjutna spökets x-kordinat
- * @param {number} drawY Det skjutna spökets y-kordinat
+ * @param {number} ghostX Det skjutna spökets x-kordinat
+ * @param {number} ghostY Det skjutna spökets y-kordinat
  */
-function newPowerUp(drawX, drawY) {
+function newPowerUp(ghostX, ghostY) {
     var randomPowerUp = Math.floor(Math.random() * 25);
     var powerUp;
 
     if (randomPowerUp === 0) {
         powerUp = new PowerUp();
-        powerUp.drawX = drawX;
-        powerUp.drawY = drawY;
+        powerUp.drawX = ghostX;
+        powerUp.drawY = ghostY;
         powerUp.srcY = 1000;
         powerUp.srcX = 150;
         powerUp.srcWidth = 26;
@@ -46,8 +46,8 @@ function newPowerUp(drawX, drawY) {
 
     else if (randomPowerUp === 1) {
         powerUp = new PowerUp();
-        powerUp.drawX = drawX;
-        powerUp.drawY = drawY;
+        powerUp.drawX = ghostX;
+        powerUp.drawY = ghostY;
         powerUp.srcY = 1000;
         powerUp.srcX = 123;
         powerUp.srcWidth = 27;
