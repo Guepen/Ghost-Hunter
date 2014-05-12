@@ -4,12 +4,12 @@
  * Skapar en instans av Player
  * @constructor
  */
-function Player(drawX) {
+function Player(drawX, srcX, srcY) {
     this.drawX = drawX;
     this.drawHeight = 100;
     this.drawY = Game.height - this.drawHeight;
-    this.srcX = 743;
-    this.srcY = 1000;
+    this.srcX = srcX;
+    this.srcY = srcY;
     this.drawWidth = 60;
     this.srcWidth = 60;
     this.srcHeight = 89;
@@ -129,7 +129,7 @@ Player.prototype.ifShooting = function(){
     if(Game.pressedKeys[32] && !this.shoot){
         this.shoot = true;
         //anropar funktionen fire som sätter kulans position till spelarens
-        Game.players[0].bullets[this.currentBullet].fire(Game.players[0].drawX, Game.players[0].drawY);
+        Game.players[0].bullets[this.currentBullet].fire(Game.players[0]);
         this.currentBullet++;
 
         //om användaren skjutit slut på alla kulor börjar arrayen om på 0
@@ -145,7 +145,7 @@ Player.prototype.ifShooting = function(){
     if (Game.pressedKeys[87] && !this.shoot2) {
         this.shoot2 = true;
         //anropar funktionen fire som sätter kulans position till spelarens
-        Game.players[1].bullets[this.currentBullet2].fire(Game.players[1].drawX, Game.players[1].drawY);
+        Game.players[1].bullets[this.currentBullet2].fire(Game.players[1]);
         this.currentBullet2++;
 
         //om användaren skjutit slut på alla kulor börjar arrayen om på 0
@@ -162,13 +162,15 @@ Player.prototype.ifShooting = function(){
 
 /**
  * Event för keydown
- * @param e event
+ * @param e Event
  */
 function keyDown(e){
 
     //förhindrar normalt beteende
-    //e.preventDefault();
-    // alert(e.keyCode);
+    if (e.keyCode === 32 || e.keyCode === 87) {
+        e.preventDefault();
+    }
+
     if (e.keyCode === 39) {
         if (!Game.pressedKeys[e.keyCode]) {
             Game.players[0].interval = setInterval(function () {
@@ -180,13 +182,35 @@ function keyDown(e){
         }
     }
 
+    if (e.keyCode === 68) {
+        if (!Game.pressedKeys[e.keyCode]) {
+            Game.players[1].interval = setInterval(function () {
+                Game.players[1].srcX -= 60;
+                if (Game.players[1].srcX <= 560) {
+                    Game.players[1].srcX = 743;
+                }
+            }, 100);
+        }
+    }
+
     if (e.keyCode === 37) {
         if (!Game.pressedKeys[e.keyCode]) {
-            Game.players[0].srcX = 198;
+            Game.players[0].srcX = 502;
             Game.players[0].interval2 = setInterval(function () {
-                Game.players[0].srcX += 48
-                if (Game.players[0].srcX >= 390) {
-                    Game.players[0].srcX = 198;
+                Game.players[0].srcX -= 60;
+                if (Game.players[0].srcX <= 320) {
+                    Game.players[0].srcX = 502;
+                }
+            }, 100);
+        }
+    }
+    if (e.keyCode === 65) {
+        if (!Game.pressedKeys[e.keyCode]) {
+            Game.players[1].srcX = 502;
+            Game.players[1].interval2 = setInterval(function () {
+                Game.players[1].srcX -= 60;
+                if (Game.players[1].srcX <= 320) {
+                    Game.players[1].srcX = 502;
                 }
             }, 100);
         }
@@ -204,7 +228,7 @@ function keyDown(e){
 
 /**
  * Event för keyup
- * @param e event
+ * @param e Event
  */
 function keyUp(e){
     if (e.keyCode === 39) {
@@ -212,10 +236,20 @@ function keyUp(e){
         Game.players[0].srcX = 743;
     }
 
-    /*if (e.keyCode === 37) {
+    if (e.keyCode === 68) {
+        clearInterval(Game.players[1].interval);
+        Game.players[1].srcX = 743;
+    }
+
+    if (e.keyCode === 65) {
+        clearInterval(Game.players[1].interval2);
+        Game.players[1].srcX = 502;
+    }
+
+    if (e.keyCode === 37) {
      clearInterval(Game.players[0].interval2);
-     Game.players[0].srcX = 198;
-     }*/
+        Game.players[0].srcX = 502;
+    }
     //sätter tangentens kod till false
     Game.pressedKeys[e.keyCode] = false;
 
