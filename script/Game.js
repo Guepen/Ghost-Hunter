@@ -106,13 +106,13 @@ var Game = {
 };
 
 function onePlayer() {
-    Game.players[Game.players.length] = new Player(Game.width / 2);
+    Game.players[Game.players.length] = new Player(Game.width / 2, 743, 1089);
     Game.renderBackground();
 }
 
 function twoPlayers() {
-    Game.players[Game.players.length] = new Player(Game.playerX);
-    Game.players[Game.players.length] = new Player(Game.player2X);
+    Game.players[Game.players.length] = new Player(Game.playerX, 743, 1089);
+    Game.players[Game.players.length] = new Player(Game.player2X, 743, 1000);
     Game.renderBackground();
 }
 
@@ -132,106 +132,8 @@ function stopStart(){
     }
 
 }
-
-
-//funktion som flyttar hindrena och ändrar egenskaper på spöken baserat på spelarens poäng
-function moveObstacles() {
-    for(var i = 0; i < Game.ghosts.length; i++) {
-        for(var o = 0; o < Game.obstacles.length; o++) {
-
-            var ghost = Game.ghosts[i];
-
-            if (Game.obstacles[0].drawY <= 100) {
-                Game.obstacles[0].drawY++;
-                Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
-                Game.obstacles[0].render();
-            }
-
-            if (Game.score >= 8 && Game.score < 18) {
-                ghost.speed = 0.7;
-                Game.spawnAmount = 3;
-                if (Game.obstacles[0].drawX >= Game.obstacles[1].drawX &&
-                    Game.obstacles[0].drawX + Game.obstacles[0].drawWidth) {
-                    Game.obstacles[0].drawX++;
-                }
-
-                else if (Game.obstacles[0].drawX >= 0 && Game.obstacles[0].drawX <= Game.obstacles[1].drawX) {
-                    Game.obstacles[0].drawX--;
-                }
-                if (Game.obstacles[1].drawY <= 125) {
-                    Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
-                    Game.obstacles[1].drawY++;
-                    Game.obstacles[1].render();
-                    Game.obstacles[0].render();
-                }
-            }
-
-            else if (Game.score >= 18 && Game.score < 28) {
-                ghost.speed = 0.8;
-                Game.spawnAmount = 4;
-                Game.spawnRate = 2500;
-            }
-
-            else if (Game.score >= 28 && Game.score < 40) {
-                ghost.speed = 1;
-                Game.spawnAmount = 5;
-                Game.spawnRate = 1800;
-                if (Game.obstacles[0].drawY <= 175) {
-                    Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
-                    Game.obstacles[0].drawY++;
-                    Game.obstacles[0].render();
-                    Game.obstacles[1].render();
-                }
-            }
-
-            else if (Game.score >= 40 && Game.score < 80) {
-                ghost.speed = 1;
-                Game.spawnAmount = 6;
-                Game.spawnRate = 1200;
-                if (Game.obstacles[1].drawY <= 255) {
-                    Game.obstacles[1].drawY++;
-                    Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
-                    Game.obstacles[1].render();
-                    Game.obstacles[0].render();
-                }
-            }
-
-            else if (Game.score >= 80) {
-
-                ghost.speed = 1.1;
-                Game.spawnAmount = 7;
-                Game.spawnRate = 1000;
-
-                /*if (Game.obstacles[0].drawX + Game.obstacles[0].drawWidth <= Game.width - 10) {
-                 Game.obstacles[0].drawX++;
-                 }*/
-
-                Game.obstacles[0].drawX += 0.2;
-
-                if (Game.obstacles[0].drawX >= Game.width) {
-                    Game.obstacles[0].drawX = -70;
-                }
-                /* if (Game.obstacles[0].drawX <= Game.width) {
-                 Game.obstacles[0].drawX--;
-                 }*/
-
-
-                if (Game.obstacles[1].drawY <= 280) {
-                    Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
-                    Game.obstacles[1].drawY++;
-
-                }
-                Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
-                Game.obstacles[0].render();
-                Game.obstacles[1].render();
-            }
-        }
-    }
-}
-
-
 //funktion som kollar vart objekten befinner sig och kollar om de kolliderar
-function checkObjectPositions() {
+function checkObjectCollisions() {
     //alert("checking");
 
     //loopar först igenom kulorna och hindrena för att kolla om de kolliderar
@@ -278,16 +180,14 @@ function checkObjectPositions() {
                     //efter 15 sekunder återställs spelarens hastighet
                     Game.clearPowerUp = setTimeout((function (p) {
                         return (function () {
-                            console.log(Game.players);
                             Game.players[p].speed = 5;
-                            console.log(Game.players);
                         });
                     })(p), 15000);
 
                 }
 
                 else if (Game.powerUps[pu].type === "health") {
-                    //Game.powerUps.splice(p, 1);
+
                     //Liv ges bara om spelaren har tappat något liv
                     if (Game.players[0].health < 3) {
                         Game.players[0].health += 1;
@@ -317,11 +217,11 @@ function checkCollision(firstObject, secondObject) {
 
     //jämför två objekt och kollar om de kolliderar
     if (firstObject.drawX + firstObject.drawWidth >= secondObject.drawX &&
-        firstObject.drawX <= secondObject.drawX + secondObject.drawWidth &&
-        firstObject.drawY + firstObject.drawHeight / 2 <= secondObject.drawY + secondObject.drawHeight &&
-        firstObject.drawY + firstObject.drawHeight >= secondObject.drawY) {
+        firstObject.drawX <= secondObject.drawX + secondObject.drawWidth) {
 
-        return true;
+        return(firstObject.drawY + firstObject.drawHeight / 2 <= secondObject.drawY + secondObject.drawHeight &&
+            firstObject.drawY + firstObject.drawHeight >= secondObject.drawY)
+
     }
 
     return false;
@@ -367,7 +267,7 @@ function loop(){
 
         }
         fps.f.innerHTML = fps.getFps();
-        checkObjectPositions();
+        checkObjectCollisions();
         moveObstacles();
         renderGhosts();
         //kollar om det finns någon power-up att rendera ut
