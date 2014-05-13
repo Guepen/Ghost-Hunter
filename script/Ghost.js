@@ -35,64 +35,128 @@ function renderGhosts(){
         //förkortning
         var ghost = Game.ghosts[i];
 
-        if (Game.score >= 8 && Game.score < 18) {
-            ghost.speed = 0.7;
-            Game.spawnAmount = 3;
+        if (Game.numberOfPlayers === 1) {
+            if (Game.score >= 8 && Game.score < 18) {
+                ghost.speed = 0.7;
+                Game.spawnAmount = 3;
+            }
+
+            else if (Game.score >= 18 && Game.score < 28) {
+                ghost.speed = 0.8;
+                Game.spawnAmount = 4;
+                Game.spawnRate = 1000;
+            }
+
+            else if (Game.score >= 28 && Game.score < 40) {
+                ghost.speed = 1;
+                Game.spawnAmount = 5;
+                Game.spawnRate = 1800;
+            }
+
+            else if (Game.score >= 40 && Game.score < 80) {
+                ghost.speed = 1;
+                Game.spawnAmount = 6;
+                Game.spawnRate = 1200;
+            }
+
+            else if (Game.score >= 80 && Game.score < 110) {
+
+                ghost.speed = 1;
+                Game.spawnAmount = 7;
+                Game.spawnRate = 1000;
+            }
+
+            else if (Game.score >= 110 && Game.score < 150) {
+                Game.spawnAmount = 9;
+                Game.spawnRate = 900;
+                ghost.speed = 1;
+            }
+
+            else if (Game.score >= 150 && Game.score < 180) {
+                Game.spawnAmount = 12;
+                Game.spawnRate = 900;
+                ghost.speed = 1;
+            }
+
+            else if (Game.score >= 180 && Game.score < 220) {
+                Game.spawnAmount = 14;
+                Game.spawnRate = 900;
+                ghost.speed = 1;
+            }
+
+            else if (Game.score >= 220 && Game.score < 250) {
+                Game.spawnAmount = 17;
+                Game.spawnRate = 900;
+                ghost.speed = 1;
+            }
+
+            else if (Game.score >= 250) {
+                Game.spawnAmount = 20;
+                Game.spawnRate = 900;
+                ghost.speed = 1;
+            }
         }
 
-        else if (Game.score >= 18 && Game.score < 28) {
-            ghost.speed = 0.8;
-            Game.spawnAmount = 4;
-            Game.spawnRate = 1000;
-        }
+        else if (Game.numberOfPlayers === 2) {
+            if (Game.score >= 8 && Game.score < 18) {
+                ghost.speed = 0.7;
+                Game.spawnAmount = 4;
+            }
 
-        else if (Game.score >= 28 && Game.score < 40) {
-            ghost.speed = 1;
-            Game.spawnAmount = 5;
-            Game.spawnRate = 1800;
-        }
+            else if (Game.score >= 18 && Game.score < 28) {
+                ghost.speed = 0.8;
+                Game.spawnAmount = 5;
+                Game.spawnRate = 1000;
+            }
 
-        else if (Game.score >= 40 && Game.score < 80) {
-            ghost.speed = 1;
-            Game.spawnAmount = 6;
-            Game.spawnRate = 1200;
-        }
+            else if (Game.score >= 28 && Game.score < 40) {
+                ghost.speed = 1;
+                Game.spawnAmount = 6;
+                Game.spawnRate = 1800;
+            }
 
-        else if (Game.score >= 80 && Game.score < 110) {
+            else if (Game.score >= 40 && Game.score < 80) {
+                ghost.speed = 1;
+                Game.spawnAmount = 8;
+                Game.spawnRate = 1200;
+            }
 
-            ghost.speed = 1;
-            Game.spawnAmount = 7;
-            Game.spawnRate = 1000;
-        }
+            else if (Game.score >= 80 && Game.score < 110) {
 
-        else if (Game.score >= 110 && Game.score < 150) {
-            Game.spawnAmount = 9;
-            Game.spawnRate = 900;
-            ghost.speed = 1;
-        }
+                ghost.speed = 1;
+                Game.spawnAmount = 10;
+                Game.spawnRate = 1000;
+            }
 
-        else if (Game.score >= 150 && Game.score < 180) {
-            Game.spawnAmount = 12;
-            Game.spawnRate = 900;
-            ghost.speed = 1;
-        }
+            else if (Game.score >= 110 && Game.score < 150) {
+                Game.spawnAmount = 16;
+                Game.spawnRate = 900;
+                ghost.speed = 1;
+            }
 
-        else if (Game.score >= 180 && Game.score < 220) {
-            Game.spawnAmount = 14;
-            Game.spawnRate = 900;
-            ghost.speed = 1;
-        }
+            else if (Game.score >= 150 && Game.score < 180) {
+                Game.spawnAmount = 19;
+                Game.spawnRate = 900;
+                ghost.speed = 1;
+            }
 
-        else if (Game.score >= 220 && Game.score < 250) {
-            Game.spawnAmount = 17;
-            Game.spawnRate = 900;
-            ghost.speed = 1;
-        }
+            else if (Game.score >= 180 && Game.score < 220) {
+                Game.spawnAmount = 22;
+                Game.spawnRate = 900;
+                ghost.speed = 1;
+            }
 
-        else if (Game.score >= 250) {
-            Game.spawnAmount = 20;
-            Game.spawnRate = 900;
-            ghost.speed = 1;
+            else if (Game.score >= 220 && Game.score < 250) {
+                Game.spawnAmount = 25;
+                Game.spawnRate = 900;
+                ghost.speed = 1;
+            }
+
+            else if (Game.score >= 250) {
+                Game.spawnAmount = 30;
+                Game.spawnRate = 900;
+                ghost.speed = 1;
+            }
         }
         //om spöket är nära vänstra kanten flyttas det till höger
         if(ghost.drawX <= 5){

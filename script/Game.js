@@ -2,10 +2,9 @@
 
 // objektet Game kapslar in kod som behöver köras innan spelet kan starta och även viss funkonalitet
 var Game = {
-    player: null,
-    player2: null,
     playerX: 200,
     player2X: 600,
+    numberOfPlayers: 0,
     pauseButton: null,
     onePlayerButton: null,
     twoPlayerButton: null,
@@ -105,12 +104,14 @@ var Game = {
 
     onePlayer: function () {
     Game.players[Game.players.length] = new Player(Game.width / 2, 743, 1089);
+        Game.numberOfPlayers = 1;
     Game.renderBackground();
     },
 
     twoPlayers: function () {
     Game.players[Game.players.length] = new Player(Game.playerX, 743, 1089);
     Game.players[Game.players.length] = new Player(Game.player2X, 743, 1000);
+        Game.numberOfPlayers = 2;
     Game.renderBackground();
     },
 
@@ -159,20 +160,20 @@ function checkObjectCollisions() {
                     Game.ghosts.splice(g, 1);
                     Game.players[p].bullets[b].resetBullet(Game.players[p].bullets[b]);
                     var random = randomPowerUp();
-                    PowerUpObj.powerUps[newPowerUp(ghost.drawX, ghost.drawY, random)]; // skickar med spökets x och y som blir powerupens startposition
+                    randomPowerUp(ghost.drawX, ghost.drawY, random); // skickar med spökets x och y som blir powerupens startposition
                 }
             }
         }
         //loopar igenom power-upsen
-        for (var pu = 0; pu < Game.powerUps.length; pu++) {
-            if (checkCollision(Game.powerUps[pu], Game.players[p])) {
+        for (var pu = 0; pu < PowerUpObj.powerUps.length; pu++) {
+            if (checkCollision(PowerUpObj.powerUps[pu], Game.players[p])) {
                 //rensar canvasen om spelaren har tagit powerupen
-                Game.powerUpCanvas.clearRect(Game.powerUps[pu].drawX, Game.powerUps[pu].drawY,
-                    Game.powerUps[pu].drawWidth, Game.powerUps[pu].drawHeight);
+                Game.powerUpCanvas.clearRect(PowerUpObj.powerUps[pu].drawX, PowerUpObj.powerUps[pu].drawY,
+                    PowerUpObj.powerUps[pu].drawWidth, PowerUpObj.powerUps[pu].drawHeight);
 
 
-                if (Game.powerUps[pu].type === "speed") {
-                    // Game.powerUps.splice(p, 1);
+                if (PowerUpObj.powerUps[pu].type === "speed") {
+                    // PowerUpObj.powerUps.splice(p, 1);
                     Game.players[p].speed = 8;
 
                     // tar bort time- så att tiden ställs om när spelaren får en likadan power-up
@@ -187,7 +188,7 @@ function checkObjectCollisions() {
 
                 }
 
-                else if (Game.powerUps[pu].type === "health") {
+                else if (PowerUpObj.powerUps[pu].type === "health") {
 
                     //Liv ges bara om spelaren har tappat något liv
                     if (Game.players[0].health < 3) {
@@ -196,7 +197,7 @@ function checkObjectCollisions() {
                     }
                 }
                 //tar bort power-upen från arrayen om spelaren har tagit den
-                Game.powerUps.splice(pu, 1);
+                PowerUpObj.powerUps.splice(pu, 1);
             }
         }
     }
@@ -273,7 +274,7 @@ function loop(){
         renderGhosts();
         //kollar om det finns någon power-up att rendera ut
         //om det finns anropas funktionen renderPowerUps
-        if (Game.powerUps.length > 0) {
+        if (PowerUpObj.powerUps.length > 0) {
             renderPowerUps();
         }
         animFrame(loop);
