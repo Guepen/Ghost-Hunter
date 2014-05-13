@@ -218,7 +218,7 @@ function keyDown(e){
 
     // om användaren trycker på p-tangenten anropas stopStart som pausar/fortsätter spelet
     if(e.keyCode === 80){
-        stopStart();
+        Game.stopStart();
     }
 
     //sätter tangentens kod till true

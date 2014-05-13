@@ -1,5 +1,13 @@
 "use strict";
 
+var PowerUpObj = {
+    powerUps: []
+}
+/**
+ * Skapar en instans av PowerUp
+ * @constructor
+ * @this {PowerUp}
+ */
 function PowerUp() {
     this.drawX = 900;
     this.drawY = 600;
@@ -12,23 +20,29 @@ function PowerUp() {
     this.speed = 2;
 }
 
+/**
+ * funktion som ritar ut power-ups
+ * @this {PowerUp}
+ */
 PowerUp.prototype.render = function () {
     Game.powerUpCanvas.drawImage(Game.gameSprite, this.srcX, this.srcY, this.srcWidth,
         this.srcHeight, this.drawX, this.drawY += this.speed, this.drawWidth, this.drawHeight);
 
 };
 
+function randomPowerUp() {
+    return Math.floor(Math.random() * 25);
+}
 /**
  * Funktion som slumpar om en power-up ska ges när ett spöke skjutits ner
- *
  * @param {number} ghostX Det skjutna spökets x-kordinat
  * @param {number} ghostY Det skjutna spökets y-kordinat
  */
-function newPowerUp(ghostX, ghostY) {
-    var randomPowerUp = Math.floor(Math.random() * 25);
+function newPowerUp(ghostX, ghostY, random) {
+    //var random = Math.floor(Math.random() * 25);
     var powerUp;
 
-    if (randomPowerUp === 0) {
+    if (random === 0) {
         powerUp = new PowerUp();
         powerUp.drawX = ghostX;
         powerUp.drawY = ghostY;
@@ -39,12 +53,10 @@ function newPowerUp(ghostX, ghostY) {
         powerUp.drawWidth = 26;
         powerUp.drawHeight = 27;
         powerUp.type = "speed";
-        Game.powerUps[Game.powerUps.length] = powerUp;
-        Game.renderPowerUp = true;
-
+        PowerUpObj.powerUps[PowerUpObj.powerUps.length] = powerUp;
     }
 
-    else if (randomPowerUp === 1) {
+    else if (random === 1) {
         powerUp = new PowerUp();
         powerUp.drawX = ghostX;
         powerUp.drawY = ghostY;
@@ -55,28 +67,22 @@ function newPowerUp(ghostX, ghostY) {
         powerUp.drawWidth = 26;
         powerUp.drawHeight = 27;
         powerUp.type = "health";
-        Game.powerUps[Game.powerUps.length] = powerUp;
-        Game.renderPowerUp = true;
+        PowerUpObj.powerUps[PowerUpObj.powerUps.length] = powerUp;
     }
 
 }
 
 /**
- * funktion som renderar ut power-ups
+ * funktion som loopar igenom alla power-ups och anropar rit-funktionen render()
  */
 function renderPowerUps() {
-
-    if (Game.powerUps.length === 0) {
-        Game.renderPowerUp = false;
-    }
-
-    for (var i = 0; i < Game.powerUps.length; i++) {
+    for (var i = 0; i < PowerUpObj.powerUps.length; i++) {
         //om power-upen inte är på marken
-        if (Game.powerUps[i].drawY + Game.powerUps[i].drawHeight <= Game.height) {
-            Game.powerUpCanvas.clearRect(Game.powerUps[i].drawX - 2, Game.powerUps[i].drawY - 2,
-                    Game.powerUps[i].drawWidth + 4, Game.powerUps[i].drawHeight + 4);
+        if (PowerUpObj.powerUps[i].drawY + PowerUpObj.powerUps[i].drawHeight <= Game.height) {
+            Game.powerUpCanvas.clearRect(PowerUpObj.powerUps[i].drawX - 2, PowerUpObj.powerUps[i].drawY - 2,
+                    PowerUpObj.powerUps[i].drawWidth + 4, PowerUpObj.powerUps[i].drawHeight + 4);
 
-            Game.powerUps[i].render();
+            PowerUpObj.powerUps[i].render();
         }
     }
 

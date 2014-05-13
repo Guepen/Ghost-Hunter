@@ -1,6 +1,6 @@
 "use strict";
 
-// objektet Game kapslar in kod som behöver köras innan spelet kan starta
+// objektet Game kapslar in kod som behöver köras innan spelet kan starta och även viss funkonalitet
 var Game = {
     player: null,
     player2: null,
@@ -17,7 +17,6 @@ var Game = {
     ghosts: [],
     bullets: [],
     obstacles: [],
-    powerUps: [],
     backgroundCanvas: null,
     playerCanvas: null,
     bulletCanvas: null,
@@ -99,25 +98,24 @@ var Game = {
 
         document.addEventListener('keydown', keyDown, false);
         document.addEventListener("keyup", keyUp, false);
-        Game.onePlayerButton.addEventListener("click", onePlayer, false);
-        Game.twoPlayerButton.addEventListener("click", twoPlayers, false);
-        Game.pauseButton.addEventListener("click", stopStart, false);
-    }
-};
+        Game.onePlayerButton.addEventListener("click", this.onePlayer, false);
+        Game.twoPlayerButton.addEventListener("click", this.twoPlayers, false);
+        Game.pauseButton.addEventListener("click", this.stopStart, false);
+    },
 
-function onePlayer() {
+    onePlayer: function () {
     Game.players[Game.players.length] = new Player(Game.width / 2, 743, 1089);
     Game.renderBackground();
-}
+    },
 
-function twoPlayers() {
+    twoPlayers: function () {
     Game.players[Game.players.length] = new Player(Game.playerX, 743, 1089);
     Game.players[Game.players.length] = new Player(Game.player2X, 743, 1000);
     Game.renderBackground();
-}
+    },
 
 //används för att pausa/starta spelet
-function stopStart(){
+    stopStart: function () {
     if(Game.paused){
         stopLoop();
         //stopSpawn();
@@ -132,10 +130,11 @@ function stopStart(){
     }
 
 }
-//funktion som kollar vart objekten befinner sig och kollar om de kolliderar
+};
+/**
+ * funktion som kollar om två objekt kolliderar
+ */
 function checkObjectCollisions() {
-    //alert("checking");
-
     //loopar först igenom kulorna och hindrena för att kolla om de kolliderar
     for (var p = 0; p < Game.players.length; p++) {
         for (var b = 0; b < Game.players[p].bullets.length; b++) {
@@ -148,8 +147,9 @@ function checkObjectCollisions() {
             }
             //loopar igenom kulorna och spökena
             for (var g = 0; g < Game.ghosts.length; g++) {
-                var ghost = Game.ghosts[g]; // tilldelar variabeln ghost nuvarande spökobjekt
+                // tilldelar variabeln ghost nuvarande spökobjekt
                 // i arrayen så det blir mindre kod att skriva
+                var ghost = Game.ghosts[g];
 
                 //om de kolliderar "resetas" kulans position och är sen redo att återanvändas, spöket tas bort
                 // poängen ökar och ett anrop till funktionen newPowerUp görs för att slumpa om en powerUp ska ges
@@ -158,7 +158,8 @@ function checkObjectCollisions() {
                     Game.htmlScore.innerHTML = Game.score;
                     Game.ghosts.splice(g, 1);
                     Game.players[p].bullets[b].resetBullet(Game.players[p].bullets[b]);
-                    newPowerUp(ghost.drawX, ghost.drawY); // skickar med spökets x och y som blir powerupens startposition
+                    var random = randomPowerUp();
+                    PowerUpObj.powerUps[newPowerUp(ghost.drawX, ghost.drawY, random)]; // skickar med spökets x och y som blir powerupens startposition
                 }
             }
         }
@@ -272,7 +273,7 @@ function loop(){
         renderGhosts();
         //kollar om det finns någon power-up att rendera ut
         //om det finns anropas funktionen renderPowerUps
-        if (Game.renderPowerUp) {
+        if (Game.powerUps.length > 0) {
             renderPowerUps();
         }
         animFrame(loop);

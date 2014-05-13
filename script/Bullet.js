@@ -19,6 +19,7 @@ function Bullet(){
 
 /**
  * funktion som ritar ut kulorna och uppdaterar deras position
+ * @this {Bullet}
  */
 Bullet.prototype.render = function(){
     Game.bulletCanvas.drawImage(Game.gameSprite, this.srcX, this.srcY, this.srcWidth,
@@ -27,15 +28,16 @@ Bullet.prototype.render = function(){
 
 /**
  *funktion som sätter en kulas position till spelarens position
- * @param playerX Spelarens x-kordinat
- * @param playerY Spelaren y-kordinat
+ * @param player Spelaren
+ * @this {Bullet}
  */
-Bullet.prototype.fire = function(playerX, playerY){
-    this.drawX = playerX + Game.players[0].drawWidth / 2 - (this.drawWidth / 2);
-    this.drawY = playerY;
+Bullet.prototype.fire = function (player) {
+    this.drawX = player.drawX + (player.drawWidth - 13);
+    this.drawY = player.drawY + ((player.drawHeight / 2) - 17);
 };
 /**
  * funktion som resetar en kulas position
+ * @this {Bullet}
  */
 Bullet.prototype.resetBullet = function () {
     this.drawX = -25;
