@@ -2,7 +2,7 @@
 
 var PowerUpObj = {
     powerUps: []
-}
+};
 /**
  * Skapar en instans av PowerUp
  * @constructor
@@ -30,16 +30,13 @@ PowerUp.prototype.render = function () {
 
 };
 
-function randomPowerUp() {
-    return Math.floor(Math.random() * 25);
-}
 /**
  * Funktion som slumpar om en power-up ska ges när ett spöke skjutits ner
  * @param {number} ghostX Det skjutna spökets x-kordinat
  * @param {number} ghostY Det skjutna spökets y-kordinat
+ * @param {number} random ett randomtal mellan 0-25 som gör att det slumpas om en power-up skall ges
  */
 function newPowerUp(ghostX, ghostY, random) {
-    //var random = Math.floor(Math.random() * 25);
     var powerUp;
 
     if (random === 0) {

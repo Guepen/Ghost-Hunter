@@ -5,7 +5,7 @@
  * @constructor
  * @this {Bullet}
  */
-function Bullet(){
+function Bullet() {
     this.drawWidth = 8;
     this.drawHeight = 12;
     this.speed = 3;
@@ -21,7 +21,7 @@ function Bullet(){
  * funktion som ritar ut kulorna och uppdaterar deras position
  * @this {Bullet}
  */
-Bullet.prototype.render = function(){
+Bullet.prototype.render = function () {
     Game.bulletCanvas.drawImage(Game.gameSprite, this.srcX, this.srcY, this.srcWidth,
         this.srcHeight, this.drawX, this.drawY -= this.speed, this.drawWidth, this.drawHeight);
 };
@@ -32,8 +32,13 @@ Bullet.prototype.render = function(){
  * @this {Bullet}
  */
 Bullet.prototype.fire = function (player) {
-    this.drawX = player.drawX + (player.drawWidth - 13);
-    this.drawY = player.drawY + ((player.drawHeight / 2) - 17);
+    if (player.movingRight) {
+        this.drawX = player.drawX + (player.drawWidth - 13);
+        this.drawY = player.drawY + ((player.drawHeight / 2) - 17);
+    } else {
+        this.drawX = player.drawX + 5;
+        this.drawY = player.drawY + ((player.drawHeight / 2) - 17);
+    }
 };
 /**
  * funktion som resetar en kulas position

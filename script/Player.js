@@ -22,25 +22,27 @@ function Player(drawX, srcX, srcY) {
     this.interval = 0;
     this.interval2 = 0;
     this.bullets = [];
+    this.movingLeft = false;
+    this.movingRight = false;
 
     //lägger till 50 skott tillhörande spelarinstansen.
     //skotten återanvänds sedan istället för att skapa en
     //ny instans av Bullet-objektet varje gång spelaren skjuter
-    for(var i = 0; i < 50; i++){
+    for (var i = 0; i < 50; i++) {
         this.bullets[this.bullets.length] = new Bullet();
     }
 }
 
-Player.prototype.render = function(){
+Player.prototype.render = function () {
     //console.log("render");
     //Om spelaren inte har några liv kvar är spelet slut
-    if(this.health <= 0){
+    if (this.health <= 0) {
         Game.rendering = false;
         Game.bulletCanvas.clearRect(0, 0, Game.width, Game.height);
         Game.ghostCanvas.clearRect(0, 0, Game.width, Game.height);
         Game.backgroundCanvas.fillStyle = "blue";
         Game.backgroundCanvas.font = "bold 25px Arial";
-        Game.backgroundCanvas.fillText("Game Over", Game.width/2, 70);
+        Game.backgroundCanvas.fillText("Game Over", Game.width / 2, 70);
         stopLoop();
     }
     else {
@@ -49,12 +51,12 @@ Player.prototype.render = function(){
     }
 };
 
-Player.prototype.renderHealth = function(){
+Player.prototype.renderHealth = function () {
     var nextX = -18; // position för utritning av liv
     Game.healthCanvas.clearRect(0, 0, Game.width, Game.height);
 
     //Loopar igenom alla liv och ritar ut dom
-    for(var i = 0; i < this.health; i++){
+    for (var i = 0; i < this.health; i++) {
         Game.healthCanvas.drawImage(Game.gameSprite, 0, 1076, 27, 23,
             nextX += 28, 470, 27, 23)
     }
@@ -63,19 +65,23 @@ Player.prototype.renderHealth = function(){
 /**
  * Funktion som kollar om spelaren rör sig
  */
-Player.prototype.checkDirection = function(){
+Player.prototype.checkDirection = function () {
     //om användaren trycker på vänster pil-tangetn eller a-tangenten
     if (Game.pressedKeys[37]) {
-            //Kollar så att inte spelaren kan gå utanför banan
+        Game.players[0].movingRight = false;
+        Game.players[0].movingLeft = true;
+        //Kollar så att inte spelaren kan gå utanför banan
         if (Game.players[0].drawX <= 0) {
             Game.players[0].drawX = 0;
-            }
-            else {
+        }
+        else {
             //console.log("player move left");
             Game.players[0].drawX -= Game.players[0].speed;
-            }
         }
+    }
     if (Game.pressedKeys[65]) {
+        Game.players[1].movingRight = false;
+        Game.players[1].movingLeft = true;
         if (Game.players[1].drawX <= 0) {
             Game.players[1].drawX = 0;
         }
@@ -86,15 +92,19 @@ Player.prototype.checkDirection = function(){
     }
     //om användaren trycker på höger pil-tangetn eller d-tangenten
     if (Game.pressedKeys[39]) {
-            //Kollar så att inte spelaren kan gå utanför banan
+        Game.players[0].movingLeft = false;
+        Game.players[0].movingRight = true;
+        //Kollar så att inte spelaren kan gå utanför banan
         if (Game.players[0].drawX <= Game.width - Game.players[0].drawWidth) {
-            Game.players[0].drawX += this.speed;
-            }
+            Game.players[0].drawX += Game.players[0].speed;
         }
+    }
 
     if (Game.pressedKeys[68]) {
+        Game.players[1].movingRight = true;
+        Game.players[1].movingLeft = false;
         if (Game.players[1].drawX <= Game.width - Game.players[1].drawWidth) {
-            Game.players[1].drawX += this.speed;
+            Game.players[1].drawX += Game.players[1].speed;
         }
     }
 };
@@ -124,9 +134,9 @@ Player.prototype.checkBullets = function () {
 /**
  * Funktion som kollar om användaren skjuter
  */
-Player.prototype.ifShooting = function(){
+Player.prototype.ifShooting = function () {
     //kollar om användaren trycker på spacebar och inte redan skjuer
-    if(Game.pressedKeys[32] && !this.shoot){
+    if (Game.pressedKeys[32] && !this.shoot) {
         this.shoot = true;
         //anropar funktionen fire som sätter kulans position till spelarens
         Game.players[0].bullets[this.currentBullet].fire(Game.players[0]);
@@ -138,7 +148,7 @@ Player.prototype.ifShooting = function(){
         }
     }
     //när användaren släppper spacebar blir shott false och då kan ett nytt skott skjutas
-    else if(!Game.pressedKeys[32]){
+    else if (!Game.pressedKeys[32]) {
         this.shoot = false;
     }
 
@@ -164,7 +174,7 @@ Player.prototype.ifShooting = function(){
  * Event för keydown
  * @param e Event
  */
-function keyDown(e){
+function keyDown(e) {
 
     //förhindrar normalt beteende
     if (e.keyCode === 32 || e.keyCode === 87) {
@@ -217,7 +227,7 @@ function keyDown(e){
     }
 
     // om användaren trycker på p-tangenten anropas stopStart som pausar/fortsätter spelet
-    if(e.keyCode === 80){
+    if (e.keyCode === 80) {
         Game.stopStart();
     }
 
@@ -230,10 +240,11 @@ function keyDown(e){
  * Event för keyup
  * @param e Event
  */
-function keyUp(e){
+function keyUp(e) {
     if (e.keyCode === 39) {
         clearInterval(Game.players[0].interval);
         Game.players[0].srcX = 743;
+        //Game.players[0].movingRight = false;
     }
 
     if (e.keyCode === 68) {
@@ -247,7 +258,7 @@ function keyUp(e){
     }
 
     if (e.keyCode === 37) {
-     clearInterval(Game.players[0].interval2);
+        clearInterval(Game.players[0].interval2);
         Game.players[0].srcX = 502;
     }
     //sätter tangentens kod till false

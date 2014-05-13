@@ -1,9 +1,14 @@
+"use strict";
+
+var ObstacleObj = {
+    obstacles: []
+};
 /**
  * Skapar en instans av Obstacle
  * @constructor
  */
-function Obstacle(){
-    this.drawX = Math.random() * (Game.width - 75);
+function Obstacle() {
+    this.drawX = randomGenerator(800);
     this.drawY = -30;
     this.srcY = 1000;
     this.srcX = 58;
@@ -14,7 +19,7 @@ function Obstacle(){
     this.type = "obstacle";
 }
 
-Obstacle.prototype.render = function() {
+Obstacle.prototype.render = function () {
     Game.obstacleCanvas.drawImage(Game.gameSprite, this.srcX, this.srcY, this.srcWidth,
         this.srcHeight, this.drawX, this.drawY, this.drawWidth, this.drawHeight);
 };
@@ -25,88 +30,88 @@ Obstacle.prototype.render = function() {
 function moveObstacles() {
     for (var i = 0; i < Game.ghosts.length; i++) {
 
-        if (Game.obstacles[0].drawY <= 100) {
-            Game.obstacles[0].drawY += 0.5;
+        if (ObstacleObj.obstacles[0].drawY <= 100) {
+            ObstacleObj.obstacles[0].drawY += 0.5;
             Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
-            Game.obstacles[0].render();
+            ObstacleObj.obstacles[0].render();
         }
 
         if (Game.score >= 8 && Game.score < 28) {
-            if (Game.obstacles[1].drawY <= 125) {
-                if (Game.obstacles[0].drawX >= Game.obstacles[1].drawX &&
-                    Game.obstacles[0].drawX + Game.obstacles[0].drawWidth <= Game.width) {
-                    Game.obstacles[0].drawX += 0.5;
+            if (ObstacleObj.obstacles[1].drawY <= 125) {
+                if (ObstacleObj.obstacles[0].drawX >= ObstacleObj.obstacles[1].drawX &&
+                    ObstacleObj.obstacles[0].drawX + ObstacleObj.obstacles[0].drawWidth <= Game.width) {
+                    ObstacleObj.obstacles[0].drawX += 0.5;
                 }
 
-                else if (Game.obstacles[0].drawX >= 0 && Game.obstacles[0].drawX <= Game.obstacles[1].drawX) {
-                    Game.obstacles[0].drawX -= 0.5;
+                else if (ObstacleObj.obstacles[0].drawX >= 0 && ObstacleObj.obstacles[0].drawX <= ObstacleObj.obstacles[1].drawX) {
+                    ObstacleObj.obstacles[0].drawX -= 0.5;
                 }
-                Game.obstacles[1].drawY++;
+                ObstacleObj.obstacles[1].drawY++;
             }
             Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
-            Game.obstacles[1].render();
-            Game.obstacles[0].render();
+            ObstacleObj.obstacles[1].render();
+            ObstacleObj.obstacles[0].render();
         }
 
         else if (Game.score >= 28 && Game.score < 40) {
-            if (Game.obstacles[0].drawY <= 175) {
-                Game.obstacles[0].drawY += 0.5;
+            if (ObstacleObj.obstacles[0].drawY <= 175) {
+                ObstacleObj.obstacles[0].drawY += 0.5;
                 Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
-                Game.obstacles[0].render();
-                Game.obstacles[1].render();
+                ObstacleObj.obstacles[0].render();
+                ObstacleObj.obstacles[1].render();
             }
         }
 
         else if (Game.score >= 40 && Game.score < 80) {
-            if (Game.obstacles[1].drawY <= 255) {
-                Game.obstacles[1].drawY += 0.5;
+            if (ObstacleObj.obstacles[1].drawY <= 255) {
+                ObstacleObj.obstacles[1].drawY += 0.5;
                 Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
-                Game.obstacles[1].render();
-                Game.obstacles[0].render();
+                ObstacleObj.obstacles[1].render();
+                ObstacleObj.obstacles[0].render();
             }
         }
 
         else if (Game.score >= 80 && Game.score < 110) {
-            if (Game.obstacles[0].drawY <= 175) {
-                Game.obstacles[0].drawY += 0.5;
+            if (ObstacleObj.obstacles[0].drawY <= 175) {
+                ObstacleObj.obstacles[0].drawY += 0.5;
             }
 
-            Game.obstacles[0].drawX += 0.2;
-            Game.obstacles[1].drawX -= 0.2;
+            ObstacleObj.obstacles[0].drawX += 0.2;
+            ObstacleObj.obstacles[1].drawX -= 0.2;
 
-            if (Game.obstacles[0].drawX >= Game.width) {
-                Game.obstacles[0].drawX = -70;
+            if (ObstacleObj.obstacles[0].drawX >= Game.width) {
+                ObstacleObj.obstacles[0].drawX = -70;
             }
 
-            if (Game.obstacles[1].drawX <= 0) {
-                Game.obstacles[1].drawX = 870;
+            if (ObstacleObj.obstacles[1].drawX <= 0) {
+                ObstacleObj.obstacles[1].drawX = 870;
             }
 
-            if (Game.obstacles[1].drawY <= 280) {
+            if (ObstacleObj.obstacles[1].drawY <= 280) {
                 //Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
-                Game.obstacles[1].drawY += 0.5;
+                ObstacleObj.obstacles[1].drawY += 0.5;
 
             }
             Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
-            Game.obstacles[0].render();
-            Game.obstacles[1].render();
+            ObstacleObj.obstacles[0].render();
+            ObstacleObj.obstacles[1].render();
         }
 
         else if (Game.score >= 110) {
-            Game.obstacles[0].drawX += 0.2;
-            Game.obstacles[1].drawX -= 0.2;
+            ObstacleObj.obstacles[0].drawX += 0.2;
+            ObstacleObj.obstacles[1].drawX -= 0.2;
 
-            if (Game.obstacles[0].drawX >= Game.width) {
-                Game.obstacles[0].drawX = -70;
+            if (ObstacleObj.obstacles[0].drawX >= Game.width) {
+                ObstacleObj.obstacles[0].drawX = -70;
             }
 
-            if (Game.obstacles[1].drawX <= 0) {
-                Game.obstacles[1].drawX = 870;
+            if (ObstacleObj.obstacles[1].drawX <= 0) {
+                ObstacleObj.obstacles[1].drawX = 870;
             }
 
             Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
-            Game.obstacles[0].render();
-            Game.obstacles[1].render();
+            ObstacleObj.obstacles[0].render();
+            ObstacleObj.obstacles[1].render();
         }
     }
 }

@@ -261,6 +261,68 @@ Javascript skall vara aktiverat.
 ### Krav-ID
 13-Webbläsarre
 
+##Testfall 11 Power-ups
+
+###Förkrav
+Javascript skall vara aktiverat.
+
+###Scenario
+1.Starta igång applikationen.
+2.Användaren trycker på knappen play uppe i vänstra hörnet på spelytan eller p-tangenten.
+3. Spelaren skjuter ner ett spöke.
+4. Det slumpas om power-up ges
+5. En power-up av typen speed faller till marken
+6. spelaren tar power-upen
+7. Spelaren blir snabbare under 15 sekunder
+
+###Alternativt scenario
+5a. En power-up av typen health faller till marken
+6a. Spelaren tar power-upen
+7a. Om spelare har mindre än tre liv ges ett liv till spelaren..
+
+5b. Ingen power-up ges
+
+###Krav-ID
+12-Power-ups
+
+##Testfall 12 Startskärm
+
+###Förkrav
+Javascript skall vara aktiverat.
+
+###Scenario
+1.Starta igång applikationen.
+2.Användaren trycker på knappen ONE PLAYER
+3. Spelet startar
+13
+###Alternativt scenario
+2a. Användaren trycker på knappen TWO PLAYERS
+3a. Spelet startar
+
+###Krav-ID
+19-Power-ups
+
+##Testfall 13 Andra spelaren
+
+###Förkrav
+Javascript skall vara aktiverat.
+
+###scenario
+1.Starta igång applikationen.
+2. Användaren trycker på knappen TWO PLAYERS
+3. Spelet startar
+4. Användaren trycker på D-tangenten
+5. Spelaren rör sig till höger.
+
+###Alternativt scenario
+4a. Användaren trycker på A-tangenten.
+5a. Spelaren rör sig till vänster.
+
+4b. Användaren trycker på W-tangenten
+5b. Spelaren skjuter ett skott.
+
+###Krav-ID
+14-Två spelare
 
 
 

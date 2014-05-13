@@ -2,8 +2,8 @@
 
 // objektet Game kapslar in kod som behöver köras innan spelet kan starta och även viss funkonalitet
 var Game = {
-    playerX: 200,
-    player2X: 600,
+    playerX: 100,
+    player2X: 700,
     numberOfPlayers: 0,
     pauseButton: null,
     onePlayerButton: null,
@@ -32,7 +32,7 @@ var Game = {
     htmlScore: null,
     score: 0,
     spawnAmount: 2,
-    spawnInterval:0,
+    spawnInterval: 0,
     spawnRate: 5000,
 
     //låter bilden laddas innan spelet startar så den inte saknas när den skall användas
@@ -91,8 +91,8 @@ var Game = {
         Game.htmlScore = document.getElementById("score");
         //Game.player = new Player();
 
-        for(var i = 0; i < 2; i++){
-            Game.obstacles[i] = new Obstacle();
+        for (var i = 0; i < 2; i++) {
+            ObstacleObj.obstacles[i] = new Obstacle();
         }
 
         document.addEventListener('keydown', keyDown, false);
@@ -103,34 +103,36 @@ var Game = {
     },
 
     onePlayer: function () {
-    Game.players[Game.players.length] = new Player(Game.width / 2, 743, 1089);
+        Game.players[Game.players.length] = new Player(Game.width / 2, 743, 1089);
         Game.numberOfPlayers = 1;
-    Game.renderBackground();
+        Game.renderBackground();
     },
 
     twoPlayers: function () {
-    Game.players[Game.players.length] = new Player(Game.playerX, 743, 1089);
-    Game.players[Game.players.length] = new Player(Game.player2X, 743, 1000);
+        Game.players[Game.players.length] = new Player(Game.playerX, 743, 1089);
+        Game.players[Game.players.length] = new Player(Game.player2X, 502, 1000);
+        Game.players[0].movingRight = true;
+        Game.players[1].movingLeft = true;
         Game.numberOfPlayers = 2;
-    Game.renderBackground();
+        Game.renderBackground();
     },
 
 //används för att pausa/starta spelet
     stopStart: function () {
-    if(Game.paused){
-        stopLoop();
-        //stopSpawn();
-        Game.paused = false;
-        Game.pauseButton.innerHTML = "Play";
-    }
+        if (Game.paused) {
+            stopLoop();
+            //stopSpawn();
+            Game.paused = false;
+            Game.pauseButton.innerHTML = "Play";
+        }
 
-    else if(!Game.paused){
-        startLoop();
-        Game.paused = true;
-        Game.pauseButton.innerHTML = "Pause";
-    }
+        else if (!Game.paused) {
+            startLoop();
+            Game.paused = true;
+            Game.pauseButton.innerHTML = "Pause";
+        }
 
-}
+    }
 };
 /**
  * funktion som kollar om två objekt kolliderar
@@ -139,10 +141,10 @@ function checkObjectCollisions() {
     //loopar först igenom kulorna och hindrena för att kolla om de kolliderar
     for (var p = 0; p < Game.players.length; p++) {
         for (var b = 0; b < Game.players[p].bullets.length; b++) {
-            for (var o = 0; o < Game.obstacles.length; o++) {
+            for (var o = 0; o < ObstacleObj.obstacles.length; o++) {
 
                 //om de kolliderar "resetas" kulans position och är sen redo att återanvändas
-                if (checkCollision(Game.players[p].bullets[b], Game.obstacles[o])) {
+                if (checkCollision(Game.players[p].bullets[b], ObstacleObj.obstacles[o])) {
                     Game.players[p].bullets[b].resetBullet(Game.players[p].bullets[b]);
                 }
             }
@@ -159,8 +161,8 @@ function checkObjectCollisions() {
                     Game.htmlScore.innerHTML = Game.score;
                     Game.ghosts.splice(g, 1);
                     Game.players[p].bullets[b].resetBullet(Game.players[p].bullets[b]);
-                    var random = randomPowerUp();
-                    randomPowerUp(ghost.drawX, ghost.drawY, random); // skickar med spökets x och y som blir powerupens startposition
+                    var random = randomGenerator(25);
+                    newPowerUp(ghost.drawX, ghost.drawY, random); // skickar med spökets x och y som blir powerupens startposition
                 }
             }
         }
@@ -258,8 +260,8 @@ var animFrame = window.requestAnimationFrame ||
     null;
 
 //funktonen loop kallar på sig själv med hjälp av animframe
-function loop(){
-    if(Game.rendering){
+function loop() {
+    if (Game.rendering) {
         Game.playerCanvas.clearRect(0, 0, 800, 500);
         Game.players[0].checkDirection();
         Game.players[0].checkBullets();
@@ -282,7 +284,7 @@ function loop(){
 }
 
 // startar spel-loopen när användaren trycker på play och bakgrunden har renderats ut
-function startLoop(){
+function startLoop() {
     Game.rendering = true;
     Game.players[0].renderHealth();
     loop();
@@ -290,7 +292,7 @@ function startLoop(){
 }
 
 //stoppar spel-loopen när spelet är slut eller om spelet pausas
-function stopLoop(){
+function stopLoop() {
     Game.rendering = false;
     stopSpawn();
 }
