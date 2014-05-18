@@ -16,6 +16,9 @@
     <a id="twoPlayers" href="#">TWO PLAYERS</a>
 </div>
 <div id="game">
+    <audio id="explosion">
+        <source src="audio/powerup.wav">
+    </audio>
     <canvas id="backgroundCanvas" width="800" height="500"></canvas>
     <canvas id="playerCanvas" width="800" height="500"></canvas>
     <canvas id="bulletCanvas" width="800" height="500"></canvas>
@@ -23,13 +26,16 @@
     <canvas id="obstacleCanvas" width="800" height="500"></canvas>
     <canvas id="healthCanvas" width="800" height="500"></canvas>
     <canvas id="powerUpCanvas" width="800" height="500"></canvas>
+    <canvas id="explosionCanvas" width="800" height="500"></canvas>
 </div>
    <p id="FPS">FPS:  <span id="fps"></span></p>
-   <script src="script/Ghost.js"></script>
-   <script src="script/obstacle.js"></script>
-   <script src="script/Bullet.js"></script>
+<script src="script/Helper.js"></script>
+<script src="script/Explosion.js"></script>
+<script src="script/Ghost.js"></script>
+<script src="script/obstacle.js"></script>
+<script src="script/Bullet.js"></script>
 <script src="script/PowerUp.js"></script>
 <script src="script/Player.js"></script>
-   <script src="script/Game.js"></script>
+<script src="script/Game.js"></script>
 </body>
 </html>

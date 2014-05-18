@@ -2,7 +2,7 @@
 
 // objektet Game kapslar in kod som behöver köras innan spelet kan starta och även viss funkonalitet
 var Game = {
-    playerX: 100,
+    playerX: 40,
     player2X: 700,
     numberOfPlayers: 0,
     pauseButton: null,
@@ -16,6 +16,7 @@ var Game = {
     ghosts: [],
     bullets: [],
     obstacles: [],
+    sounds: {"shoot": new Audio("audio/shoot.wav")},
     backgroundCanvas: null,
     playerCanvas: null,
     bulletCanvas: null,
@@ -23,6 +24,7 @@ var Game = {
     obstacleCanvas: null,
     healthCanvas: null,
     powerUpCanvas: null,
+    explosionCanvas: null,
     gameSprite: null,
     width: 800,
     height: 500,
@@ -80,6 +82,7 @@ var Game = {
     //initserar canvas-tagger, hinder och event
     init: function () {
         Game.playerCanvas = document.getElementById("playerCanvas").getContext("2d");
+        Game.explosionCanvas = document.getElementById("explosionCanvas").getContext("2d");
         Game.bulletCanvas = document.getElementById("bulletCanvas").getContext("2d");
         Game.ghostCanvas = document.getElementById("ghostCanvas").getContext("2d");
         Game.obstacleCanvas = document.getElementById("obstacleCanvas").getContext("2d");
@@ -163,6 +166,11 @@ function checkObjectCollisions() {
                     Game.players[p].bullets[b].resetBullet(Game.players[p].bullets[b]);
                     var random = randomGenerator(25);
                     newPowerUp(ghost.drawX, ghost.drawY, random); // skickar med spökets x och y som blir powerupens startposition
+                    var moveExplosion = randomGenerator(9);
+                    ExplosionObj.explosions[ExplosionObj.explosions.length] = new Explosion(ghost.drawX, ghost.drawY, function () {
+                        ExplosionObj.explosions.splice(ExplosionObj.explosions.length, 1);
+                    }, moveExplosion);
+
                 }
             }
         }
@@ -172,6 +180,7 @@ function checkObjectCollisions() {
                 //rensar canvasen om spelaren har tagit powerupen
                 Game.powerUpCanvas.clearRect(PowerUpObj.powerUps[pu].drawX, PowerUpObj.powerUps[pu].drawY,
                     PowerUpObj.powerUps[pu].drawWidth, PowerUpObj.powerUps[pu].drawHeight);
+                ExplosionObj.audio.play();
 
 
                 if (PowerUpObj.powerUps[pu].type === "speed") {
@@ -231,6 +240,12 @@ function checkCollision(firstObject, secondObject) {
     return false;
 
 }
+
+function playSound(file) {
+    Game.sounds[file].currentTime = 0;
+    Game.sounds[file].play();
+    Game.sounds[file].ended = false;
+}
 //FPS-uträkning av Felipe
 //http://www.html5gamedevs.com/topic/1828-how-to-calculate-fps-in-plain-javascript/#entry12580
 var fps = {
@@ -274,6 +289,7 @@ function loop() {
         checkObjectCollisions();
         moveObstacles();
         renderGhosts();
+        clearExplosion();
         //kollar om det finns någon power-up att rendera ut
         //om det finns anropas funktionen renderPowerUps
         if (PowerUpObj.powerUps.length > 0) {

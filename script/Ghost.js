@@ -29,6 +29,10 @@ Ghost.prototype.render = function(){
  */
 function renderGhosts(){
 
+    var ghostRules = {
+
+    };
+
     Game.ghostCanvas.clearRect(0, 0, Game.width, Game.height);
     for(var i = 0; i < Game.ghosts.length; i++){
 

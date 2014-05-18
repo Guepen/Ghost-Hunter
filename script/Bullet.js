@@ -6,13 +6,13 @@
  * @this {Bullet}
  */
 function Bullet() {
-    this.drawWidth = 8;
-    this.drawHeight = 12;
+    this.drawWidth = 9;
+    this.drawHeight = 9;
     this.speed = 3;
     this.srcX = 48;
     this.srcY = 1000;
-    this.srcWidth = 10;
-    this.srcHeight = 14;
+    this.srcWidth = 9;
+    this.srcHeight = 9;
     this.drawY = 510;
     this.drawX = -25;
 }

@@ -1,5 +1,6 @@
 "use strict";
-
+var PlayerObj = {
+};
 /**
  * Skapar en instans av Player
  * @constructor
@@ -138,6 +139,8 @@ Player.prototype.ifShooting = function () {
     //kollar om användaren trycker på spacebar och inte redan skjuer
     if (Game.pressedKeys[32] && !this.shoot) {
         this.shoot = true;
+        playSound("shoot");
+
         //anropar funktionen fire som sätter kulans position till spelarens
         Game.players[0].bullets[this.currentBullet].fire(Game.players[0]);
         this.currentBullet++;
