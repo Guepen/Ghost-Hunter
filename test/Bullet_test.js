@@ -26,16 +26,19 @@ describe('Bullet', function () {
         Game = {
             players: [
                 {
-                    drawWidth: 50
+                    drawWidth: 50,
+                    drawHeight: 100,
+                    drawX: 400,
+                    drawY: 400
                 }
             ],
             gameSprite: "pic"
         };
 
         var bullet = new Bullet();
-        bullet.fire(400, 400);
-        expect(bullet.drawX).to.eql(421);
-        expect(bullet.drawY).to.eql(400);
+        bullet.fire(Game.players[0]);
+        expect(bullet.drawX).to.eql(405);
+        expect(bullet.drawY).to.eql(433);
     });
 
     it('should render', function () {

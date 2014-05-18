@@ -1,5 +1,6 @@
 "use strict";
 var PlayerObj = {
+    shootAudio: new Audio("audio/shoot.wav")
 };
 /**
  * Skapar en instans av Player
@@ -138,8 +139,9 @@ Player.prototype.checkBullets = function () {
 Player.prototype.ifShooting = function () {
     //kollar om användaren trycker på spacebar och inte redan skjuer
     if (Game.pressedKeys[32] && !this.shoot) {
+        PlayerObj.shootAudio.play();
+        PlayerObj.shootAudio.currentTime = 0;
         this.shoot = true;
-        playSound("shoot");
 
         //anropar funktionen fire som sätter kulans position till spelarens
         Game.players[0].bullets[this.currentBullet].fire(Game.players[0]);

@@ -16,7 +16,6 @@ var Game = {
     ghosts: [],
     bullets: [],
     obstacles: [],
-    sounds: {"shoot": new Audio("audio/shoot.wav")},
     backgroundCanvas: null,
     playerCanvas: null,
     bulletCanvas: null,
@@ -181,6 +180,7 @@ function checkObjectCollisions() {
                 Game.powerUpCanvas.clearRect(PowerUpObj.powerUps[pu].drawX, PowerUpObj.powerUps[pu].drawY,
                     PowerUpObj.powerUps[pu].drawWidth, PowerUpObj.powerUps[pu].drawHeight);
                 ExplosionObj.audio.play();
+                ExplosionObj.audio.currentTime = 0;
 
 
                 if (PowerUpObj.powerUps[pu].type === "speed") {
