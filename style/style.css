@@ -3,8 +3,14 @@ canvas{
     background: transparent;
     top: 100px;
     left: auto ;
+    width: 800px;
+    height: 500px;
     display: block;
     z-index: 1;
+    margin-top: 20px;
+    -moz-box-shadow: 0 0 5px 10px #404040;
+    -webkit-box-shadow: 0 0 5px 10px #404040;
+    box-shadow: 0 0 5px 10px #404040;
 }
 
 #FPS{
@@ -17,16 +23,16 @@ canvas{
 
 #pauseButton{
     height: 20px;
-    margin: 17px 0 0 25px;
+    width: 50px;
 }
 
 #topGame{
-    width: 800px;
+    width: 796px;
     height: 40px;
-    margin-left:26%;
+    margin-left: 17.2%;
     margin-top: -20px;
     display: inline-flex;
-
+    background-color: rgba(1, 1, 1, 0.3);
 
 }
 
@@ -41,6 +47,28 @@ canvas{
     display: inline-block;
     width: 200px;
     height: 400px;
+    background-color: rgba(0, 0, 0, 0.1);
+    margin-left: 20px;
+    margin-top: 40px;
+    border: 2px solid #606050;
+}
+
+#Controls a {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 20px;
+    margin-left: 25px;
+    width: 60px;
+    height: 20px;
+    background: linear-gradient(to bottom, darkgreen 0%, green 40%);
+    color: whitesmoke;
+    font-size: 1.5em;
+}
+
+#Controls a:hover {
+    color: whitesmoke;
+    background: linear-gradient(to bottom, green 0%, darkgreen 100%);
 }
 
 h2 {
@@ -140,15 +168,25 @@ h2 {
     background: linear-gradient(to bottom, orange 0%, yellow 100%);
 }
 
-label, h1{
+h1 {
     color: white;
 }
 
 #game{
-    margin: 100px auto 0;
+    margin: 0 auto 0;
     width: 800px;
     height: 580px;
     display: block;
+}
+
+#score2 {
+    margin-left: 600px;
+    color: purple;
+}
+
+#score {
+    margin-left: 12px;
+    color: lawngreen;
 }
 
 body{

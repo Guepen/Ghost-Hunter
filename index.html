@@ -8,8 +8,9 @@
 <body>
 <h1>Ghost Hunter</h1>
 <div id="topGame">
-<p><label>SCORE: <span id="score"></span></label></p>
-<button id="pauseButton">Pause</button>
+    <p id="score"><label>SCORE: <span id="countScore"></span></label></p>
+
+    <p id="score2"><label>SCORE: <span id="countScore2"></span></label></p>
 </div>
 <div id="menu">
     <a id="onePlayer" href="#">ONE PLAYER</a>
@@ -33,18 +34,17 @@
 
         <h4>Player Two</h4>
 
-        <p><span>Move Left</span>
-            <span id="spanRightTwo">Move Right</span></p>
+        <p id="ShootTextTwo">Shoot</p>
+        <section id="ShootTwo"></section>
         <section id="LeftTwo"></section>
         <section id="RightTwo"></section>
-        <section id="ShootTwo"></section>
-        <p id="ShootTextTwo">Shoot</p>
+        <p><span>Move Left</span>
+            <span id="spanRightTwo">Move Right</span></p>
+
+        <a id="Hide" href="#">Hide</a>
     </div>
 </div>
 <div id="game">
-    <audio id="explosion">
-        <source src="audio/powerup.wav">
-    </audio>
     <canvas id="backgroundCanvas" width="800" height="500"></canvas>
     <canvas id="playerCanvas" width="800" height="500"></canvas>
     <canvas id="bulletCanvas" width="800" height="500"></canvas>
