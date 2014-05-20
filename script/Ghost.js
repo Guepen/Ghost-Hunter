@@ -40,20 +40,21 @@ function renderGhosts() {
         if (ghost.drawX + ghost.drawWidth >= 795) {
             ghost.drawX -= ghost.xSpeed / 2;
         }
-        if (ghost.drawX <= 5) {
+        else if (ghost.drawX <= 5) {
             ghost.drawX += ghost.xSpeed / 2;
         }
 
         //Huvudfunktionalitet för att röra på spöken
-        if (!ghost.drawX <= 5 || ghost.drawX + ghost.drawWidth >= 795) {
+        else {
 
             //om spökets "rörelsetal" är noll slumpas ett nytt tal
             if (ghost.movement === 0) {
-                ghost.movement = Math.floor(Math.random() * Game.width * 0.2 - Game.width * 0.1);
+                // ghost.movement = Math.floor(Math.random() * Game.width * 0.2 - Game.width * 0.1);
+                ghost.movement = randomGenerator(-(Game.width * 0.1), Game.width * 0.2);
             }
 
             //om spökets rörelsetal är större än noll
-            if (ghost.movement > 0) {
+            else if (ghost.movement > 0) {
                 ghost.drawX += ghost.xSpeed / 2; //spöket går åt höger
                 ghost.movement -= ghost.xSpeed; // rörelsetalet minskas och blir tillslut noll
             }

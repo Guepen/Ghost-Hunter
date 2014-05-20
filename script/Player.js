@@ -6,24 +6,26 @@ var PlayerObj = {
  * Skapar en instans av Player
  * @constructor
  */
-function Player(drawX, srcX, srcY, htmlScore, type) {
+function Player(drawX, srcX, srcY, htmlScore, type, shootKey, moveLeftKey, moveRightKey, minX, maxX) {
     this.drawX = drawX;
     this.drawHeight = 100;
     this.drawY = Game.height - this.drawHeight;
+    this.drawWidth = 60;
     this.srcX = srcX;
     this.srcY = srcY;
-    this.drawWidth = 60;
     this.srcWidth = 60;
     this.srcHeight = 89;
     this.speed = 5;
     this.health = 3;
     this.shoot = false;
-    this.shoot2 = false;
     this.currentBullet = 0;
-    this.currentBullet2 = 0;
+    //this.currentBullet2 = 0;
     this.interval = 0;
     this.interval2 = 0;
     this.bullets = [];
+    this.shootKey = shootKey;
+    this.moveLeftKey = moveLeftKey;
+    this.moveRightKey = moveRightKey;
     this.movingLeft = false;
     this.movingRight = false;
     this.score = 0;
@@ -70,84 +72,55 @@ Player.prototype.renderHealth = function (x) {
  * Funktion som kollar om spelaren rör sig
  */
 Player.prototype.checkDirection = function () {
-    //om användaren trycker på vänster pil-tangetn eller a-tangenten
-    if (Game.pressedKeys[37]) {
-        Game.players[0].movingRight = false;
-        Game.players[0].movingLeft = true;
-        //Kollar så att inte spelaren kan gå utanför banan
-        if (Game.players[0].drawX <= 0) {
-            Game.players[0].drawX = 0;
-        }
-        else {
-            //console.log("player move left");
-
-            Game.players[0].drawX -= Game.players[0].speed;
-        }
-    }
-    if (Game.pressedKeys[65]) {
-        Game.players[1].movingRight = false;
-        Game.players[1].movingLeft = true;
-        if (Game.numberOfPlayers === 1 || Game.players[1].wallWalker) {
-            if (Game.players[1].drawX <= 0) {
-                Game.players[1].drawX = 0;
-            }
-            else {
-                Game.players[1].drawX -= Game.players[1].speed;
-            }
-        }
-        else {
-            if (Game.players[1].drawX >= Game.width / 2 + 2 && !Game.players[1].dead) {
-                Game.players[1].drawX -= Game.players[1].speed;
-            }
-        }
-    }
     //om användaren trycker på höger pil-tangent eller d-tangenten
-    if (Game.pressedKeys[39]) {
-        Game.players[0].movingLeft = false;
-        Game.players[0].movingRight = true;
+    if (Game.pressedKeys[this.moveRightKey]) {
+        this.movingLeft = false;
+        this.movingRight = true;
         //Kollar så att inte spelaren kan gå utanför banan
-        if (Game.numberOfPlayers === 1 || Game.players[0].wallWalker) {
-            if (Game.players[0].drawX <= Game.width - Game.players[0].drawWidth) {
-                Game.players[0].drawX += Game.players[0].speed;
+        if (Game.numberOfPlayers === 1 || this.wallWalker) {
+            if (this.drawX <= Game.width - this.drawWidth) {
+                this.drawX += this.speed;
             }
         }
+
+        else if (this.type === "purple") {
+            if (this.drawX + this.drawWidth <= Game.width / 2 - 4) {
+                this.drawX += this.speed;
+            }
+        }
+
+        else if (this.type === "green") {
+            if (this.drawX <= Game.width - this.drawWidth) {
+                this.drawX += this.speed;
+            }
+        }
+    }
+
+    if (Game.pressedKeys[this.moveLeftKey]) {
+        this.movingLeft = true;
+        this.movingRight = false;
+        //Kollar så att inte spelaren kan gå utanför banan
+        if (this.drawX <= 0) {
+            this.drawX = 0;
+            }
         else {
-            if (Game.players[0].drawX + Game.players[0].drawWidth + 2 <= Game.width / 2) {
-                Game.players[0].drawX += Game.players[0].speed;
+            if (Game.numberOfPlayers === 1 || this.wallWalker) {
+                this.drawX -= this.speed;
+            }
+            else if (this.type === "green") {
+                if (this.drawX >= Game.width / 2 + 4) {
+                    this.drawX -= this.speed;
+                }
             }
 
-        }
-    }
-
-    if (Game.pressedKeys[68]) {
-        Game.players[1].movingRight = true;
-        Game.players[1].movingLeft = false;
-        if (Game.players[1].drawX <= Game.width - Game.players[1].drawWidth) {
-            Game.players[1].drawX += Game.players[1].speed;
-        }
-    }
-};
-
-/**
- * funktion som kollar kulornas position
- * och kollar om de ska renderas ut
- */
-Player.prototype.checkBullets = function () {
-    //"clearar" canvasen så inte det gamla finns kvar
-    Game.bulletCanvas.clearRect(0, 0, 800, 500);
-    //loopar igenom alla kulor
-    for (var p = 0; p < Game.players.length; p++) {
-        for (var i = 0; i < Game.players[p].bullets.length; i++) {
-            //om kulan finns på spelytan renderas den ut
-            if (Game.players[p].bullets[i].drawY <= 500 && Game.players[p].bullets[i].drawY >= 0) {
-                Game.players[p].bullets[i].render();
+            else if (this.type === "purple") {
+                if (this.drawX + this.drawWidth >= 0) {
+                    this.drawX -= this.speed;
+                }
             }
-            //om kulan är över spelytan anropas funktionen resetBullet
-            else if (Game.players[p].bullets[i].drawY <= 0) {
-                Game.players[p].bullets[i].resetBullet(Game.players[p].bullets[i]);
+
             }
         }
-    }
 };
 
 /**
@@ -155,41 +128,24 @@ Player.prototype.checkBullets = function () {
  */
 Player.prototype.ifShooting = function () {
     //kollar om användaren trycker på spacebar och inte redan skjuer
-    if (Game.pressedKeys[32] && !this.shoot) {
+    if (Game.pressedKeys[this.shootKey] && !this.shoot) {
         PlayerObj.shootAudio.play();
         PlayerObj.shootAudio.currentTime = 0;
         this.shoot = true;
 
         //anropar funktionen fire som sätter kulans position till spelarens
-        Game.players[0].bullets[this.currentBullet].fire(Game.players[0]);
+        this.bullets[this.currentBullet].fire(this);
         this.currentBullet++;
 
         //om användaren skjutit slut på alla kulor börjar arrayen om på 0
-        if (this.currentBullet >= Game.players[0].bullets.length) {
+        if (this.currentBullet >= this.bullets.length) {
             this.currentBullet = 0;
         }
     }
     //när användaren släppper spacebar blir shott false och då kan ett nytt skott skjutas
-    else if (!Game.pressedKeys[32]) {
+    else if (!Game.pressedKeys[this.shootKey]) {
         this.shoot = false;
     }
-
-    if (Game.pressedKeys[87] && !this.shoot2) {
-        this.shoot2 = true;
-        //anropar funktionen fire som sätter kulans position till spelarens
-        Game.players[1].bullets[this.currentBullet2].fire(Game.players[1]);
-        this.currentBullet2++;
-
-        //om användaren skjutit slut på alla kulor börjar arrayen om på 0
-        if (this.currentBullet2 >= Game.players[1].bullets.length) {
-            this.currentBullet2 = 0;
-        }
-    }
-    //när användaren släppper spacebar blir shott false och då kan ett nytt skott skjutas
-    else if (!Game.pressedKeys[87]) {
-        this.shoot2 = false;
-    }
-
 };
 
 /**
@@ -197,9 +153,10 @@ Player.prototype.ifShooting = function () {
  * @param e Event
  */
 function keyDown(e) {
+    //alert(e.keyCode);
 
     //förhindrar normalt beteende
-    if (e.keyCode === 32 || e.keyCode === 87) {
+    if (e.keyCode === 32 || e.keyCode === 87 || e.keyCode === 16) {
         e.preventDefault();
     }
 

@@ -181,13 +181,13 @@ h1 {
 
 #score2 {
     margin-left: 600px;
-    color: purple;
+    color: lawngreen;
     display: none;
 }
 
 #score {
     margin-left: 12px;
-    color: lawngreen;
+    color: purple;
 }
 
 body{

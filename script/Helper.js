@@ -4,7 +4,27 @@ function randomGenerator(lowest, range) {
     return Math.floor((Math.random() * range) + lowest);
 }
 
-
+/**
+ * funktion som kollar kulornas position
+ * och kollar om de ska renderas ut
+ */
+function checkBullets() {
+    //"clearar" canvasen så inte det gamla finns kvar
+    Game.bulletCanvas.clearRect(0, 0, 800, 500);
+    //loopar igenom alla kulor
+    for (var p = 0; p < Game.players.length; p++) {
+        for (var i = 0; i < Game.players[p].bullets.length; i++) {
+            //om kulan finns på spelytan renderas den ut
+            if (Game.players[p].bullets[i].drawY <= 500 && Game.players[p].bullets[i].drawY >= 0) {
+                Game.players[p].bullets[i].render();
+            }
+            //om kulan är över spelytan anropas funktionen resetBullet
+            else if (Game.players[p].bullets[i].drawY <= 0) {
+                Game.players[p].bullets[i].resetBullet(Game.players[p].bullets[i]);
+            }
+        }
+    }
+}
 function ghostRules() {
     if (Game.score > 0) {
         if (Game.score % 15 === 0) {
@@ -28,27 +48,30 @@ function ghostRules() {
     }
 }
 
-function obstacleRules() {
+function moveObstacleX() {
+
+    ObstacleObj.obstacles[0].drawX += 0.2;
+    ObstacleObj.obstacles[1].drawX -= 0.2;
+
+    if (ObstacleObj.obstacles[1].drawX <= 0) {
+        ObstacleObj.obstacles[1].drawX = 870;
+    }
+
+    if (ObstacleObj.obstacles[0].drawX >= Game.width) {
+        ObstacleObj.obstacles[0].drawX = -70;
+    }
+}
+
+function moveObstacleY() {
     Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
     for (var i = 0; i < ObstacleObj.obstacles.length; i++) {
         if (ObstacleObj.moveObs > 0 && ObstacleObj.obstacles[i].drawY < 320) {
             ObstacleObj.obstacles[i].drawY += 0.5;
             ObstacleObj.moveObs -= 0.2;
         }
-        if (Game.score >= 80) {
-            ObstacleObj.obstacles[0].drawX += 0.2;
-            ObstacleObj.obstacles[1].drawX -= 0.2;
-
+        if (Game.score >= 5) {
+            moveObstacleX();
         }
-
-        if (ObstacleObj.obstacles[1].drawX <= 0) {
-            ObstacleObj.obstacles[1].drawX = 870;
-        }
-
-        if (ObstacleObj.obstacles[0].drawX >= Game.width) {
-            ObstacleObj.obstacles[0].drawX = -70;
-        }
-
 
         ObstacleObj.obstacles[i].render();
     }

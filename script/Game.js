@@ -128,7 +128,7 @@ var Game = {
     },
 
     onePlayer: function () {
-        Game.players[Game.players.length] = new Player(Game.width / 2, 743, 1089, score, "green");
+        Game.players[Game.players.length] = new Player(Game.width / 2, 743, 1089, score, "green", 32, 37, 39, 0, 368);
         Game.numberOfPlayers = 1;
         Game.players[0].movingRight = true;
         Game.renderBackground();
@@ -137,10 +137,10 @@ var Game = {
     twoPlayers: function () {
         var score = document.getElementById("countScore");
         var score2 = document.getElementById("countScore2");
-        Game.players[Game.players.length] = new Player(Game.playerX, 743, 1089, score, "green");
-        Game.players[Game.players.length] = new Player(Game.player2X, 502, 1000, score2, "purple");
-        Game.players[0].movingRight = true;
-        Game.players[1].movingLeft = true;
+        Game.players[Game.players.length] = new Player(700, 743, 1089, score, "green", 32, 37, 39, 0, 368);
+        Game.players[Game.players.length] = new Player(40, 502, 1000, score2, "purple", 16, 65, 68, 402, 402);
+        Game.players[1].movingRight = true;
+        Game.players[0].movingLeft = true;
         Game.numberOfPlayers = 2;
         Game.renderBackground();
     },
@@ -196,7 +196,7 @@ function checkObjectCollisions() {
                     Game.players[p].htmlScore.innerHTML = Game.players[p].score;
                     Game.ghosts.splice(g, 1);
                     Game.players[p].bullets[b].resetBullet(Game.players[p].bullets[b]);
-                    var random = randomGenerator(0, 25);
+                    var random = randomGenerator(0, 30);
                     newPowerUp(ghost.drawX, ghost.drawY, random); // skickar med spökets x och y som blir powerupens startposition
                     var moveExplosion = randomGenerator(0, 9);
                     ExplosionObj.explosions[ExplosionObj.explosions.length] = new Explosion(ghost.drawX, ghost.drawY, function () {
@@ -251,17 +251,16 @@ function checkObjectCollisions() {
 
                 else if (PowerUpObj.powerUps[pu].type === "wallWalker") {
                     Game.players[p].wallWalker = true;
-                    clearTimeout(Game.clearPowerUp);
 
                     setTimeout((function (p) {
                         return (function () {
                             Game.players[p].wallWalker = false;
-                            if (Game.players[0].drawX + Game.players[0].drawWidth >= 402) {
-                                Game.players[0].drawX = 150;
+                            if (Game.players[1].drawX + Game.players[0].drawWidth >= 402) {
+                                Game.players[1].drawX = 150;
                             }
 
-                            if (Game.players[1].drawX <= 398) {
-                                Game.players[1].drawX = 500;
+                            if (Game.players[0].drawX <= 398) {
+                                Game.players[0].drawX = 500;
                             }
                         });
                     })(p), 9000);
@@ -332,18 +331,19 @@ var animFrame = window.requestAnimationFrame ||
 function loop() {
     if (Game.rendering) {
         Game.playerCanvas.clearRect(0, 0, 800, 500);
-        Game.players[0].checkDirection();
-        Game.players[0].checkBullets();
-        Game.players[0].ifShooting();
         for (var i = 0; i < Game.players.length; i++) {
             Game.players[i].render();
+            Game.players[i].checkDirection();
+            Game.players[i].ifShooting();
         }
         fps.f.innerHTML = fps.getFps();
         checkObjectCollisions();
+        checkBullets();
         renderGhosts();
         clearExplosion();
-        obstacleRules();
+        moveObstacleY();
         ghostRules();
+
         //kollar om det finns någon power-up att rendera ut
         //om det finns anropas funktionen renderPowerUps
         if (PowerUpObj.powerUps.length > 0) {
@@ -351,7 +351,6 @@ function loop() {
         }
         animFrame(loop);
     }
-    //console.log('asdds');
 }
 
 // startar spel-loopen när användaren trycker på play och bakgrunden har renderats ut
