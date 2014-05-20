@@ -27,7 +27,6 @@ function PowerUp() {
 PowerUp.prototype.render = function () {
     Game.powerUpCanvas.drawImage(Game.gameSprite, this.srcX, this.srcY, this.srcWidth,
         this.srcHeight, this.drawX, this.drawY += this.speed, this.drawWidth, this.drawHeight);
-
 };
 
 /**
@@ -43,6 +42,20 @@ function newPowerUp(ghostX, ghostY, random) {
         powerUp = new PowerUp();
         powerUp.drawX = ghostX;
         powerUp.drawY = ghostY;
+        powerUp.drawWidth = 26;
+        powerUp.drawHeight = 27;
+        powerUp.srcY = 0;
+        powerUp.srcX = 0;
+        powerUp.srcWidth = 26;
+        powerUp.srcHeight = 27;
+        powerUp.type = "wallWalker";
+        PowerUpObj.powerUps[PowerUpObj.powerUps.length] = powerUp;
+    }
+
+    else if (random === 1) {
+        powerUp = new PowerUp();
+        powerUp.drawX = ghostX;
+        powerUp.drawY = ghostY;
         powerUp.srcY = 1000;
         powerUp.srcX = 150;
         powerUp.srcWidth = 26;
@@ -53,7 +66,7 @@ function newPowerUp(ghostX, ghostY, random) {
         PowerUpObj.powerUps[PowerUpObj.powerUps.length] = powerUp;
     }
 
-    else if (random === 1) {
+    else if (random === 2) {
         powerUp = new PowerUp();
         powerUp.drawX = ghostX;
         powerUp.drawY = ghostY;

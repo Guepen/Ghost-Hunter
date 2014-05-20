@@ -6,10 +6,12 @@ var Game = {
     player2X: 700,
     numberOfPlayers: 0,
     pauseButton: null,
+    hideControls: null,
     onePlayerButton: null,
     twoPlayerButton: null,
     gameDiv: null,
     menuDiv: null,
+    secondScoreDiv: null,
     clearPowerUp: null,
     pressedKeys: [],
     players: [],
@@ -30,10 +32,11 @@ var Game = {
     rendering: false,
     renderPowerUp: false,
     paused: true,
-    htmlScore: null,
+    updateGhostRules: false,
+    updateGhostRulesTwo: 0,
     score: 0,
     spawnAmount: 2,
-    spawnInterval: 0,
+    spawnInterval: null,
     spawnRate: 5000,
 
     //låter bilden laddas innan spelet startar så den inte saknas när den skall användas
@@ -73,6 +76,16 @@ var Game = {
 
         this.backgroundCanvas.drawImage(Game.gameSprite, srcX, srcY, Game.width, Game.height, drawX, drawY, Game.width, Game.height);
 
+        if (Game.numberOfPlayers === 2) {
+            Game.secondScoreDiv.style.display = "block";
+            this.backgroundCanvas.strokeStyle = "red";
+            this.backgroundCanvas.lineWidth = 4;
+            this.backgroundCanvas.beginPath();
+            this.backgroundCanvas.moveTo(398, 0);
+            this.backgroundCanvas.lineTo(398, 500);
+
+            this.backgroundCanvas.stroke();
+        }
         //Startar spelet
         startLoop();
     },
@@ -87,10 +100,12 @@ var Game = {
         Game.obstacleCanvas = document.getElementById("obstacleCanvas").getContext("2d");
         Game.healthCanvas = document.getElementById("healthCanvas").getContext("2d");
         Game.powerUpCanvas = document.getElementById("powerUpCanvas").getContext("2d");
-        Game.pauseButton = document.getElementById("pauseButton");
+        //Game.pauseButton = document.getElementById("pauseButton");
+        Game.hideControls = document.getElementById("Hide");
         Game.gameDiv = document.getElementById("game");
         Game.menuDiv = document.getElementById("menu");
-        Game.htmlScore = document.getElementById("score");
+        Game.htmlScore = document.getElementById("countScore");
+        Game.secondScoreDiv = document.getElementById("score2");
         //Game.player = new Player();
 
         for (var i = 0; i < 2; i++) {
@@ -101,22 +116,31 @@ var Game = {
         document.addEventListener("keyup", keyUp, false);
         Game.onePlayerButton.addEventListener("click", this.onePlayer, false);
         Game.twoPlayerButton.addEventListener("click", this.twoPlayers, false);
-        Game.pauseButton.addEventListener("click", this.stopStart, false);
+        //Game.pauseButton.addEventListener("click", this.stopStart, false);
+        Game.hideControls.addEventListener("click", this.removeControls, false);
     },
 
     onePlayer: function () {
-        Game.players[Game.players.length] = new Player(Game.width / 2, 743, 1089);
+        Game.players[Game.players.length] = new Player(Game.width / 2, 743, 1089, score, "green");
         Game.numberOfPlayers = 1;
+        Game.players[0].movingRight = true;
         Game.renderBackground();
     },
 
     twoPlayers: function () {
-        Game.players[Game.players.length] = new Player(Game.playerX, 743, 1089);
-        Game.players[Game.players.length] = new Player(Game.player2X, 502, 1000);
+        var score = document.getElementById("countScore");
+        var score2 = document.getElementById("countScore2");
+        Game.players[Game.players.length] = new Player(Game.playerX, 743, 1089, score, "green");
+        Game.players[Game.players.length] = new Player(Game.player2X, 502, 1000, score2, "purple");
         Game.players[0].movingRight = true;
         Game.players[1].movingLeft = true;
         Game.numberOfPlayers = 2;
         Game.renderBackground();
+    },
+
+    removeControls: function () {
+        var controls = document.getElementById("Controls");
+        controls.style.visibility = 'hidden';
     },
 
 //används för att pausa/starta spelet
@@ -125,13 +149,14 @@ var Game = {
             stopLoop();
             //stopSpawn();
             Game.paused = false;
-            Game.pauseButton.innerHTML = "Play";
+            // Game.pauseButton.innerHTML = "Play";
         }
 
         else if (!Game.paused) {
-            startLoop();
+            Game.rendering = true;
             Game.paused = true;
-            Game.pauseButton.innerHTML = "Pause";
+            // Game.pauseButton.innerHTML = "Pause";
+            startLoop();
         }
 
     }
@@ -160,7 +185,8 @@ function checkObjectCollisions() {
                 // poängen ökar och ett anrop till funktionen newPowerUp görs för att slumpa om en powerUp ska ges
                 if (checkCollision(Game.players[p].bullets[b], ghost)) {
                     Game.score++;
-                    Game.htmlScore.innerHTML = Game.score;
+                    Game.players[p].score++;
+                    Game.players[p].htmlScore.innerHTML = Game.players[p].score;
                     Game.ghosts.splice(g, 1);
                     Game.players[p].bullets[b].resetBullet(Game.players[p].bullets[b]);
                     var random = randomGenerator(25);
@@ -202,10 +228,38 @@ function checkObjectCollisions() {
                 else if (PowerUpObj.powerUps[pu].type === "health") {
 
                     //Liv ges bara om spelaren har tappat något liv
-                    if (Game.players[0].health < 3) {
-                        Game.players[0].health += 1;
-                        Game.players[0].renderHealth();
+                    if (Game.players[p].type === "green") {
+                        if (Game.players[0].health < 3) {
+                            Game.players[0].health += 1;
+                            Game.players[0].renderHealth(-18);
+                        }
                     }
+                    else if (Game.players[p].type === "purple") {
+                        if (Game.players[1].health < 3) {
+                            Game.players[1].health += 1;
+                            Game.players[1].renderHealth(680);
+                        }
+                    }
+                }
+
+                else if (PowerUpObj.powerUps[pu].type === "wallWalker") {
+                    var timeOut;
+                    var time = 9000;
+                    Game.players[p].wallWalker = true;
+                    clearTimeout(Game.clearPowerUp);
+
+                    timeOut = setTimeout((function (p) {
+                        return (function () {
+                            Game.players[p].wallWalker = false;
+                            if (Game.players[0].drawX + Game.players[0].drawWidth >= 402) {
+                                Game.players[0].drawX = 150;
+                            }
+
+                            if (Game.players[1].drawX <= 398) {
+                                Game.players[1].drawX = 500;
+                            }
+                        });
+                    })(p), time);
                 }
                 //tar bort power-upen från arrayen om spelaren har tagit den
                 PowerUpObj.powerUps.splice(pu, 1);
@@ -241,11 +295,6 @@ function checkCollision(firstObject, secondObject) {
 
 }
 
-function playSound(file) {
-    Game.sounds[file].currentTime = 0;
-    Game.sounds[file].play();
-    Game.sounds[file].ended = false;
-}
 //FPS-uträkning av Felipe
 //http://www.html5gamedevs.com/topic/1828-how-to-calculate-fps-in-plain-javascript/#entry12580
 var fps = {
@@ -282,7 +331,9 @@ function loop() {
         Game.players[0].checkBullets();
         Game.players[0].ifShooting();
         for (var i = 0; i < Game.players.length; i++) {
-            Game.players[i].render();
+            if (!Game.players[i].dead) {
+                Game.players[i].render();
+            }
 
         }
         fps.f.innerHTML = fps.getFps();
@@ -290,6 +341,7 @@ function loop() {
         moveObstacles();
         renderGhosts();
         clearExplosion();
+        ghostRules();
         //kollar om det finns någon power-up att rendera ut
         //om det finns anropas funktionen renderPowerUps
         if (PowerUpObj.powerUps.length > 0) {
@@ -297,14 +349,16 @@ function loop() {
         }
         animFrame(loop);
     }
+    //console.log('asdds');
 }
 
 // startar spel-loopen när användaren trycker på play och bakgrunden har renderats ut
 function startLoop() {
     Game.rendering = true;
-    Game.players[0].renderHealth();
-    loop();
+    Game.players[0].renderHealth(-18);
+    Game.players[0].renderHealth(680);
     startSpawn();
+    loop();
 }
 
 //stoppar spel-loopen när spelet är slut eller om spelet pausas

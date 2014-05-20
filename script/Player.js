@@ -6,7 +6,7 @@ var PlayerObj = {
  * Skapar en instans av Player
  * @constructor
  */
-function Player(drawX, srcX, srcY) {
+function Player(drawX, srcX, srcY, htmlScore, type) {
     this.drawX = drawX;
     this.drawHeight = 100;
     this.drawY = Game.height - this.drawHeight;
@@ -26,6 +26,11 @@ function Player(drawX, srcX, srcY) {
     this.bullets = [];
     this.movingLeft = false;
     this.movingRight = false;
+    this.score = 0;
+    this.htmlScore = htmlScore;
+    this.type = type;
+    this.wallWalker = false;
+    this.dead = false;
 
     //lägger till 50 skott tillhörande spelarinstansen.
     //skotten återanvänds sedan istället för att skapa en
@@ -38,24 +43,32 @@ function Player(drawX, srcX, srcY) {
 Player.prototype.render = function () {
     //console.log("render");
     //Om spelaren inte har några liv kvar är spelet slut
-    if (this.health <= 0) {
-        Game.rendering = false;
-        Game.bulletCanvas.clearRect(0, 0, Game.width, Game.height);
-        Game.ghostCanvas.clearRect(0, 0, Game.width, Game.height);
-        Game.backgroundCanvas.fillStyle = "blue";
-        Game.backgroundCanvas.font = "bold 25px Arial";
-        Game.backgroundCanvas.fillText("Game Over", Game.width / 2, 70);
-        stopLoop();
+    if (Game.players[0].health <= 0) {
+        checkWinner();
+        Game.players[0].dead = true;
+        Game.playerCanvas.fillStyle = "red";
+        Game.playerCanvas.fillRect(Game.players[0].drawX, Game.players[0].drawY, 25, 25);
     }
-    else {
+
+    if (Game.numberOfPlayers === 2) {
+        if (Game.players[1].health <= 0) {
+            checkWinner();
+            Game.players[1].dead = true;
+            Game.playerCanvas.fillStyle = "red";
+            Game.playerCanvas.fillRect(Game.players[1].drawX, Game.players[1].drawY, 25, 25);
+        }
+    }
+
+
+    if (!this.dead) {
         Game.playerCanvas.drawImage(Game.gameSprite, this.srcX, this.srcY, this.srcWidth, this.srcHeight,
             this.drawX, this.drawY, this.drawWidth, this.drawHeight);
     }
+
 };
 
-Player.prototype.renderHealth = function () {
-    var nextX = -18; // position för utritning av liv
-    Game.healthCanvas.clearRect(0, 0, Game.width, Game.height);
+Player.prototype.renderHealth = function (x) {
+    var nextX = x; // position för utritning av liv
 
     //Loopar igenom alla liv och ritar ut dom
     for (var i = 0; i < this.health; i++) {
@@ -78,27 +91,42 @@ Player.prototype.checkDirection = function () {
         }
         else {
             //console.log("player move left");
+
             Game.players[0].drawX -= Game.players[0].speed;
         }
     }
     if (Game.pressedKeys[65]) {
         Game.players[1].movingRight = false;
         Game.players[1].movingLeft = true;
-        if (Game.players[1].drawX <= 0) {
-            Game.players[1].drawX = 0;
+        if (Game.numberOfPlayers === 1 || Game.players[1].wallWalker) {
+            if (Game.players[1].drawX <= 0) {
+                Game.players[1].drawX = 0;
+            }
+            else {
+                Game.players[1].drawX -= Game.players[1].speed;
+            }
         }
         else {
-            //console.log("player move left");
-            Game.players[1].drawX -= Game.players[1].speed;
+            if (Game.players[1].drawX >= Game.width / 2 + 2 && !Game.players[1].dead) {
+                Game.players[1].drawX -= Game.players[1].speed;
+            }
         }
     }
-    //om användaren trycker på höger pil-tangetn eller d-tangenten
+    //om användaren trycker på höger pil-tangent eller d-tangenten
     if (Game.pressedKeys[39]) {
         Game.players[0].movingLeft = false;
         Game.players[0].movingRight = true;
         //Kollar så att inte spelaren kan gå utanför banan
-        if (Game.players[0].drawX <= Game.width - Game.players[0].drawWidth) {
-            Game.players[0].drawX += Game.players[0].speed;
+        if (Game.numberOfPlayers === 1 || Game.players[0].wallWalker) {
+            if (Game.players[0].drawX <= Game.width - Game.players[0].drawWidth) {
+                Game.players[0].drawX += Game.players[0].speed;
+            }
+        }
+        else {
+            if (Game.players[0].drawX + Game.players[0].drawWidth + 2 <= Game.width / 2) {
+                Game.players[0].drawX += Game.players[0].speed;
+            }
+
         }
     }
 
@@ -269,6 +297,4 @@ function keyUp(e) {
     //sätter tangentens kod till false
     Game.pressedKeys[e.keyCode] = false;
 
-
 }
-

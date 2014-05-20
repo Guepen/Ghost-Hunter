@@ -2,7 +2,7 @@
 
 var ExplosionObj = {
     explosions: [],
-    audio: document.getElementById("explosion")
+    audio: new Audio("audio/powerup.wav")
 };
 
 function Explosion(drawX, drawY, callback, move) {

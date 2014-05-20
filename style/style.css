@@ -29,7 +29,7 @@ canvas{
 #topGame{
     width: 796px;
     height: 40px;
-    margin-left: 17.2%;
+    margin-left: 13%;
     margin-top: -20px;
     display: inline-flex;
     background-color: rgba(1, 1, 1, 0.3);
@@ -182,6 +182,7 @@ h1 {
 #score2 {
     margin-left: 600px;
     color: purple;
+    display: none;
 }
 
 #score {
