@@ -68,6 +68,8 @@ var Game = {
     },
 
     renderBackground: function () {
+        var obstacleMaxDrawX = 328;
+        var obstacleMinDrawX = 0;
         Game.menuDiv.parentNode.removeChild(Game.menuDiv);
         var srcX = 0; //x-pixeln i spriten som bakgrunden börjar på
         var srcY = 0; //y-pixeln i spriten som bakgrunden börjar på
@@ -76,16 +78,26 @@ var Game = {
 
         this.backgroundCanvas.drawImage(Game.gameSprite, srcX, srcY, Game.width, Game.height, drawX, drawY, Game.width, Game.height);
 
-        if (Game.numberOfPlayers === 2) {
-            Game.secondScoreDiv.style.display = "block";
-            this.backgroundCanvas.strokeStyle = "red";
-            this.backgroundCanvas.lineWidth = 4;
-            this.backgroundCanvas.beginPath();
-            this.backgroundCanvas.moveTo(398, 0);
-            this.backgroundCanvas.lineTo(398, 500);
+        for (var i = 0; i < 2; i++) {
+            if (Game.numberOfPlayers === 2) {
+                ObstacleObj.obstacles[i] = new Obstacle(obstacleMinDrawX, obstacleMaxDrawX);
+                obstacleMinDrawX = 402;
+                obstacleMaxDrawX = 328;
 
-            this.backgroundCanvas.stroke();
+                Game.secondScoreDiv.style.display = "block";
+                this.backgroundCanvas.strokeStyle = "red";
+                this.backgroundCanvas.lineWidth = 4;
+                this.backgroundCanvas.beginPath();
+                this.backgroundCanvas.moveTo(398, 0);
+                this.backgroundCanvas.lineTo(398, 500);
+                this.backgroundCanvas.stroke();
+            }
+
+            else {
+                ObstacleObj.obstacles[i] = new Obstacle(0, 730);
+            }
         }
+
         //Startar spelet
         startLoop();
     },
@@ -106,11 +118,6 @@ var Game = {
         Game.menuDiv = document.getElementById("menu");
         Game.htmlScore = document.getElementById("countScore");
         Game.secondScoreDiv = document.getElementById("score2");
-        //Game.player = new Player();
-
-        for (var i = 0; i < 2; i++) {
-            ObstacleObj.obstacles[i] = new Obstacle();
-        }
 
         document.addEventListener('keydown', keyDown, false);
         document.addEventListener("keyup", keyUp, false);
@@ -189,9 +196,9 @@ function checkObjectCollisions() {
                     Game.players[p].htmlScore.innerHTML = Game.players[p].score;
                     Game.ghosts.splice(g, 1);
                     Game.players[p].bullets[b].resetBullet(Game.players[p].bullets[b]);
-                    var random = randomGenerator(25);
+                    var random = randomGenerator(0, 25);
                     newPowerUp(ghost.drawX, ghost.drawY, random); // skickar med spökets x och y som blir powerupens startposition
-                    var moveExplosion = randomGenerator(9);
+                    var moveExplosion = randomGenerator(0, 9);
                     ExplosionObj.explosions[ExplosionObj.explosions.length] = new Explosion(ghost.drawX, ghost.drawY, function () {
                         ExplosionObj.explosions.splice(ExplosionObj.explosions.length, 1);
                     }, moveExplosion);
@@ -243,12 +250,10 @@ function checkObjectCollisions() {
                 }
 
                 else if (PowerUpObj.powerUps[pu].type === "wallWalker") {
-                    var timeOut;
-                    var time = 9000;
                     Game.players[p].wallWalker = true;
                     clearTimeout(Game.clearPowerUp);
 
-                    timeOut = setTimeout((function (p) {
+                    setTimeout((function (p) {
                         return (function () {
                             Game.players[p].wallWalker = false;
                             if (Game.players[0].drawX + Game.players[0].drawWidth >= 402) {
@@ -259,7 +264,7 @@ function checkObjectCollisions() {
                                 Game.players[1].drawX = 500;
                             }
                         });
-                    })(p), time);
+                    })(p), 9000);
                 }
                 //tar bort power-upen från arrayen om spelaren har tagit den
                 PowerUpObj.powerUps.splice(pu, 1);
@@ -331,16 +336,13 @@ function loop() {
         Game.players[0].checkBullets();
         Game.players[0].ifShooting();
         for (var i = 0; i < Game.players.length; i++) {
-            if (!Game.players[i].dead) {
-                Game.players[i].render();
-            }
-
+            Game.players[i].render();
         }
         fps.f.innerHTML = fps.getFps();
         checkObjectCollisions();
-        moveObstacles();
         renderGhosts();
         clearExplosion();
+        obstacleRules();
         ghostRules();
         //kollar om det finns någon power-up att rendera ut
         //om det finns anropas funktionen renderPowerUps
@@ -358,6 +360,7 @@ function startLoop() {
     Game.players[0].renderHealth(-18);
     Game.players[0].renderHealth(680);
     startSpawn();
+    interval();
     loop();
 }
 

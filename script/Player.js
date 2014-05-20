@@ -41,24 +41,13 @@ function Player(drawX, srcX, srcY, htmlScore, type) {
 }
 
 Player.prototype.render = function () {
-    //console.log("render");
     //Om spelaren inte har några liv kvar är spelet slut
-    if (Game.players[0].health <= 0) {
+    if (this.health <= 0) {
         checkWinner();
-        Game.players[0].dead = true;
+        this.dead = true;
         Game.playerCanvas.fillStyle = "red";
-        Game.playerCanvas.fillRect(Game.players[0].drawX, Game.players[0].drawY, 25, 25);
+        Game.playerCanvas.fillRect(this.drawX, this.drawY, 25, 25);
     }
-
-    if (Game.numberOfPlayers === 2) {
-        if (Game.players[1].health <= 0) {
-            checkWinner();
-            Game.players[1].dead = true;
-            Game.playerCanvas.fillStyle = "red";
-            Game.playerCanvas.fillRect(Game.players[1].drawX, Game.players[1].drawY, 25, 25);
-        }
-    }
-
 
     if (!this.dead) {
         Game.playerCanvas.drawImage(Game.gameSprite, this.srcX, this.srcY, this.srcWidth, this.srcHeight,
