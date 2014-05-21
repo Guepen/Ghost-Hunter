@@ -137,10 +137,10 @@ var Game = {
     twoPlayers: function () {
         var score = document.getElementById("countScore");
         var score2 = document.getElementById("countScore2");
-        Game.players[Game.players.length] = new Player(700, 743, 1089, score, "green", 32, 37, 39, 0, 368);
-        Game.players[Game.players.length] = new Player(40, 502, 1000, score2, "purple", 16, 65, 68, 402, 402);
-        Game.players[1].movingRight = true;
-        Game.players[0].movingLeft = true;
+        Game.players[Game.players.length] = new Player(700, 743, 1089, score2, "green", 32, 37, 39, 0, 368);
+        Game.players[Game.players.length] = new Player(40, 502, 1000, score, "purple", 49, 65, 68, 402, 402);
+        Game.players[0].movingRight = true;
+        Game.players[1].movingLeft = true;
         Game.numberOfPlayers = 2;
         Game.renderBackground();
     },
@@ -238,13 +238,13 @@ function checkObjectCollisions() {
                     if (Game.players[p].type === "green") {
                         if (Game.players[0].health < 3) {
                             Game.players[0].health += 1;
-                            Game.players[0].renderHealth(-18);
+                            Game.players[0].renderHealth(680);
                         }
                     }
                     else if (Game.players[p].type === "purple") {
                         if (Game.players[1].health < 3) {
                             Game.players[1].health += 1;
-                            Game.players[1].renderHealth(680);
+                            Game.players[1].renderHealth(-18);
                         }
                     }
                 }
@@ -340,10 +340,9 @@ function loop() {
         checkObjectCollisions();
         checkBullets();
         renderGhosts();
-        clearExplosion();
+        renderExplosions();
         moveObstacleY();
         ghostRules();
-
         //kollar om det finns någon power-up att rendera ut
         //om det finns anropas funktionen renderPowerUps
         if (PowerUpObj.powerUps.length > 0) {

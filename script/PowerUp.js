@@ -38,48 +38,63 @@ PowerUp.prototype.render = function () {
 function newPowerUp(ghostX, ghostY, random) {
     var powerUp;
 
-    if (random === 0) {
-        powerUp = new PowerUp();
-        powerUp.drawX = ghostX;
-        powerUp.drawY = ghostY;
-        powerUp.drawWidth = 26;
-        powerUp.drawHeight = 27;
-        powerUp.srcY = 0;
-        powerUp.srcX = 0;
-        powerUp.srcWidth = 26;
-        powerUp.srcHeight = 27;
-        powerUp.type = "wallWalker";
-        PowerUpObj.powerUps[PowerUpObj.powerUps.length] = powerUp;
-    }
+    switch (random) {
+        case 0:
+            powerUp = new PowerUp();
+            powerUp.drawX = ghostX;
+            powerUp.drawY = ghostY;
+            powerUp.drawWidth = 26;
+            powerUp.drawHeight = 27;
+            powerUp.srcY = 0;
+            powerUp.srcX = 0;
+            powerUp.srcWidth = 26;
+            powerUp.srcHeight = 27;
+            powerUp.type = "wallWalker";
+            PowerUpObj.powerUps[PowerUpObj.powerUps.length] = powerUp;
+            break;
 
-    else if (random === 1) {
-        powerUp = new PowerUp();
-        powerUp.drawX = ghostX;
-        powerUp.drawY = ghostY;
-        powerUp.srcY = 1000;
-        powerUp.srcX = 150;
-        powerUp.srcWidth = 26;
-        powerUp.srcHeight = 27;
-        powerUp.drawWidth = 26;
-        powerUp.drawHeight = 27;
-        powerUp.type = "speed";
-        PowerUpObj.powerUps[PowerUpObj.powerUps.length] = powerUp;
-    }
+        case 1:
+            powerUp = new PowerUp();
+            powerUp.drawX = ghostX;
+            powerUp.drawY = ghostY;
+            powerUp.srcY = 1000;
+            powerUp.srcX = 150;
+            powerUp.srcWidth = 26;
+            powerUp.srcHeight = 27;
+            powerUp.drawWidth = 26;
+            powerUp.drawHeight = 27;
+            powerUp.type = "speed";
+            PowerUpObj.powerUps[PowerUpObj.powerUps.length] = powerUp;
+            break;
 
-    else if (random === 2) {
-        powerUp = new PowerUp();
-        powerUp.drawX = ghostX;
-        powerUp.drawY = ghostY;
-        powerUp.srcY = 1000;
-        powerUp.srcX = 123;
-        powerUp.srcWidth = 27;
-        powerUp.srcHeight = 27;
-        powerUp.drawWidth = 26;
-        powerUp.drawHeight = 27;
-        powerUp.type = "health";
-        PowerUpObj.powerUps[PowerUpObj.powerUps.length] = powerUp;
-    }
+        case 2:
+            powerUp = new PowerUp();
+            powerUp.drawX = ghostX;
+            powerUp.drawY = ghostY;
+            powerUp.srcY = 1000;
+            powerUp.srcX = 123;
+            powerUp.srcWidth = 27;
+            powerUp.srcHeight = 27;
+            powerUp.drawWidth = 26;
+            powerUp.drawHeight = 27;
+            powerUp.type = "health";
+            PowerUpObj.powerUps[PowerUpObj.powerUps.length] = powerUp;
+            break;
 
+        default :
+            powerUp = new PowerUp();
+            powerUp.drawX = ghostX;
+            powerUp.drawY = ghostY;
+            powerUp.srcY = 1000;
+            powerUp.srcX = 123;
+            powerUp.srcWidth = 27;
+            powerUp.srcHeight = 27;
+            powerUp.drawWidth = 26;
+            powerUp.drawHeight = 27;
+            powerUp.type = "health";
+            PowerUpObj.powerUps[PowerUpObj.powerUps.length] = powerUp;
+            break;
+    }
 }
 
 /**

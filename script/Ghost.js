@@ -14,8 +14,16 @@ function Ghost() {
     this.type = "ghost";
 }
 
+/**
+ * sätter spökenas fart
+ * @type {number}
+ */
 Ghost.prototype.speed = 0.5;
 
+/**
+ * funktion som ritar spökena
+ * @this Ghost
+ */
 Ghost.prototype.render = function () {
     Game.ghostCanvas.drawImage(Game.gameSprite, this.srcX, this.srcY, this.srcWidth,
         this.srcHeight, this.drawX, this.drawY += this.speed, this.drawWidth, this.drawHeight);
@@ -70,14 +78,14 @@ function renderGhosts() {
         if (ghost.drawY + ghost.drawHeight >= Game.height) {
             if (ghost.drawX + ghost.drawWidth <= Game.width / 2 - 2) {
                 Game.healthCanvas.clearRect(0, 0, 400, 500);
-                Game.players[0].health--;
-                Game.players[0].renderHealth(-18);
+                Game.players[1].health--;
+                Game.players[1].renderHealth(-18);
                 Game.ghosts.splice(i, 1);
             }
             else {
                 Game.healthCanvas.clearRect(400, 0, 400, 500);
-                Game.players[1].health--;
-                Game.players[1].renderHealth(680);
+                Game.players[0].health--;
+                Game.players[0].renderHealth(680);
                 Game.ghosts.splice(i, 1);
             }
         }

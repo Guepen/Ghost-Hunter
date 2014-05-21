@@ -25,6 +25,14 @@ function checkBullets() {
         }
     }
 }
+
+function reloadGun(player) {
+    setTimeout(function () {
+        player.currentBullet = 0;
+        player.reloading = false;
+
+    }, 600);
+}
 function ghostRules() {
     if (Game.score > 0) {
         if (Game.score % 15 === 0) {
@@ -37,6 +45,7 @@ function ghostRules() {
                 if (Game.numberOfPlayers === 2 && Game.updateGhostRulesTwo % 2 === 0) {
                     Game.spawnRate -= 50;
                     Game.spawnAmount++;
+                    Ghost.prototype.speed += 0.1;
                     Game.updateGhostRulesTwo = 0;
                 }
             }
@@ -83,12 +92,12 @@ function checkWinner() {
 
     if (Game.players[0].score > Game.players[1].score) {
         Game.powerUpCanvas.fillStyle = "green";
-        Game.powerUpCanvas.fillText("Green player wins!", 100, 250);
+        Game.powerUpCanvas.fillText("Purple player wins!", 100, 250);
     }
 
     else if (Game.players[1].score > Game.players[0].score) {
         Game.powerUpCanvas.fillStyle = "purple";
-        Game.powerUpCanvas.fillText("Purple player wins!", 500, 250);
+        Game.powerUpCanvas.fillText("Green player wins!", 500, 250);
     }
     else if (Game.players[1].score === Game.players[0].score) {
         Game.powerUpCanvas.fillText("Draw!", 390, 250);

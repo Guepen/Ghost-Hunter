@@ -6,7 +6,7 @@ var PlayerObj = {
  * Skapar en instans av Player
  * @constructor
  */
-function Player(drawX, srcX, srcY, htmlScore, type, shootKey, moveLeftKey, moveRightKey, minX, maxX) {
+function Player(drawX, srcX, srcY, htmlScore, type, shootKey, moveLeftKey, moveRightKey) {
     this.drawX = drawX;
     this.drawHeight = 100;
     this.drawY = Game.height - this.drawHeight;
@@ -19,7 +19,6 @@ function Player(drawX, srcX, srcY, htmlScore, type, shootKey, moveLeftKey, moveR
     this.health = 3;
     this.shoot = false;
     this.currentBullet = 0;
-    //this.currentBullet2 = 0;
     this.interval = 0;
     this.interval2 = 0;
     this.bullets = [];
@@ -33,11 +32,12 @@ function Player(drawX, srcX, srcY, htmlScore, type, shootKey, moveLeftKey, moveR
     this.type = type;
     this.wallWalker = false;
     this.dead = false;
+    this.reloading = false;
 
-    //lägger till 50 skott tillhörande spelarinstansen.
+    //lägger till 40 skott tillhörande spelarinstansen.
     //skotten återanvänds sedan istället för att skapa en
     //ny instans av Bullet-objektet varje gång spelaren skjuter
-    for (var i = 0; i < 50; i++) {
+    for (var i = 0; i < 40; i++) {
         this.bullets[this.bullets.length] = new Bullet();
     }
 }
@@ -54,6 +54,11 @@ Player.prototype.render = function () {
     if (!this.dead) {
         Game.playerCanvas.drawImage(Game.gameSprite, this.srcX, this.srcY, this.srcWidth, this.srcHeight,
             this.drawX, this.drawY, this.drawWidth, this.drawHeight);
+
+        if (this.reloading) {
+            Game.playerCanvas.font = "italic 18px bold";
+            Game.playerCanvas.fillText("RELOADING", this.drawX, this.drawY - 5);
+        }
     }
 
 };
@@ -128,7 +133,7 @@ Player.prototype.checkDirection = function () {
  */
 Player.prototype.ifShooting = function () {
     //kollar om användaren trycker på spacebar och inte redan skjuer
-    if (Game.pressedKeys[this.shootKey] && !this.shoot) {
+    if (Game.pressedKeys[this.shootKey] && !this.shoot && !this.reloading) {
         PlayerObj.shootAudio.play();
         PlayerObj.shootAudio.currentTime = 0;
         this.shoot = true;
@@ -137,9 +142,10 @@ Player.prototype.ifShooting = function () {
         this.bullets[this.currentBullet].fire(this);
         this.currentBullet++;
 
-        //om användaren skjutit slut på alla kulor börjar arrayen om på 0
+        //om användaren skjutit slut på alla skott anropas funktionen reload med spelaren som parameter
         if (this.currentBullet >= this.bullets.length) {
-            this.currentBullet = 0;
+            this.reloading = true;
+            reloadGun(this);
         }
     }
     //när användaren släppper spacebar blir shott false och då kan ett nytt skott skjutas
@@ -156,7 +162,7 @@ function keyDown(e) {
     //alert(e.keyCode);
 
     //förhindrar normalt beteende
-    if (e.keyCode === 32 || e.keyCode === 87 || e.keyCode === 16) {
+    if (e.keyCode === 32 || e.keyCode === 87 || e.keyCode === 49) {
         e.preventDefault();
     }
 
@@ -225,21 +231,21 @@ function keyUp(e) {
         Game.players[0].srcX = 743;
         //Game.players[0].movingRight = false;
     }
+    else if (e.keyCode === 37) {
+        clearInterval(Game.players[0].interval2);
+        Game.players[0].srcX = 502;
+    }
 
     if (e.keyCode === 68) {
         clearInterval(Game.players[1].interval);
         Game.players[1].srcX = 743;
     }
 
-    if (e.keyCode === 65) {
+    else if (e.keyCode === 65) {
         clearInterval(Game.players[1].interval2);
         Game.players[1].srcX = 502;
     }
 
-    if (e.keyCode === 37) {
-        clearInterval(Game.players[0].interval2);
-        Game.players[0].srcX = 502;
-    }
     //sätter tangentens kod till false
     Game.pressedKeys[e.keyCode] = false;
 

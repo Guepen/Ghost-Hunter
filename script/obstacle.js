@@ -6,7 +6,7 @@ var ObstacleObj = {
 };
 /**
  * Skapar en instans av Obstacle
- * @constructorpp
+ * @constructor
  */
 function Obstacle(minDrawX, maxDrawX) {
     this.drawX = randomGenerator(minDrawX, maxDrawX);

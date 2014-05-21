@@ -37,7 +37,7 @@ Explosion.prototype.render = function () {
     }
 };
 
-function clearExplosion() {
+function renderExplosions() {
     Game.explosionCanvas.clearRect(0, 0, Game.width, Game.height);
     for (var i = 0; i < ExplosionObj.explosions.length; i++) {
         ExplosionObj.explosions[i].render();
