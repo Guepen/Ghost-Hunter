@@ -26,6 +26,35 @@ function checkBullets() {
     }
 }
 
+function clearCanvas() {
+    var canvavasTags = document.getElementsByTagName("canvas");
+
+    for (var i = 1; i < canvavasTags.length; i++) {
+        canvavasTags[i].getContext("2d").clearRect(0, 0, Game.width, Game.height);
+    }
+
+    Game.backgroundCanvas.font = "italic 46px calibri";
+    Game.backgroundCanvas.fillStyle = "black";
+    Game.backgroundCanvas.fillRect(Game.width / 2 - 200, 0, 350, 150);
+    Game.backgroundCanvas.fillStyle = "red";
+    Game.backgroundCanvas.fillText("GAME OVER", Game.width / 2 - 150, Game.height / 2 - 200);
+}
+
+function renderHealth(drawX, health) {
+    for (var i = 0; i < health; i++) {
+        if (Game.combat) {
+            Game.healthCanvas.drawImage(Game.gameSprite, 0, 1076, 27, 23,
+                drawX += 28, 470, 27, 23)
+        }
+
+        else {
+            var img = document.createElement("img");
+            img.setAttribute("id", "heart");
+            Game.div.appendChild(img);
+        }
+    }
+}
+
 function reloadGun(player) {
     setTimeout(function () {
         player.currentBullet = 0;

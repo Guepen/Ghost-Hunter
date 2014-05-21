@@ -6,11 +6,12 @@ var PlayerObj = {
  * Skapar en instans av Player
  * @constructor
  */
-function Player(drawX, srcX, srcY, htmlScore, type, shootKey, moveLeftKey, moveRightKey) {
+function Player(drawX, srcX, srcY, htmlScore, type, shootKey, moveLeftKey, moveRightKey, healthX) {
     this.drawX = drawX;
     this.drawHeight = 100;
     this.drawY = Game.height - this.drawHeight;
     this.drawWidth = 60;
+    this.drawHealthX = healthX;
     this.srcX = srcX;
     this.srcY = srcY;
     this.srcWidth = 60;
@@ -37,18 +38,23 @@ function Player(drawX, srcX, srcY, htmlScore, type, shootKey, moveLeftKey, moveR
     //lägger till 40 skott tillhörande spelarinstansen.
     //skotten återanvänds sedan istället för att skapa en
     //ny instans av Bullet-objektet varje gång spelaren skjuter
-    for (var i = 0; i < 40; i++) {
+    for (var i = 0; i < 30; i++) {
         this.bullets[this.bullets.length] = new Bullet();
     }
 }
 
 Player.prototype.render = function () {
     //Om spelaren inte har några liv kvar är spelet slut
-    if (this.health <= 0) {
-        checkWinner();
+    if (this.health <= 0 || Game.health <= 0) {
+        if (Game.combat) {
+            checkWinner();
+        }
+
+        else {
+            stopLoop();
+        }
         this.dead = true;
-        Game.playerCanvas.fillStyle = "red";
-        Game.playerCanvas.fillRect(this.drawX, this.drawY, 25, 25);
+
     }
 
     if (!this.dead) {
@@ -63,16 +69,6 @@ Player.prototype.render = function () {
 
 };
 
-Player.prototype.renderHealth = function (x) {
-    var nextX = x; // position för utritning av liv
-
-    //Loopar igenom alla liv och ritar ut dom
-    for (var i = 0; i < this.health; i++) {
-        Game.healthCanvas.drawImage(Game.gameSprite, 0, 1076, 27, 23,
-            nextX += 28, 470, 27, 23)
-    }
-
-};
 /**
  * Funktion som kollar om spelaren rör sig
  */
@@ -82,7 +78,7 @@ Player.prototype.checkDirection = function () {
         this.movingLeft = false;
         this.movingRight = true;
         //Kollar så att inte spelaren kan gå utanför banan
-        if (Game.numberOfPlayers === 1 || this.wallWalker) {
+        if (!Game.combat || this.wallWalker) {
             if (this.drawX <= Game.width - this.drawWidth) {
                 this.drawX += this.speed;
             }
@@ -109,7 +105,7 @@ Player.prototype.checkDirection = function () {
             this.drawX = 0;
             }
         else {
-            if (Game.numberOfPlayers === 1 || this.wallWalker) {
+            if (!Game.combat || this.wallWalker) {
                 this.drawX -= this.speed;
             }
             else if (this.type === "green") {

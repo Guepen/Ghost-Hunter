@@ -27,13 +27,26 @@ canvas{
 }
 
 #topGame{
+    z-index: 2;
     width: 796px;
     height: 40px;
-    margin-left: 13%;
+    margin-left: 12%;
     margin-top: -20px;
     display: inline-flex;
     background-color: rgba(1, 1, 1, 0.3);
 
+}
+
+#healthDiv {
+    width: 90px;
+    height: 30px;
+    margin-left: 30%;
+}
+
+#heart {
+    background: url('../pictures/Spriten.png') 0 -1076px;
+    width: 26px;
+    height: 26px;
 }
 
 #Content {
@@ -180,7 +193,7 @@ h1 {
 }
 
 #score2 {
-    margin-left: 600px;
+    margin-left: 300px;
     color: lawngreen;
     display: none;
 }

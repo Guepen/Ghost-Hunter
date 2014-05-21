@@ -82,17 +82,6 @@ function newPowerUp(ghostX, ghostY, random) {
             break;
 
         default :
-            powerUp = new PowerUp();
-            powerUp.drawX = ghostX;
-            powerUp.drawY = ghostY;
-            powerUp.srcY = 1000;
-            powerUp.srcX = 123;
-            powerUp.srcWidth = 27;
-            powerUp.srcHeight = 27;
-            powerUp.drawWidth = 26;
-            powerUp.drawHeight = 27;
-            powerUp.type = "health";
-            PowerUpObj.powerUps[PowerUpObj.powerUps.length] = powerUp;
             break;
     }
 }

@@ -76,16 +76,24 @@ function renderGhosts() {
 
         //om spöket är under marken
         if (ghost.drawY + ghost.drawHeight >= Game.height) {
-            if (ghost.drawX + ghost.drawWidth <= Game.width / 2 - 2) {
-                Game.healthCanvas.clearRect(0, 0, 400, 500);
-                Game.players[1].health--;
-                Game.players[1].renderHealth(-18);
-                Game.ghosts.splice(i, 1);
+            if (Game.combat) {
+                if (ghost.drawX + ghost.drawWidth <= Game.width / 2 - 2) {
+                    Game.healthCanvas.clearRect(0, 0, 400, 500);
+                    Game.players[1].health--;
+                    renderHealth(-18, Game.players[1].health);
+                    Game.ghosts.splice(i, 1);
+                }
+                else {
+                    Game.healthCanvas.clearRect(400, 0, 400, 500);
+                    Game.players[0].health--;
+                    renderHealth(680, Game.players[0].health);
+                    Game.ghosts.splice(i, 1);
+                }
             }
-            else {
-                Game.healthCanvas.clearRect(400, 0, 400, 500);
-                Game.players[0].health--;
-                Game.players[0].renderHealth(680);
+            else if (Game.health > 0) {
+                Game.div.removeChild(Game.div.firstChild);
+                Game.health--;
+                renderHealth(Game.health);
                 Game.ghosts.splice(i, 1);
             }
         }

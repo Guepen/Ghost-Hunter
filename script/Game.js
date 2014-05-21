@@ -2,15 +2,17 @@
 
 // objektet Game kapslar in kod som behöver köras innan spelet kan starta och även viss funkonalitet
 var Game = {
-    playerX: 40,
-    player2X: 700,
     numberOfPlayers: 0,
+    lowestRandom: 1,
+    randomRange: 30,
     pauseButton: null,
     hideControls: null,
     onePlayerButton: null,
     twoPlayerButton: null,
+    combatModeButton: null,
     gameDiv: null,
     menuDiv: null,
+    header: null,
     secondScoreDiv: null,
     clearPowerUp: null,
     pressedKeys: [],
@@ -33,11 +35,13 @@ var Game = {
     renderPowerUp: false,
     paused: true,
     updateGhostRules: false,
+    combat: false,
     updateGhostRulesTwo: 0,
     score: 0,
     spawnAmount: 2,
     spawnInterval: null,
     spawnRate: 5000,
+    health: 3,
 
     //låter bilden laddas innan spelet startar så den inte saknas när den skall användas
     pictureLoader: function () {
@@ -54,6 +58,7 @@ var Game = {
     renderStartScreen: function () {
         Game.onePlayerButton = document.getElementById("onePlayer");
         Game.twoPlayerButton = document.getElementById("twoPlayers");
+        Game.combatModeButton = document.getElementById("combat");
         this.backgroundCanvas = document.getElementById("backgroundCanvas").getContext("2d");
         var srcX = 0; //x-pixeln i spriten som bakgrunden börjar på
         var srcY = 500; //y-pixeln i spriten som bakgrunden börjar på
@@ -79,7 +84,7 @@ var Game = {
         this.backgroundCanvas.drawImage(Game.gameSprite, srcX, srcY, Game.width, Game.height, drawX, drawY, Game.width, Game.height);
 
         for (var i = 0; i < 2; i++) {
-            if (Game.numberOfPlayers === 2) {
+            if (Game.numberOfPlayers === 2 && Game.combat) {
                 ObstacleObj.obstacles[i] = new Obstacle(obstacleMinDrawX, obstacleMaxDrawX);
                 obstacleMinDrawX = 402;
                 obstacleMaxDrawX = 328;
@@ -105,6 +110,10 @@ var Game = {
 
     //initserar canvas-tagger, hinder och event
     init: function () {
+        Game.firstScore = document.getElementById("score");
+        Game.div = document.createElement("div");
+        Game.div.setAttribute("id", "healthDiv");
+        Game.firstScore.parentNode.insertBefore(Game.div, Game.firstScore.nextSibling);
         Game.playerCanvas = document.getElementById("playerCanvas").getContext("2d");
         Game.explosionCanvas = document.getElementById("explosionCanvas").getContext("2d");
         Game.bulletCanvas = document.getElementById("bulletCanvas").getContext("2d");
@@ -115,6 +124,7 @@ var Game = {
         //Game.pauseButton = document.getElementById("pauseButton");
         Game.hideControls = document.getElementById("Hide");
         Game.gameDiv = document.getElementById("game");
+        Game.header = document.getElementById("topGame");
         Game.menuDiv = document.getElementById("menu");
         Game.htmlScore = document.getElementById("countScore");
         Game.secondScoreDiv = document.getElementById("score2");
@@ -123,12 +133,13 @@ var Game = {
         document.addEventListener("keyup", keyUp, false);
         Game.onePlayerButton.addEventListener("click", this.onePlayer, false);
         Game.twoPlayerButton.addEventListener("click", this.twoPlayers, false);
+        Game.combatModeButton.addEventListener("click", this.combatMode, false);
         //Game.pauseButton.addEventListener("click", this.stopStart, false);
         Game.hideControls.addEventListener("click", this.removeControls, false);
     },
 
     onePlayer: function () {
-        Game.players[Game.players.length] = new Player(Game.width / 2, 743, 1089, score, "green", 32, 37, 39, 0, 368);
+        Game.players[Game.players.length] = new Player(Game.width / 2, 743, 1089, score, "green", 32, 37, 39, 0, 368, 680);
         Game.numberOfPlayers = 1;
         Game.players[0].movingRight = true;
         Game.renderBackground();
@@ -137,11 +148,26 @@ var Game = {
     twoPlayers: function () {
         var score = document.getElementById("countScore");
         var score2 = document.getElementById("countScore2");
-        Game.players[Game.players.length] = new Player(700, 743, 1089, score2, "green", 32, 37, 39, 0, 368);
-        Game.players[Game.players.length] = new Player(40, 502, 1000, score, "purple", 49, 65, 68, 402, 402);
+        Game.players[Game.players.length] = new Player(700, 743, 1089, score2, "green", 32, 37, 39, 0, 368, 780);
+        Game.players[Game.players.length] = new Player(40, 502, 1000, score, "purple", 49, 65, 68, 402, 402, -18);
         Game.players[0].movingRight = true;
         Game.players[1].movingLeft = true;
         Game.numberOfPlayers = 2;
+        Game.secondScoreDiv.style.display = "inline-block";
+        Game.renderBackground();
+
+    },
+
+    combatMode: function () {
+        var score = document.getElementById("countScore");
+        var score2 = document.getElementById("countScore2");
+        Game.players[Game.players.length] = new Player(700, 743, 1089, score2, "green", 32, 37, 39, 680);
+        Game.players[Game.players.length] = new Player(40, 502, 1000, score, "purple", 49, 65, 68, -18);
+        Game.players[0].movingRight = true;
+        Game.players[1].movingLeft = true;
+        Game.numberOfPlayers = 2;
+        Game.lowestRandom = 0;
+        Game.combat = true;
         Game.renderBackground();
     },
 
@@ -196,7 +222,7 @@ function checkObjectCollisions() {
                     Game.players[p].htmlScore.innerHTML = Game.players[p].score;
                     Game.ghosts.splice(g, 1);
                     Game.players[p].bullets[b].resetBullet(Game.players[p].bullets[b]);
-                    var random = randomGenerator(0, 30);
+                    var random = randomGenerator(Game.lowestRandom, Game.randomRange);
                     newPowerUp(ghost.drawX, ghost.drawY, random); // skickar med spökets x och y som blir powerupens startposition
                     var moveExplosion = randomGenerator(0, 9);
                     ExplosionObj.explosions[ExplosionObj.explosions.length] = new Explosion(ghost.drawX, ghost.drawY, function () {
@@ -234,8 +260,13 @@ function checkObjectCollisions() {
 
                 else if (PowerUpObj.powerUps[pu].type === "health") {
 
+                    if (!Game.combat && Game.health < 3) {
+                        Game.health++;
+                        renderHealth(0, Game.health);
+                    }
+
                     //Liv ges bara om spelaren har tappat något liv
-                    if (Game.players[p].type === "green") {
+                    else if (Game.players[p].type === "green") {
                         if (Game.players[0].health < 3) {
                             Game.players[0].health += 1;
                             Game.players[0].renderHealth(680);
@@ -332,6 +363,9 @@ function loop() {
     if (Game.rendering) {
         Game.playerCanvas.clearRect(0, 0, 800, 500);
         for (var i = 0; i < Game.players.length; i++) {
+            if (Game.combat && Game.numberOfPlayers === 2) {
+                renderHealth(Game.players[i].drawHealthX, Game.players[i].health);
+            }
             Game.players[i].render();
             Game.players[i].checkDirection();
             Game.players[i].ifShooting();
@@ -354,9 +388,10 @@ function loop() {
 
 // startar spel-loopen när användaren trycker på play och bakgrunden har renderats ut
 function startLoop() {
+    if (!Game.combat) {
+        renderHealth(20, Game.health);
+    }
     Game.rendering = true;
-    Game.players[0].renderHealth(-18);
-    Game.players[0].renderHealth(680);
     startSpawn();
     interval();
     loop();
@@ -366,6 +401,8 @@ function startLoop() {
 function stopLoop() {
     Game.rendering = false;
     stopSpawn();
+    clearCanvas();
+
 }
 //anropar funktionen pictureLoader när sidan är färdigladdad
 window.onload = Game.pictureLoader;
