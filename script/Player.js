@@ -56,6 +56,8 @@ Player.prototype.render = function () {
         }
         this.dead = true;
         Game.ended = true;
+        gameOverSound();
+
 
     }
 

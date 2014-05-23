@@ -26,6 +26,11 @@ function checkBullets() {
     }
 }
 
+function gameOverSound() {
+    var audio = new Audio("audio/gameOver.wav");
+    audio.play();
+}
+
 function clearCanvas() {
     var endScreenY = 100;
     var canvavasTags = document.getElementsByTagName("canvas");
