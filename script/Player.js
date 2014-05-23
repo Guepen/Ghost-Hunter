@@ -46,8 +46,8 @@ function Player(drawX, srcX, srcY, htmlScore, type, shootKey, moveLeftKey, moveR
 Player.prototype.render = function () {
     //Om spelaren inte har några liv kvar är spelet slut
     if (this.health <= 0 || Game.health <= 0) {
-        stopSoundLoop();
-        gameOverSound();
+        this.dead = true;
+        Game.ended = true;
 
         if (Game.combat) {
             checkWinner();
@@ -55,9 +55,11 @@ Player.prototype.render = function () {
 
         else {
             stopLoop();
+
         }
-        this.dead = true;
-        Game.ended = true;
+        stopSoundLoop();
+        gameOverSound();
+
     }
 
     if (!this.dead) {
