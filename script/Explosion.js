@@ -22,7 +22,6 @@ function Explosion(drawX, drawY, callback, move) {
 }
 
 Explosion.prototype.render = function () {
-    console.log();
     if (this.move <= 4) {
         if (this.drawHeight >= 0 && this.drawWidth > 0) {
             Game.explosionCanvas.drawImage(Game.gameSprite, this.srcX, this.srcY, this.srcWidth,

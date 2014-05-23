@@ -114,7 +114,6 @@ function endScreen(str, y) {
 
 function renderHealth(drawX, health) {
     for (var i = 0; i < health; i++) {
-        console.log()
         if (Game.combat) {
             Game.healthCanvas.drawImage(Game.gameSprite, 0, 1076, 27, 23,
                 drawX += 28, 470, 27, 23)
