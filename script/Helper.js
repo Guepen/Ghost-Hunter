@@ -27,7 +27,7 @@ function checkBullets() {
 }
 
 function stopSoundLoop() {
-    Game.backGroundMusic.stop();
+    Game.backGroundMusic.pause();
 }
 
 function gameOverSound() {
