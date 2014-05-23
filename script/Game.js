@@ -2,6 +2,7 @@
 
 // objektet Game kapslar in kod som behöver köras innan spelet kan starta och även viss funkonalitet
 var Game = {
+    backGroundMusic: null,
     numberOfPlayers: 0,
     lowestRandom: 1,
     randomRange: 30,
@@ -199,9 +200,9 @@ var Game = {
     },
 
     musicLoop: function () {
-        var backGroundMusic = new Audio("audio/backgroundMusic.wav");
-        backGroundMusic.loop = true;
-        backGroundMusic.play();
+        Game.backGroundMusic = new Audio("audio/backgroundMusic.wav");
+        Game.backGroundMusic.loop = true;
+        Game.backGroundMusic.play();
     }
 };
 /**

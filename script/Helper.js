@@ -26,6 +26,10 @@ function checkBullets() {
     }
 }
 
+function stopSoundLoop() {
+    Game.backGroundMusic.stop();
+}
+
 function gameOverSound() {
     var audio = new Audio("audio/gameOver.wav");
     audio.play();
