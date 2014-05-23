@@ -200,7 +200,7 @@ var Game = {
 
     musicLoop: function () {
         var backGroundMusic = new Audio("audio/backgroundMusic.wav");
-        //backGroundMusic.loop = true;
+        backGroundMusic.loop = true;
         backGroundMusic.play();
     }
 };
