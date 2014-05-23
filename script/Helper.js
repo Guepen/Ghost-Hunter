@@ -27,17 +27,80 @@ function checkBullets() {
 }
 
 function clearCanvas() {
+    var endScreenY = 100;
     var canvavasTags = document.getElementsByTagName("canvas");
+    var messages = [
+        {
+            text: "This game was my project in the course 1D430, individually Software Development",
+            writeY: 100
+        },
+        {
+            text: "It is made entirely in HTML5, Javascript and CSS3",
+            writeY: 115
+        },
+        {
+            text: "You can find the code here: https://github.com/th222fa/Ghost-Hunter ",
+            writeY: 130
+        },
+
+        {
+            text: "Feel free to copy the code and continue develop the game ",
+            writeY: 145
+        },
+
+        {
+            text: "but would be nice if you gave me some credit if you use my code! :) ",
+            writeY: 160
+        }
+    ];
 
     for (var i = 1; i < canvavasTags.length; i++) {
         canvavasTags[i].getContext("2d").clearRect(0, 0, Game.width, Game.height);
     }
 
-    Game.backgroundCanvas.font = "italic 46px calibri";
-    Game.backgroundCanvas.fillStyle = "black";
-    Game.backgroundCanvas.fillRect(Game.width / 2 - 200, 0, 350, 150);
-    Game.backgroundCanvas.fillStyle = "red";
-    Game.backgroundCanvas.fillText("GAME OVER", Game.width / 2 - 150, Game.height / 2 - 200);
+    setInterval(function () {
+        Game.backgroundCanvas.font = "italic 46px calibri";
+        Game.backgroundCanvas.fillStyle = "black";
+        Game.backgroundCanvas.fillRect(Game.width / 2 - 200, 0, 350, endScreenY += 0.2);
+        Game.backgroundCanvas.fillStyle = "red";
+        Game.backgroundCanvas.fillText("GAME OVER", Game.width / 2 - 150, Game.height / 2 - 200);
+
+        if (endScreenY >= 120 && endScreenY < 135) {
+            endScreen(messages[0].text, messages[0].writeY);
+
+        }
+
+        else if (endScreenY >= 135 && endScreenY < 150) {
+            endScreen(messages[0].text, messages[0].writeY);
+            endScreen(messages[1].text, messages[1].writeY);
+        }
+
+        else if (endScreenY >= 150 && endScreenY < 165) {
+            endScreen(messages[0].text, messages[0].writeY);
+            endScreen(messages[1].text, messages[1].writeY);
+            endScreen(messages[2].text, messages[2].writeY);
+            endScreen(messages[3].text, messages[3].writeY);
+        }
+
+        else if (endScreenY >= 165) {
+            endScreen(messages[0].text, messages[0].writeY);
+            endScreen(messages[1].text, messages[1].writeY);
+            endScreen(messages[2].text, messages[2].writeY);
+            endScreen(messages[3].text, messages[3].writeY);
+            endScreen(messages[4].text, messages[4].writeY);
+        }
+
+
+    }, 20);
+
+}
+
+function endScreen(str, y) {
+    Game.backgroundCanvas.font = "bold 12px calibri";
+    Game.backgroundCanvas.fillStyle = "white";
+    Game.backgroundCanvas.fillText(str,
+            Game.width / 2 - 195, y, 340);
+
 }
 
 function renderHealth(drawX, health) {

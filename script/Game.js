@@ -35,6 +35,7 @@ var Game = {
     renderPowerUp: false,
     paused: true,
     updateGhostRules: false,
+    ended: false,
     combat: false,
     updateGhostRulesTwo: 0,
     score: 0,
@@ -104,6 +105,7 @@ var Game = {
         }
 
         //Startar spelet
+        this.musicLoop();
         startLoop();
     },
 
@@ -178,20 +180,28 @@ var Game = {
 
 //används för att pausa/starta spelet
     stopStart: function () {
-        if (Game.paused) {
-            stopLoop();
-            //stopSpawn();
-            Game.paused = false;
-            // Game.pauseButton.innerHTML = "Play";
+        if (!Game.ended) {
+            if (Game.paused) {
+                stopLoop();
+                //stopSpawn();
+                Game.paused = false;
+                // Game.pauseButton.innerHTML = "Play";
+            }
+
+            else if (!Game.paused) {
+                Game.rendering = true;
+                Game.paused = true;
+                // Game.pauseButton.innerHTML = "Pause";
+                startLoop();
+            }
         }
 
-        else if (!Game.paused) {
-            Game.rendering = true;
-            Game.paused = true;
-            // Game.pauseButton.innerHTML = "Pause";
-            startLoop();
-        }
+    },
 
+    musicLoop: function () {
+        var backGroundMusic = new Audio("audio/backgroundMusic.wav");
+        //backGroundMusic.loop = true;
+        backGroundMusic.play();
     }
 };
 /**
@@ -269,21 +279,23 @@ function checkObjectCollisions() {
                     else if (Game.players[p].type === "green") {
                         if (Game.players[0].health < 3) {
                             Game.players[0].health += 1;
-                            Game.players[0].renderHealth(680);
+                            renderHealth(680, Game.players[0].health);
                         }
                     }
                     else if (Game.players[p].type === "purple") {
                         if (Game.players[1].health < 3) {
                             Game.players[1].health += 1;
-                            Game.players[1].renderHealth(-18);
+                            renderHealth(-18, Game.players[1].health)
                         }
                     }
                 }
 
                 else if (PowerUpObj.powerUps[pu].type === "wallWalker") {
+                    var powerUp;
                     Game.players[p].wallWalker = true;
+                    clearTimeout(powerUp);
 
-                    setTimeout((function (p) {
+                    powerUp = setTimeout((function (p) {
                         return (function () {
                             Game.players[p].wallWalker = false;
                             if (Game.players[1].drawX + Game.players[0].drawWidth >= 402) {
@@ -401,7 +413,11 @@ function startLoop() {
 function stopLoop() {
     Game.rendering = false;
     stopSpawn();
-    clearCanvas();
+    if (Game.ended && !Game.combat) {
+        setTimeout(function () {
+            clearCanvas();
+        }, 300);
+    }
 
 }
 //anropar funktionen pictureLoader när sidan är färdigladdad

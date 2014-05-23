@@ -18,6 +18,7 @@ function PowerUp() {
     this.drawWidth = 0;
     this.drawHeight = 0;
     this.speed = 2;
+    this.type = "";
 }
 
 /**
@@ -91,8 +92,10 @@ function newPowerUp(ghostX, ghostY, random) {
  */
 function renderPowerUps() {
     for (var i = 0; i < PowerUpObj.powerUps.length; i++) {
+        console.log(PowerUpObj.powerUps[i]);
         //om power-upen inte är på marken
         if (PowerUpObj.powerUps[i].drawY + PowerUpObj.powerUps[i].drawHeight <= Game.height) {
+            console.log("clear");
             Game.powerUpCanvas.clearRect(PowerUpObj.powerUps[i].drawX - 2, PowerUpObj.powerUps[i].drawY - 2,
                     PowerUpObj.powerUps[i].drawWidth + 4, PowerUpObj.powerUps[i].drawHeight + 4);
 
