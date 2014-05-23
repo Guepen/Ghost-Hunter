@@ -105,7 +105,7 @@ var Game = {
         }
 
         //Startar spelet
-        this.musicLoop();
+        Game.musicLoop();
         startLoop();
     },
 
