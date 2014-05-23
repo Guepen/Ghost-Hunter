@@ -89,7 +89,7 @@ var Game = {
             if (Game.numberOfPlayers === 2 && Game.combat) {
                 ObstacleObj.obstacles[i] = new Obstacle(obstacleMinDrawX, obstacleMaxDrawX);
                 obstacleMinDrawX = 402;
-                obstacleMaxDrawX = 328;
+                obstacleMaxDrawX = 318;
 
                 Game.secondScoreDiv.style.display = "block";
                 this.backgroundCanvas.strokeStyle = "red";

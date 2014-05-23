@@ -11,12 +11,12 @@ var ObstacleObj = {
 function Obstacle(minDrawX, maxDrawX) {
     this.drawX = randomGenerator(minDrawX, maxDrawX);
     this.drawY = -30;
-    this.srcY = 1000;
-    this.srcX = 58;
-    this.srcWidth = 65;
-    this.srcHeight = 19;
-    this.drawWidth = 70;
-    this.drawHeight = 20;
+    this.srcY = 1170;
+    this.srcX = 0;
+    this.srcWidth = 78;
+    this.srcHeight = 20;
+    this.drawWidth = 80;
+    this.drawHeight = 25;
     this.speed = 0.5;
     this.type = "obstacle";
 }
