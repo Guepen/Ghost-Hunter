@@ -91,7 +91,6 @@ var Game = {
                 obstacleMinDrawX = 402;
                 obstacleMaxDrawX = 318;
 
-                Game.secondScoreDiv.style.display = "block";
                 this.backgroundCanvas.strokeStyle = "red";
                 this.backgroundCanvas.lineWidth = 4;
                 this.backgroundCanvas.beginPath();
@@ -142,6 +141,7 @@ var Game = {
     },
 
     onePlayer: function () {
+        var score = document.getElementById("countScore");
         Game.players[Game.players.length] = new Player(Game.width / 2, 743, 1089, score, "green", 32, 37, 39, 0, 368, 680);
         Game.numberOfPlayers = 1;
         Game.players[0].movingRight = true;
@@ -156,7 +156,7 @@ var Game = {
         Game.players[0].movingRight = true;
         Game.players[1].movingLeft = true;
         Game.numberOfPlayers = 2;
-        Game.secondScoreDiv.style.display = "inline-block";
+        Game.secondScoreDiv.classList.remove('hidden');
         Game.renderBackground();
 
     },
@@ -171,6 +171,7 @@ var Game = {
         Game.numberOfPlayers = 2;
         Game.lowestRandom = 0;
         Game.combat = true;
+        Game.secondScoreDiv.classList.remove('hidden');
         Game.renderBackground();
     },
 
@@ -190,10 +191,9 @@ var Game = {
             }
 
             else if (!Game.paused) {
-                Game.rendering = true;
+                startLoop();
                 Game.paused = true;
                 // Game.pauseButton.innerHTML = "Pause";
-                startLoop();
             }
         }
 
@@ -294,7 +294,6 @@ function checkObjectCollisions() {
                 else if (PowerUpObj.powerUps[pu].type === "wallWalker") {
                     var powerUp;
                     Game.players[p].wallWalker = true;
-                    clearTimeout(powerUp);
 
                     powerUp = setTimeout((function (p) {
                         return (function () {
@@ -401,7 +400,7 @@ function loop() {
 
 // startar spel-loopen när användaren trycker på play och bakgrunden har renderats ut
 function startLoop() {
-    if (!Game.combat) {
+    if (!Game.combat && Game.paused) {
         renderHealth(20, Game.health);
     }
     Game.rendering = true;

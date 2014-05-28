@@ -191,12 +191,12 @@ function checkWinner() {
     stopLoop();
     Game.powerUpCanvas.font = "italic 36px calibri";
 
-    if (Game.players[0].score > Game.players[1].score) {
+    if (Game.players[1].score > Game.players[0].score) {
         Game.powerUpCanvas.fillStyle = "Purple";
         Game.powerUpCanvas.fillText("Purple player wins!", 100, 250);
     }
 
-    else if (Game.players[1].score > Game.players[0].score) {
+    else if (Game.players[0].score > Game.players[1].score) {
         Game.powerUpCanvas.fillStyle = "Green";
         Game.powerUpCanvas.fillText("Green player wins!", 500, 250);
     }

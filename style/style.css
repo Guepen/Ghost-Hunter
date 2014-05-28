@@ -199,7 +199,11 @@ h1 {
 #score2 {
     margin-left: 300px;
     color: lawngreen;
-    display: none;
+    display: inline-block;
+}
+
+.hidden {
+    display: none !important;
 }
 
 #score {

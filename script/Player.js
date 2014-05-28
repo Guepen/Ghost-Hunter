@@ -43,23 +43,24 @@ function Player(drawX, srcX, srcY, htmlScore, type, shootKey, moveLeftKey, moveR
     }
 }
 
+
 Player.prototype.render = function () {
     //Om spelaren inte har några liv kvar är spelet slut
-    if (this.health <= 0 || Game.health <= 0) {
+    if (this.health <= 0) {
         this.dead = true;
-        Game.ended = true;
 
-        if (Game.combat) {
+        if (Game.combat && Game.players[0].health <= 0 && Game.players[1].health <= 0) {
+            stopSoundLoop();
             checkWinner();
         }
 
-        else {
-            stopLoop();
+    }
 
-        }
-        stopSoundLoop();
+    if (Game.health <= 0) {
+        Game.ended = true;
+        stopLoop();
         gameOverSound();
-
+        stopSoundLoop();
     }
 
     if (!this.dead) {
@@ -134,7 +135,7 @@ Player.prototype.checkDirection = function () {
  */
 Player.prototype.ifShooting = function () {
     //kollar om användaren trycker på spacebar och inte redan skjuer
-    if (Game.pressedKeys[this.shootKey] && !this.shoot && !this.reloading) {
+    if (Game.pressedKeys[this.shootKey] && !this.shoot && !this.reloading && !this.dead) {
         PlayerObj.shootAudio.play();
         PlayerObj.shootAudio.currentTime = 0;
         this.shoot = true;
@@ -178,17 +179,6 @@ function keyDown(e) {
         }
     }
 
-    if (e.keyCode === 68) {
-        if (!Game.pressedKeys[e.keyCode]) {
-            Game.players[1].interval = setInterval(function () {
-                Game.players[1].srcX -= 60;
-                if (Game.players[1].srcX <= 560) {
-                    Game.players[1].srcX = 743;
-                }
-            }, 100);
-        }
-    }
-
     if (e.keyCode === 37) {
         if (!Game.pressedKeys[e.keyCode]) {
             Game.players[0].srcX = 502;
@@ -200,15 +190,29 @@ function keyDown(e) {
             }, 100);
         }
     }
-    if (e.keyCode === 65) {
-        if (!Game.pressedKeys[e.keyCode]) {
-            Game.players[1].srcX = 502;
-            Game.players[1].interval2 = setInterval(function () {
-                Game.players[1].srcX -= 60;
-                if (Game.players[1].srcX <= 320) {
-                    Game.players[1].srcX = 502;
-                }
-            }, 100);
+
+    if (Game.numberOfPlayers === 2) {
+        if (e.keyCode === 68) {
+            if (!Game.pressedKeys[e.keyCode]) {
+                Game.players[1].interval = setInterval(function () {
+                    Game.players[1].srcX -= 60;
+                    if (Game.players[1].srcX <= 560) {
+                        Game.players[1].srcX = 743;
+                    }
+                }, 100);
+            }
+        }
+
+        if (e.keyCode === 65) {
+            if (!Game.pressedKeys[e.keyCode]) {
+                Game.players[1].srcX = 502;
+                Game.players[1].interval2 = setInterval(function () {
+                    Game.players[1].srcX -= 60;
+                    if (Game.players[1].srcX <= 320) {
+                        Game.players[1].srcX = 502;
+                    }
+                }, 100);
+            }
         }
     }
 
@@ -237,14 +241,16 @@ function keyUp(e) {
         Game.players[0].srcX = 502;
     }
 
-    if (e.keyCode === 68) {
-        clearInterval(Game.players[1].interval);
-        Game.players[1].srcX = 743;
-    }
+    if (Game.numberOfPlayers === 2) {
+        if (e.keyCode === 68) {
+            clearInterval(Game.players[1].interval);
+            Game.players[1].srcX = 743;
+        }
 
-    else if (e.keyCode === 65) {
-        clearInterval(Game.players[1].interval2);
-        Game.players[1].srcX = 502;
+        else if (e.keyCode === 65) {
+            clearInterval(Game.players[1].interval2);
+            Game.players[1].srcX = 502;
+        }
     }
 
     //sätter tangentens kod till false
