@@ -24,12 +24,12 @@ describe('Explosion', function () {
         });
     });
 
-    it('should clear', function () {
-        var explosion = new Explosion();
+    /*it('should clear', function () {
+     var explosion = new Explosion();
 
-        expect(explosion.callback.called).to.be.true;
+     expect(explosion.callback.called).to.be.true;
 
-    });
+     });*/
     /*
      it('should change positon to players right position', function () {
      Game = {

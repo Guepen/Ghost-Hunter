@@ -8,14 +8,13 @@ canvas{
     display: block;
     z-index: 1;
     margin-top: 20px;
-    -moz-box-shadow: 0 0 5px 10px #404040;
-    -webkit-box-shadow: 0 0 5px 10px #404040;
-    box-shadow: 0 0 5px 10px #404040;
+    -moz-box-shadow: 0 0 5px 10px #202020;
+    -webkit-box-shadow: 0 0 5px 10px #202020;
+    box-shadow: 0 0 20px 10px #202020;
 }
 
 #FPS{
     margin-left: 28%;
-    margin-top: -50px;
     color: white;
     font-style: italic;
     font-size: 20px;
@@ -31,7 +30,7 @@ canvas{
     width: 796px;
     height: 40px;
     margin: auto;
-    margin-top: -15px;
+    margin-top: -23px;
     background-color: rgba(1, 1, 1, 0.3);
 
 }
@@ -89,6 +88,10 @@ canvas{
 
 h2 {
     margin-left: 30px;
+}
+
+h1 {
+    margin-left: 45%;
 }
 
 #LeftPic {
@@ -197,12 +200,12 @@ h1 {
 }
 
 #score2 {
-    margin-left: 300px;
+    margin-left: 280px;
     color: lawngreen;
     display: inline-block;
 }
 
-.hidden {
+.hidden, .hide {
     display: none !important;
 }
 
@@ -216,6 +219,3 @@ body{
     background-color: #303030;
 }
 
-h1{
-    margin-left: 40%;
-}

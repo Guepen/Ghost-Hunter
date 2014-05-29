@@ -78,6 +78,7 @@ var Game = {
         var obstacleMaxDrawX = 328;
         var obstacleMinDrawX = 0;
         Game.menuDiv.parentNode.removeChild(Game.menuDiv);
+        Game.header.classList.remove('hide');
         var srcX = 0; //x-pixeln i spriten som bakgrunden börjar på
         var srcY = 0; //y-pixeln i spriten som bakgrunden börjar på
         var drawX = 0; //x-pixeln där bakgrunden börjar ritas ut
@@ -105,7 +106,7 @@ var Game = {
         }
 
         //Startar spelet
-        Game.musicLoop();
+        //Game.musicLoop();
         startLoop();
     },
 
@@ -185,13 +186,14 @@ var Game = {
         if (!Game.ended) {
             if (Game.paused) {
                 stopLoop();
-                //stopSpawn();
+                //stopSoundLoop();
                 Game.paused = false;
                 // Game.pauseButton.innerHTML = "Play";
             }
 
             else if (!Game.paused) {
                 startLoop();
+                // this.backGroundMusic.play();
                 Game.paused = true;
                 // Game.pauseButton.innerHTML = "Pause";
             }
@@ -200,7 +202,7 @@ var Game = {
     },
 
     musicLoop: function () {
-        Game.backGroundMusic = new Audio("audio/backgroundMusic.wav");
+        Game.backGroundMusic = new Audio();
         Game.backGroundMusic.loop = true;
         Game.backGroundMusic.play();
     }
@@ -250,7 +252,7 @@ function checkObjectCollisions() {
                 Game.powerUpCanvas.clearRect(PowerUpObj.powerUps[pu].drawX, PowerUpObj.powerUps[pu].drawY,
                     PowerUpObj.powerUps[pu].drawWidth, PowerUpObj.powerUps[pu].drawHeight);
                 ExplosionObj.audio.play();
-                ExplosionObj.audio.currentTime = 0;
+                //ExplosionObj.audio.currentTime = 0;
 
 
                 if (PowerUpObj.powerUps[pu].type === "speed") {

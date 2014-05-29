@@ -137,7 +137,7 @@ Player.prototype.ifShooting = function () {
     //kollar om användaren trycker på spacebar och inte redan skjuer
     if (Game.pressedKeys[this.shootKey] && !this.shoot && !this.reloading && !this.dead) {
         PlayerObj.shootAudio.play();
-        PlayerObj.shootAudio.currentTime = 0;
+        //PlayerObj.shootAudio.currentTime = 0;
         this.shoot = true;
 
         //anropar funktionen fire som sätter kulans position till spelarens
