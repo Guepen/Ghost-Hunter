@@ -275,7 +275,7 @@ function checkObjectCollisions() {
 
                     if (!Game.combat && Game.health < 3) {
                         Game.health++;
-                        renderHealth(0, Game.health);
+                        renderHealth(0, 1);
                     }
 
                     //Liv ges bara om spelaren har tappat något liv

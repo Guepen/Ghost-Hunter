@@ -113,6 +113,7 @@ function endScreen(str, y) {
 }
 
 function renderHealth(drawX, health) {
+    var countHearts = document.getElementsByTagName("img");
     for (var i = 0; i < health; i++) {
         if (Game.combat) {
             Game.healthCanvas.drawImage(Game.gameSprite, 0, 1076, 27, 23,
@@ -123,6 +124,7 @@ function renderHealth(drawX, health) {
             var heart = document.createElement("div");
             heart.setAttribute("id", "heart");
             Game.div.appendChild(heart);
+            console.log(countHearts);
         }
     }
 }
