@@ -58,7 +58,7 @@ function clearCanvas() {
         },
 
         {
-            text: "but would be nice if you gave me some credit if you use my code! :) ",
+            text: "but it would be nice if you gave me some credit if you use my code! :) ",
             writeY: 160
         }
     ];
@@ -91,12 +91,20 @@ function clearCanvas() {
             endScreen(messages[3].text, messages[3].writeY);
         }
 
-        else if (endScreenY >= 165) {
+        else if (endScreenY >= 165 && endScreenY < 180) {
             endScreen(messages[0].text, messages[0].writeY);
             endScreen(messages[1].text, messages[1].writeY);
             endScreen(messages[2].text, messages[2].writeY);
             endScreen(messages[3].text, messages[3].writeY);
             endScreen(messages[4].text, messages[4].writeY);
+        }
+
+        else if (endScreenY >= 180) {
+
+            var a = document.createElement("a");
+            a.setAttribute("href", "index.html");
+            a.setAttribute("id", "newGame");
+
         }
 
 
@@ -165,7 +173,7 @@ function moveObstacleX() {
     ObstacleObj.obstacles[0].drawX += 0.2;
     ObstacleObj.obstacles[1].drawX -= 0.2;
 
-    if (ObstacleObj.obstacles[1].drawX <= 0) {
+    if (ObstacleObj.obstacles[1].drawX + ObstacleObj.obstacles[1].drawWidth <= 0) {
         ObstacleObj.obstacles[1].drawX = 870;
     }
 
