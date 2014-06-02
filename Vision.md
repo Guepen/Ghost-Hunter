@@ -10,11 +10,11 @@ Spelet Ghost Hunter går ut på att en eller två spelare skall skjuta ner spök
 eventuellt skall en powerup ges till spelaren.
 Spökena skall falla fortare och fortare ju mer eftersom och det skall även falla fler och fler spöken.
 
-Spelet är slut när ett spöke nuddar marken eller om ett spöke kolliderar med en spelare, om det inte finns några spöken kvar att skjuta ner så har spelaren vunnit.
+Spelet är slut när spelarens liv är slut.
 
 Spelaren/spelarna får en sammnlagd poäng antingen när spelet är förlorat eller vunnet. Poängen beräknas av hur många spöken spelaren/spelarna har skjutit ner och användaren kan välja att spara sin poäng.
 
-Spelet skall designas i 2d och banan kommer att ses i en sidovy. Banorna skall utgöras av en bakgrund och hinder. Om ett skott träffar ett hinder skall det skottet explodera, spökena kan dock falla igenom alla hinder.
+Spelet skall designas i 2d och banan kommer att ses i en sidovy. Banan skall utgöras av en bakgrund och hinder. Om ett skott träffar ett hinder skall det skottet explodera, spökena kan dock falla igenom alla hinder.
 
 ## Teknik
 HTML5 Canvas och javascript kommer att användas för att utveckla spelet eftersom det då kommer vara lätttillgängligt för användare.
@@ -27,8 +27,7 @@ En MS SQL databas skall användas för att spara ner användarens poäng.
 
 ### Slutanvändare
 
-Spelet skall finnas tillgängligt för alla som har en dator med en webbläsare av nyare verision men inriktar sig till personer i alla åldrar som har ett intresse för onlinespel.
-
+Personer mellan 16-30 år som har en medelhög datorvana och som spelar ett webbspel minst en gång i veckan 
 
 ## Liknande system
 
