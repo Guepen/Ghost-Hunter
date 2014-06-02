@@ -50,7 +50,7 @@ Player.prototype.render = function () {
         this.dead = true;
 
         if (Game.combat && Game.players[0].health <= 0 && Game.players[1].health <= 0) {
-            stopSoundLoop();
+            //stopSoundLoop();
             checkWinner();
         }
 
@@ -60,7 +60,7 @@ Player.prototype.render = function () {
         Game.ended = true;
         stopLoop();
         gameOverSound();
-        stopSoundLoop();
+        //stopSoundLoop();
     }
 
     if (!this.dead) {
@@ -137,7 +137,7 @@ Player.prototype.ifShooting = function () {
     //kollar om användaren trycker på spacebar och inte redan skjuer
     if (Game.pressedKeys[this.shootKey] && !this.shoot && !this.reloading && !this.dead) {
         PlayerObj.shootAudio.play();
-        //PlayerObj.shootAudio.currentTime = 0;
+        PlayerObj.shootAudio.currentTime = 0;
         this.shoot = true;
 
         //anropar funktionen fire som sätter kulans position till spelarens

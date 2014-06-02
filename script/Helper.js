@@ -91,20 +91,12 @@ function clearCanvas() {
             endScreen(messages[3].text, messages[3].writeY);
         }
 
-        else if (endScreenY >= 165 && endScreenY < 180) {
+        else if (endScreenY >= 165) {
             endScreen(messages[0].text, messages[0].writeY);
             endScreen(messages[1].text, messages[1].writeY);
             endScreen(messages[2].text, messages[2].writeY);
             endScreen(messages[3].text, messages[3].writeY);
             endScreen(messages[4].text, messages[4].writeY);
-        }
-
-        else if (endScreenY >= 180) {
-
-            var a = document.createElement("a");
-            a.setAttribute("href", "index.html");
-            a.setAttribute("id", "newGame");
-
         }
 
 
