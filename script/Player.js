@@ -67,7 +67,7 @@ Player.prototype.render = function () {
             //stopSoundLoop();
             checkWinner();
             setTimeout(function () {
-                location.reload();
+                reloadPage();
             }, 3000)
         }
 

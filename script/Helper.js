@@ -121,15 +121,9 @@ function clearCanvas() {
             i = 0;
         }
 
-        /**
-         * Fruktansvärt fult
-         * Har dock ingen tid till att fixa en Constructor för Game
-         * utan det får vara ett statiskt objekt
-         */
         else if (endScreenY >= 250) {
-            location.reload();
+            reloadPage();
         }
-
         for (; i < messages.length; i++) {
             endScreen(messages[x].text, messages[x].writeY);
             x++;
@@ -276,4 +270,8 @@ function moveObstacleYInterval() {
         ObstacleObj.moveObs = 50;
 
     }, 40000);
+}
+
+function reloadPage() {
+    location.reload();
 }
