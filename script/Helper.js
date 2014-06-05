@@ -121,7 +121,7 @@ function clearCanvas() {
             i = 0;
         }
 
-        else if (endScreenY >= 250) {
+        else if (endScreenY === 250) {
             reloadPage();
         }
         for (; i < messages.length; i++) {
