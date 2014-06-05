@@ -53,6 +53,7 @@ function gameOverSound() {
 function clearCanvas() {
     var endScreenY = 100;
     var i = 0;
+    var reloading = false;
     var canvavasTags = document.getElementsByTagName("canvas");
 
     /**
@@ -121,7 +122,8 @@ function clearCanvas() {
             i = 0;
         }
 
-        else if (endScreenY === 250) {
+        else if (endScreenY >= 250 && !reloading) {
+            reloading = true;
             reloadPage();
         }
         for (; i < messages.length; i++) {
