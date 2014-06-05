@@ -11,12 +11,14 @@ var Game = {
     randomRange: 30,
     pauseButton: null,
     hideControls: null,
+    functionsDiv: null,
     onePlayerButton: null,
     twoPlayerButton: null,
     combatModeButton: null,
     gameDiv: null,
     menuDiv: null,
     header: null,
+    controlsA: null,
     secondScoreDiv: null,
     clearPowerUp: null,
     pressedKeys: [],
@@ -41,6 +43,7 @@ var Game = {
     updateGhostRules: false,
     ended: false,
     combat: false,
+    removedControls: false,
     updateGhostRulesTwo: 0,
     score: 0,
     spawnAmount: 2,
@@ -89,6 +92,7 @@ var Game = {
         var obstacleMinDrawX = 0;
         this.menuDiv.parentNode.removeChild(this.menuDiv);
         this.header.classList.remove('hide');
+        this.functionsDiv.classList.remove('hide');
         var srcX = 0; //x-pixeln i spriten som bakgrunden börjar på
         var srcY = 0; //y-pixeln i spriten som bakgrunden börjar på
         var drawX = 0; //x-pixeln där bakgrunden börjar ritas ut
@@ -145,21 +149,22 @@ var Game = {
         this.obstacleCanvas = document.getElementById("obstacleCanvas").getContext("2d");
         this.healthCanvas = document.getElementById("healthCanvas").getContext("2d");
         this.powerUpCanvas = document.getElementById("powerUpCanvas").getContext("2d");
-        //Game.pauseButton = document.getElementById("pauseButton");
-        this.hideControls = document.getElementById("Hide");
+        Game.pauseButton = document.getElementById("pauseButton");
         this.gameDiv = document.getElementById("game");
         this.header = document.getElementById("topGame");
         this.menuDiv = document.getElementById("menu");
+        this.functionsDiv = document.getElementById("functions");
         this.htmlScore = document.getElementById("countScore");
         this.secondScoreDiv = document.getElementById("score2");
+        this.controlsA = document.getElementById("controlsA");
 
         document.addEventListener('keydown', keyDown, false);
         document.addEventListener("keyup", keyUp, false);
         this.onePlayerButton.addEventListener("click", this.onePlayer, false);
         this.twoPlayerButton.addEventListener("click", this.twoPlayers, false);
         this.combatModeButton.addEventListener("click", this.combatMode, false);
-        //Game.pauseButton.addEventListener("click", this.stopStart, false);
-        this.hideControls.addEventListener("click", this.removeControls, false);
+        this.pauseButton.addEventListener("click", this.stopStart, false);
+        this.controlsA.addEventListener("click", this.removeControls, false);
     },
     /**
      * Om man spelar själv
@@ -200,8 +205,20 @@ var Game = {
     },
 
     removeControls: function () {
+        var that = this;
         var controls = document.getElementById("Controls");
-        controls.style.display = "none";
+        if (!Game.removedControls) {
+            console.log(that);
+            this.innerHTML = "Show Controls";
+            Game.removedControls = true;
+            controls.style.display = "none";
+        }
+
+        else {
+            this.innerHTML = "Hide Controls";
+            Game.removedControls = false;
+            controls.style.display = "block";
+        }
     },
 
     showControls: function () {
@@ -216,14 +233,14 @@ var Game = {
                 stopLoop();
                 //stopSoundLoop();
                 Game.paused = false;
-                // Game.pauseButton.innerHTML = "Play";
+                Game.pauseButton.innerHTML = "Play";
             }
 
             else if (!Game.paused) {
                 startLoop();
                 // this.backGroundMusic.play();
                 Game.paused = true;
-                // Game.pauseButton.innerHTML = "Pause";
+                Game.pauseButton.innerHTML = "Pause";
             }
         }
 

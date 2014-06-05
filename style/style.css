@@ -13,25 +13,15 @@ canvas{
     box-shadow: 0 0 20px 10px #202020;
 }
 
-#FPS{
-    margin-left: 28%;
-    color: white;
-    font-style: italic;
-    font-size: 20px;
-}
-
-#pauseButton{
-    height: 20px;
-    width: 50px;
-}
 
 #topGame{
-    z-index: 5;
+    z-index: 99;
+    position: relative;
     width: 796px;
     height: 40px;
     margin: auto;
     margin-top: -23px;
-    background-color: rgba(1, 1, 1, 0.3);
+    background-color: rgba(1, 1, 1, 0.1);
 
 }
 
@@ -68,7 +58,7 @@ canvas{
     border: 2px solid #606050;
 }
 
-#Controls a {
+/*#Controls a {
     display: block;
     text-decoration: none;
     text-align: center;
@@ -84,7 +74,7 @@ canvas{
 #Controls a:hover {
     color: whitesmoke;
     background: linear-gradient(to bottom, green 0%, darkgreen 100%);
-}
+}*/
 
 h2 {
     margin-left: 30px;
@@ -163,13 +153,38 @@ h1 {
     margin-left: 45px;
 }
 
-#menu, #newGame {
+#menu, #functions {
     position: absolute;
+    z-index: 999;
+}
+
+#functions {
+    width: 150px;
+    height: 40px;
+    top: 130px;
+    left: 29%;
+    display: inline-flex;
+}
+
+#functions a {
+    text-decoration: none;
+    color: whitesmoke;
+    background: linear-gradient(to bottom, cornflowerblue 0%, darkblue 100%);
+    font-size: 1em;
+    width: 50px;
+    height: 20px;
+    text-align: center;
+    margin: 7px;
+}
+
+#functions a:hover {
+    background: linear-gradient(to bottom, darkblue 0%, cornflowerblue 100%);
+}
+
+#menu {
+    color: yellow;
     left: 45%;
     top: 200px;
-
-    color: yellow;
-    z-index: 999;
 }
 
 #menu a {
@@ -199,6 +214,13 @@ h1 {
     display: block;
 }
 
+#FPS {
+    color: whitesmoke;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 7px;
+}
+
 #score2 {
     margin-left: 270px;
     color: lawngreen;
@@ -217,5 +239,23 @@ h1 {
 
 body{
     background-color: #303030;
+}
+
+#hideControls a {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 20px;
+    margin-left: 70px;
+    width: 120px;
+    height: 20px;
+    background: linear-gradient(to bottom, darkgreen 0%, green 40%);
+    color: whitesmoke;
+    font-size: 1.2em;
+}
+
+#hideControls a:hover {
+    color: whitesmoke;
+    background: linear-gradient(to bottom, green 0%, darkgreen 100%);
 }
 
