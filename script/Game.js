@@ -1,6 +1,9 @@
 "use strict";
 
-// objektet Game kapslar in kod som behöver köras innan spelet kan starta och även viss funkonalitet
+/**
+ * objektet Game kapslar in kod som behöver köras innan spelet kan starta och även viss funkonalitet
+ */
+
 var Game = {
     backGroundMusic: null,
     numberOfPlayers: 0,
@@ -45,7 +48,9 @@ var Game = {
     spawnRate: 5000,
     health: 3,
 
-    //låter bilden laddas innan spelet startar så den inte saknas när den skall användas
+    /**
+     * låter spriten med alla bilder laddas innan spelet startar så de inte saknas när de skall användas
+     */
     pictureLoader: function () {
         Game.gameSprite = new Image();
         Game.gameSprite.src = "pictures/Spriten.png";
@@ -57,10 +62,13 @@ var Game = {
         }
     },
 
+    /**
+     * Funktion som renderar ut menyn
+     */
     renderStartScreen: function () {
-        Game.onePlayerButton = document.getElementById("onePlayer");
-        Game.twoPlayerButton = document.getElementById("twoPlayers");
-        Game.combatModeButton = document.getElementById("combat");
+        this.onePlayerButton = document.getElementById("onePlayer");
+        this.twoPlayerButton = document.getElementById("twoPlayers");
+        this.combatModeButton = document.getElementById("combat");
         this.backgroundCanvas = document.getElementById("backgroundCanvas").getContext("2d");
         var srcX = 0; //x-pixeln i spriten som bakgrunden börjar på
         var srcY = 500; //y-pixeln i spriten som bakgrunden börjar på
@@ -68,17 +76,19 @@ var Game = {
         var drawY = 0; //y-pixeln där bakgrunden börjar ritas ut
 
 
-        this.backgroundCanvas.drawImage(Game.gameSprite, srcX, srcY, Game.width, Game.height, drawX, drawY, Game.width, Game.height);
+        this.backgroundCanvas.drawImage(this.gameSprite, srcX, srcY, this.width, this.height, drawX, drawY, this.width, this.height);
 
         //Startskärmen visas, init körs och efter det är allt i spelet förberett
-        Game.init();
+        this.init();
     },
-
+    /**
+     * Funktion som renderar ut spelets bakgrundsbild och initierar två hinder
+     */
     renderBackground: function () {
         var obstacleMaxDrawX = 328;
         var obstacleMinDrawX = 0;
-        Game.menuDiv.parentNode.removeChild(Game.menuDiv);
-        Game.header.classList.remove('hide');
+        this.menuDiv.parentNode.removeChild(this.menuDiv);
+        this.header.classList.remove('hide');
         var srcX = 0; //x-pixeln i spriten som bakgrunden börjar på
         var srcY = 0; //y-pixeln i spriten som bakgrunden börjar på
         var drawX = 0; //x-pixeln där bakgrunden börjar ritas ut
@@ -87,11 +97,18 @@ var Game = {
         this.backgroundCanvas.drawImage(Game.gameSprite, srcX, srcY, Game.width, Game.height, drawX, drawY, Game.width, Game.height);
 
         for (var i = 0; i < 2; i++) {
+            /**
+             * Om man spelar combat mode så skall de två spelarna får varsit hinder
+             * Efter det första hindret har skapats ändrar jag vart nästa hinder får skapas
+             */
             if (Game.numberOfPlayers === 2 && Game.combat) {
                 ObstacleObj.obstacles[i] = new Obstacle(obstacleMinDrawX, obstacleMaxDrawX);
                 obstacleMinDrawX = 402;
                 obstacleMaxDrawX = 318;
-
+                /**
+                 * Rtiar ut "väggen" i mitten på banan
+                 * @type {string}
+                 */
                 this.backgroundCanvas.strokeStyle = "red";
                 this.backgroundCanvas.lineWidth = 4;
                 this.backgroundCanvas.beginPath();
@@ -99,7 +116,9 @@ var Game = {
                 this.backgroundCanvas.lineTo(398, 500);
                 this.backgroundCanvas.stroke();
             }
-
+            /**
+             * Om man inte spelar combat mode får båda hiindrena skapas varsomhelst i spelet
+             */
             else {
                 ObstacleObj.obstacles[i] = new Obstacle(0, 730);
             }
@@ -111,36 +130,40 @@ var Game = {
     },
 
 
-    //initserar canvas-tagger, hinder och event
+    /**
+     * initserar canvas-tagger, hinder och event
+     */
     init: function () {
-        Game.firstScore = document.getElementById("score");
+        this.firstScore = document.getElementById("score");
         Game.div = document.createElement("div");
-        Game.div.setAttribute("id", "healthDiv");
-        Game.firstScore.parentNode.insertBefore(Game.div, Game.firstScore.nextSibling);
-        Game.playerCanvas = document.getElementById("playerCanvas").getContext("2d");
-        Game.explosionCanvas = document.getElementById("explosionCanvas").getContext("2d");
-        Game.bulletCanvas = document.getElementById("bulletCanvas").getContext("2d");
-        Game.ghostCanvas = document.getElementById("ghostCanvas").getContext("2d");
-        Game.obstacleCanvas = document.getElementById("obstacleCanvas").getContext("2d");
-        Game.healthCanvas = document.getElementById("healthCanvas").getContext("2d");
-        Game.powerUpCanvas = document.getElementById("powerUpCanvas").getContext("2d");
+        this.div.setAttribute("id", "healthDiv");
+        this.firstScore.parentNode.insertBefore(this.div, this.firstScore.nextSibling);
+        this.playerCanvas = document.getElementById("playerCanvas").getContext("2d");
+        this.explosionCanvas = document.getElementById("explosionCanvas").getContext("2d");
+        this.bulletCanvas = document.getElementById("bulletCanvas").getContext("2d");
+        this.ghostCanvas = document.getElementById("ghostCanvas").getContext("2d");
+        this.obstacleCanvas = document.getElementById("obstacleCanvas").getContext("2d");
+        this.healthCanvas = document.getElementById("healthCanvas").getContext("2d");
+        this.powerUpCanvas = document.getElementById("powerUpCanvas").getContext("2d");
         //Game.pauseButton = document.getElementById("pauseButton");
-        Game.hideControls = document.getElementById("Hide");
-        Game.gameDiv = document.getElementById("game");
-        Game.header = document.getElementById("topGame");
-        Game.menuDiv = document.getElementById("menu");
-        Game.htmlScore = document.getElementById("countScore");
-        Game.secondScoreDiv = document.getElementById("score2");
+        this.hideControls = document.getElementById("Hide");
+        this.gameDiv = document.getElementById("game");
+        this.header = document.getElementById("topGame");
+        this.menuDiv = document.getElementById("menu");
+        this.htmlScore = document.getElementById("countScore");
+        this.secondScoreDiv = document.getElementById("score2");
 
         document.addEventListener('keydown', keyDown, false);
         document.addEventListener("keyup", keyUp, false);
-        Game.onePlayerButton.addEventListener("click", this.onePlayer, false);
-        Game.twoPlayerButton.addEventListener("click", this.twoPlayers, false);
-        Game.combatModeButton.addEventListener("click", this.combatMode, false);
+        this.onePlayerButton.addEventListener("click", this.onePlayer, false);
+        this.twoPlayerButton.addEventListener("click", this.twoPlayers, false);
+        this.combatModeButton.addEventListener("click", this.combatMode, false);
         //Game.pauseButton.addEventListener("click", this.stopStart, false);
-        Game.hideControls.addEventListener("click", this.removeControls, false);
+        this.hideControls.addEventListener("click", this.removeControls, false);
     },
-
+    /**
+     * Om man spelar själv
+     */
     onePlayer: function () {
         var score = document.getElementById("countScore");
         Game.players[Game.players.length] = new Player(Game.width / 2, 743, 1089, score, "green", 32, 37, 39, 0, 368, 680);
@@ -178,7 +201,12 @@ var Game = {
 
     removeControls: function () {
         var controls = document.getElementById("Controls");
-        controls.style.visibility = 'hidden';
+        controls.style.display = "none";
+    },
+
+    showControls: function () {
+        var controls = document.getElementById("Controls");
+        controls.style.display = "block";
     },
 
 //används för att pausa/starta spelet
@@ -239,7 +267,7 @@ function checkObjectCollisions() {
                     newPowerUp(ghost.drawX, ghost.drawY, random); // skickar med spökets x och y som blir powerupens startposition
                     var moveExplosion = randomGenerator(0, 9);
                     ExplosionObj.explosions[ExplosionObj.explosions.length] = new Explosion(ghost.drawX, ghost.drawY, function () {
-                        ExplosionObj.explosions.splice(ExplosionObj.explosions.length, 1);
+                        ExplosionObj.explosions.splice(0, 1);
                     }, moveExplosion);
 
                 }
@@ -407,7 +435,7 @@ function startLoop() {
     }
     Game.rendering = true;
     startSpawn();
-    interval();
+    moveObstacleYInterval();
     loop();
 }
 

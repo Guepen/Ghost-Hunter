@@ -1,5 +1,7 @@
 "use strict";
-
+/**
+ * @type {{powerUps: Array}}
+ */
 var PowerUpObj = {
     powerUps: []
 };

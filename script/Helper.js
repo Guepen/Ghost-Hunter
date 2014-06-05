@@ -1,5 +1,10 @@
 "use strict";
-
+/**
+ * Funktion som slumpar ett tal
+ * @param lowest Lägsta talet
+ * @param range Högsta talet
+ * @returns {number} Ett slumpat tal
+ */
 function randomGenerator(lowest, range) {
     return Math.floor((Math.random() * range) + lowest);
 }
@@ -26,18 +31,34 @@ function checkBullets() {
     }
 }
 
+/**
+ * Stoppar bakgrundsljudet
+ */
 function stopSoundLoop() {
     Game.backGroundMusic.pause();
 }
 
+/**
+ * Om spelet är slut spelas ett ljud upp
+ */
 function gameOverSound() {
     var audio = new Audio("audio/gameOver.wav");
     audio.play();
 }
 
+/**
+ *rensar allt på spelytan förutom bakgrunden
+ * och ritar ut game over
+ */
 function clearCanvas() {
     var endScreenY = 100;
+    var i = 0;
     var canvavasTags = document.getElementsByTagName("canvas");
+
+    /**
+     *
+     * @type {{text: string, writeY: number}[]} writeY innehåller y-positionen där texten skall renderas ut
+     */
     var messages = [
         {
             text: "This game was my project in the course 1D430, individually Software Development",
@@ -63,40 +84,55 @@ function clearCanvas() {
         }
     ];
 
+    /**
+     * i börjar på 1 eftersom jag vill ha kvar min bakgrund
+     */
     for (var i = 1; i < canvavasTags.length; i++) {
         canvavasTags[i].getContext("2d").clearRect(0, 0, Game.width, Game.height);
     }
 
+    /**
+     * animerar game over skärmen med ett intervall
+     */
     setInterval(function () {
+        var x = 0;
         Game.backgroundCanvas.font = "italic 46px calibri";
         Game.backgroundCanvas.fillStyle = "black";
         Game.backgroundCanvas.fillRect(Game.width / 2 - 200, 0, 350, endScreenY += 0.2);
         Game.backgroundCanvas.fillStyle = "red";
         Game.backgroundCanvas.fillText("GAME OVER", Game.width / 2 - 150, Game.height / 2 - 200);
 
+        /**
+         * lite fulkod för att bestämma vilken text som skall renderas ut
+         */
         if (endScreenY >= 120 && endScreenY < 135) {
-            endScreen(messages[0].text, messages[0].writeY);
-
+            i = 3;
         }
 
         else if (endScreenY >= 135 && endScreenY < 150) {
-            endScreen(messages[0].text, messages[0].writeY);
-            endScreen(messages[1].text, messages[1].writeY);
+            i = 2;
         }
 
         else if (endScreenY >= 150 && endScreenY < 165) {
-            endScreen(messages[0].text, messages[0].writeY);
-            endScreen(messages[1].text, messages[1].writeY);
-            endScreen(messages[2].text, messages[2].writeY);
-            endScreen(messages[3].text, messages[3].writeY);
+            i = 1;
         }
 
-        else if (endScreenY >= 165) {
-            endScreen(messages[0].text, messages[0].writeY);
-            endScreen(messages[1].text, messages[1].writeY);
-            endScreen(messages[2].text, messages[2].writeY);
-            endScreen(messages[3].text, messages[3].writeY);
-            endScreen(messages[4].text, messages[4].writeY);
+        else if (endScreenY >= 165 && endScreenY < 250) {
+            i = 0;
+        }
+
+        /**
+         * Fruktansvärt fult
+         * Har dock ingen tid till att fixa en Constructor för Game
+         * utan det får vara ett statiskt objekt
+         */
+        else if (endScreenY >= 250) {
+            location.reload();
+        }
+
+        for (; i < messages.length; i++) {
+            endScreen(messages[x].text, messages[x].writeY);
+            x++;
         }
 
 
@@ -104,6 +140,11 @@ function clearCanvas() {
 
 }
 
+/**
+ * Funktion som renderar ut text
+ * @param str Texten
+ * @param y Y-positionen där texten skall renderas ut
+ */
 function endScreen(str, y) {
     Game.backgroundCanvas.font = "bold 12px calibri";
     Game.backgroundCanvas.fillStyle = "white";
@@ -112,8 +153,12 @@ function endScreen(str, y) {
 
 }
 
+/**
+ * Funktion som renderar ut liven
+ * @param drawX X-positionen där livet skall renderas ut
+ * @param health Antal liv
+ */
 function renderHealth(drawX, health) {
-    var countHearts = document.getElementsByTagName("img");
     for (var i = 0; i < health; i++) {
         if (Game.combat) {
             Game.healthCanvas.drawImage(Game.gameSprite, 0, 1076, 27, 23,
@@ -124,11 +169,14 @@ function renderHealth(drawX, health) {
             var heart = document.createElement("div");
             heart.setAttribute("id", "heart");
             Game.div.appendChild(heart);
-            console.log(countHearts);
         }
     }
 }
 
+/**
+ * Funktion för att ladda om vapnet
+ * @param player Spelarobjektet
+ */
 function reloadGun(player) {
     setTimeout(function () {
         player.currentBullet = 0;
@@ -136,9 +184,13 @@ function reloadGun(player) {
 
     }, 600);
 }
+
+/**
+ * Funktion som ökar svårighetsgraden i spelet
+ */
 function ghostRules() {
     if (Game.score > 0) {
-        if (Game.score % 15 === 0) {
+        if (Game.score % 10 === 0) {
             if (!Game.updateGhostRules) {
                 Game.updateGhostRules = true;
                 Game.spawnAmount++;
@@ -160,6 +212,9 @@ function ghostRules() {
     }
 }
 
+/**
+ * flyttar hindrena i sidled
+ */
 function moveObstacleX() {
 
     ObstacleObj.obstacles[0].drawX += 0.2;
@@ -174,6 +229,9 @@ function moveObstacleX() {
     }
 }
 
+/**
+ * flyttar hindrena neråt
+ */
 function moveObstacleY() {
     Game.obstacleCanvas.clearRect(0, 0, Game.width, Game.height);
     for (var i = 0; i < ObstacleObj.obstacles.length; i++) {
@@ -181,14 +239,14 @@ function moveObstacleY() {
             ObstacleObj.obstacles[i].drawY += 0.5;
             ObstacleObj.moveObs -= 0.2;
         }
-        if (Game.score >= 5) {
-            moveObstacleX();
-        }
-
         ObstacleObj.obstacles[i].render();
     }
+    moveObstacleX();
 }
 
+/**
+ * kollar vinnaren i combat mode
+ */
 function checkWinner() {
     stopLoop();
     Game.powerUpCanvas.font = "italic 36px calibri";
@@ -201,13 +259,19 @@ function checkWinner() {
     else if (Game.players[0].score > Game.players[1].score) {
         Game.powerUpCanvas.fillStyle = "Green";
         Game.powerUpCanvas.fillText("Green player wins!", 500, 250);
+        Game.players[0].srcX = 326;
+        Game.players[0].srcY = 1182;
     }
     else if (Game.players[1].score === Game.players[0].score) {
         Game.powerUpCanvas.fillText("Draw!", 390, 250);
     }
 }
 
-function interval() {
+/**
+ *moveObs måste vara större än 0 för att hindret skall falla neråt
+ * moveObs värde minska i funktionen moveObstacleY
+ */
+function moveObstacleYInterval() {
     setInterval(function () {
         ObstacleObj.moveObs = 50;
 

@@ -1,11 +1,15 @@
 "use strict";
-
+/**
+ * @type {{obstacles: Array, moveObs: number}}
+ */
 var ObstacleObj = {
     obstacles: [],
     moveObs: 100
 };
+
 /**
- * Skapar en instans av Obstacle
+ * @param minDrawX Minsta position i x-led där hindret kan skapas
+ * @param maxDrawX Högsta position i x-led där hindret kan skapas
  * @constructor
  */
 function Obstacle(minDrawX, maxDrawX) {

@@ -1,5 +1,9 @@
 "use strict";
 
+/**
+ * Skapar en ny instans av ett spöke
+ * @constructor
+ */
 function Ghost() {
     this.drawX = randomGenerator(0, 752);
     this.drawY = -10;

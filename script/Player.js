@@ -1,9 +1,21 @@
 "use strict";
+/**
+ * @type {{shootAudio: Audio}}
+ */
 var PlayerObj = {
     shootAudio: new Audio("audio/shoot.wav")
 };
+
 /**
- * Skapar en instans av Player
+ * @param drawX
+ * @param srcX
+ * @param srcY
+ * @param htmlScore HTMLelement som visar poängen
+ * @param type Grön eller Lila spelare
+ * @param shootKey
+ * @param moveLeftKey
+ * @param moveRightKey
+ * @param healthX
  * @constructor
  */
 function Player(drawX, srcX, srcY, htmlScore, type, shootKey, moveLeftKey, moveRightKey, healthX) {
@@ -35,7 +47,7 @@ function Player(drawX, srcX, srcY, htmlScore, type, shootKey, moveLeftKey, moveR
     this.dead = false;
     this.reloading = false;
 
-    //lägger till 40 skott tillhörande spelarinstansen.
+    //lägger till 30 skott tillhörande spelarinstansen.
     //skotten återanvänds sedan istället för att skapa en
     //ny instans av Bullet-objektet varje gång spelaren skjuter
     for (var i = 0; i < 30; i++) {
@@ -43,7 +55,9 @@ function Player(drawX, srcX, srcY, htmlScore, type, shootKey, moveLeftKey, moveR
     }
 }
 
-
+/**
+ * renderar ut spelarna
+ */
 Player.prototype.render = function () {
     //Om spelaren inte har några liv kvar är spelet slut
     if (this.health <= 0) {
@@ -52,6 +66,9 @@ Player.prototype.render = function () {
         if (Game.combat && Game.players[0].health <= 0 && Game.players[1].health <= 0) {
             //stopSoundLoop();
             checkWinner();
+            setTimeout(function () {
+                location.reload();
+            }, 3000)
         }
 
     }
@@ -63,6 +80,7 @@ Player.prototype.render = function () {
         //stopSoundLoop();
     }
 
+
     if (!this.dead) {
         Game.playerCanvas.drawImage(Game.gameSprite, this.srcX, this.srcY, this.srcWidth, this.srcHeight,
             this.drawX, this.drawY, this.drawWidth, this.drawHeight);
@@ -72,7 +90,6 @@ Player.prototype.render = function () {
             Game.playerCanvas.fillText("RELOADING", this.drawX, this.drawY - 5);
         }
     }
-
 };
 
 /**
@@ -109,7 +126,7 @@ Player.prototype.checkDirection = function () {
         //Kollar så att inte spelaren kan gå utanför banan
         if (this.drawX <= 0) {
             this.drawX = 0;
-            }
+        }
         else {
             if (!Game.combat || this.wallWalker) {
                 this.drawX -= this.speed;
@@ -126,8 +143,8 @@ Player.prototype.checkDirection = function () {
                 }
             }
 
-            }
         }
+    }
 };
 
 /**
