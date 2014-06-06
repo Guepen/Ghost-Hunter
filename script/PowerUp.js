@@ -49,7 +49,7 @@ function newPowerUp(ghostX, ghostY, random) {
             powerUp.drawWidth = 26;
             powerUp.drawHeight = 27;
             powerUp.srcY = 1000;
-            powerUp.srcX = 94;
+            powerUp.srcX = 96;
             powerUp.srcWidth = 27;
             powerUp.srcHeight = 27;
             powerUp.type = "wallWalker";
